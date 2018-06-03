@@ -18,6 +18,9 @@ var httpServer = require('http').Server(app);
 // Setup routes
 
 
+// Setup chat
+var io = require('socket.io')(httpServer);
+
 
 // Static files
 

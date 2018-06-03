@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <% include ../partials/head %>
+    <script src="/javascripts/socket.io.js"></script>
 </head>
 <body class="container">
 
@@ -16,14 +16,15 @@
     </div>
 </main>
 
+
+    <script>
+        var socket = io();
+    </script>
+
 <footer>
     <% include ../partials/footer %>
 </footer>
 
 </body>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io();
-</script>
     
 </html>

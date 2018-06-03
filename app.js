@@ -15,6 +15,14 @@ var httpServer = require('http').Server(app);
 // Import controllers
 
 
+// Modules to store session
+var myDatabase = require('./server/controllers/database');
+var expressSession = require('express-session');
+var SessionStore = require('express-session-sequelize')(expressSession.Store);
+var sequelizeSessionStore = new SessionStore({
+    db: myDatabase.sequelize,
+});
+
 // Setup routes
 
 
@@ -24,6 +32,8 @@ var io = require('socket.io')(httpServer);
 
 // Static files
 
+
+module.exports = app;
 
 app.set('port', serverPort);
 

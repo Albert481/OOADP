@@ -12,7 +12,18 @@ var io = socket();
 var serverPort = 3000;
 var httpServer = require('http').Server(app);
 
-// Import controllers
+// Import home controller
+var index = require('./server/controllers/index')
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'server/views/pages'));
+app.set('view engine', 'ejs');
+
+// Setup public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 
 // Modules to store session
@@ -23,20 +34,21 @@ var sequelizeSessionStore = new SessionStore({
     db: myDatabase.sequelize,
 });
 
-// Setup routes
+// Application Routes
+// Index route
+app.get('/', index.show)
 
 
 // Setup chat
 var io = require('socket.io')(httpServer);
 
 
-// Static files
-
-
 module.exports = app;
 
 app.set('port', serverPort);
 
+app.set('view engine', 'ejs');
+
 var server = httpServer.listen(app.get('port'), function (){
-    console.log('http server running on port' + server.address().port);
+    console.log('http server running on port ' + server.address().port);
 });

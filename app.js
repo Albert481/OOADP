@@ -6,6 +6,10 @@ var socket = require('socket.io');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Import Passport and Warning flash modules
+var passport = require('passport');
+var flash = require('connect-flash');
+
 // App setup
 var app = express();
 var io = socket();
@@ -13,7 +17,9 @@ var serverPort = 3000;
 var httpServer = require('http').Server(app);
 
 // Import home controller
-var index = require('./server/controllers/index')
+var index = require('./server/controllers/index');
+// Import login controller
+var auth = require('./server/controllers/auth');
 
 
 // view engine setup
@@ -22,8 +28,6 @@ app.set('view engine', 'ejs');
 
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 
 
 // Modules to store session
@@ -37,6 +41,7 @@ var sequelizeSessionStore = new SessionStore({
 // Application Routes
 // Index route
 app.get('/', index.show)
+app.get('/login', auth.signin)
 
 
 // Setup chat

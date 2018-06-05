@@ -5,12 +5,12 @@ var passport = require('passport');
 // Signin GET
 exports.signin = function(req, res) {
     // List all Users and sort by Date
-    res.render('login', { title: 'Login Page' });
+    res.render('login', { title: 'Login Page', message: req.flash('loginMessage') });
 };
 // Signup GET
 exports.signup = function(req, res) {
     // List all Users and sort by Date
-    res.render('signup', { title: 'Signup Page' });
+    res.render('signup', { title: 'Signup Page', message: req.flash('signupMessage') });
 
 };
 // Profile GET

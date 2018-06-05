@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 
 // Import Passport and Warning flash modules
 var passport = require('passport');
-var flash = require('connect-flash');
 
 // App setup
 var app = express();
@@ -26,9 +25,16 @@ var auth = require('./server/controllers/auth');
 app.set('views', path.join(__dirname, 'server/views/pages'));
 app.set('view engine', 'ejs');
 
+// Passport configuration
+require('./server/config/passport')(passport);
+
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Init passport authentication
+app.use(passport.initialize());
+// persistent login sessions
+app.use(passport.session());
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -42,6 +48,25 @@ var sequelizeSessionStore = new SessionStore({
 // Index route
 app.get('/', index.show)
 app.get('/login', auth.signin)
+
+app.post('/login', passport.authenticate('local-login', {
+    //Success go to Profile Page / Fail go to login page
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+
+}));
+app.post('/signup', passport.authenticate('local-signup', {
+    //Success go to Profile Page / Fail go to Signup page
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    
+}));
+
+// Logout Page
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
 
 
 // Setup chat

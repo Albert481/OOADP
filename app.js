@@ -13,6 +13,8 @@ var index = require('./server/controllers/index');
 var auth = require('./server/controllers/auth');
 // Import categories controller
 var category = require('./server/controllers/category');
+// Import chatmessage controller
+var chat = require('./server/controllers/chatmessage');
 
 // Modules to store session
 // var myDatabase = require('./server/controllers/database');
@@ -94,7 +96,9 @@ app.get('/logout', function (req, res) {
 });
 
 // Serve static files TEMPORARILY
-app.get('/cat', category.show)
+app.get('/categories', category.show)
+
+app.get('/chatmessage', chat.show)
 
 // Setup chat
 var io = require('socket.io')(httpServer);

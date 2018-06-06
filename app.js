@@ -11,14 +11,16 @@ var bodyParser = require('body-parser');
 var index = require('./server/controllers/index');
 // Import login controller
 var auth = require('./server/controllers/auth');
+// Import categories controller
+var category = require('./server/controllers/category');
 
 // Modules to store session
-var myDatabase = require('./server/controllers/database');
-var expressSession = require('express-session');
-var SessionStore = require('express-session-sequelize')(expressSession.Store);
-var sequelizeSessionStore = new SessionStore({
-    db: myDatabase.sequelize,
-});
+// var myDatabase = require('./server/controllers/database');
+// var expressSession = require('express-session');
+// var SessionStore = require('express-session-sequelize')(expressSession.Store);
+// var sequelizeSessionStore = new SessionStore({
+//     db: myDatabase.sequelize,
+// });
 
 // Import Passport and Warning flash modules
 var passport = require('passport');
@@ -53,12 +55,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // required for passport
 // secret for session
-app.use(expressSession({
-    secret: 'sometextgohere',
-    store: sequelizeSessionStore,
-    resave: false,
-    saveUninitialized: false,
-}));
+// app.use(expressSession({
+//     secret: 'sometextgohere',
+//     store: sequelizeSessionStore,
+//     resave: false,
+//     saveUninitialized: false,
+// }));
 
 // Init passport authentication
 app.use(passport.initialize());
@@ -91,6 +93,8 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
+// Serve static files TEMPORARILY
+app.get('/cat', category.show)
 
 // Setup chat
 var io = require('socket.io')(httpServer);
@@ -101,7 +105,6 @@ app.use(function (req, res, next) {
     err.status = 404;
     next(err);
 });
-
 
 // production error handler
 // no stacktraces leaked to user

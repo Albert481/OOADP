@@ -13,7 +13,7 @@ module.exports = function (passport) {
     passport.deserializeUser(function (id, done) {
         User.findById(id).then(function (user) {
             if (user) {
-                done(null, user.get());
+                done(null, user);
             } else {
                 done(user.errors, null);
             }
@@ -44,7 +44,7 @@ module.exports = function (passport) {
                         return done(null, false, req.flash('loginMessage', 'Wrong email or password. Try again!'));
                     // everything ok, get user
                     else {
-                        return done(null, user.get());
+                        return done(null, user);
                     }
                 }).catch((err) => {
                     console.log("Error:", err);

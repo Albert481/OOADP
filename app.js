@@ -72,6 +72,11 @@ app.use(passport.session());
 app.use(flash());
 
 // Application Routes
+// app.use(function(req, res, next) {
+//     user: req.user;
+//     next();
+// })
+
 // Index route
 app.get('/', index.show)
 app.get('/login', auth.login)

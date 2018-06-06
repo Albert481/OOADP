@@ -5,7 +5,7 @@ var passport = require('passport');
 // Login GET
 exports.login = function(req, res) {
     // List all Users and sort by Date
-    res.render('login', { title: 'Login Page', message: req.flash('loginMessage') });
+    res.render('login', { title: 'Login Page', message: req.flash('loginMessage'), user: req.user });
 };
 // // Signup GET
 // exports.signup = function(req, res) {
@@ -27,7 +27,6 @@ exports.logout = function () {
 // check if user is logged in
 exports.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
-        req.user = req.user;
         return next();
     res.redirect('/login');
 };

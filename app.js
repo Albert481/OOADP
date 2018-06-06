@@ -17,12 +17,12 @@ var category = require('./server/controllers/category');
 var chat = require('./server/controllers/chatmessage');
 
 // Modules to store session
-// var myDatabase = require('./server/controllers/database');
-// var expressSession = require('express-session');
-// var SessionStore = require('express-session-sequelize')(expressSession.Store);
-// var sequelizeSessionStore = new SessionStore({
-//     db: myDatabase.sequelize,
-// });
+var myDatabase = require('./server/controllers/database');
+var expressSession = require('express-session');
+var SessionStore = require('express-session-sequelize')(expressSession.Store);
+var sequelizeSessionStore = new SessionStore({
+    db: myDatabase.sequelize,
+});
 
 // Import Passport and Warning flash modules
 var passport = require('passport');
@@ -57,12 +57,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // required for passport
 // secret for session
-// app.use(expressSession({
-//     secret: 'sometextgohere',
-//     store: sequelizeSessionStore,
-//     resave: false,
-//     saveUninitialized: false,
-// }));
+app.use(expressSession({
+    secret: 'sometextgohere',
+    store: sequelizeSessionStore,
+    resave: false,
+    saveUninitialized: false,
+}));
 
 // Init passport authentication
 app.use(passport.initialize());

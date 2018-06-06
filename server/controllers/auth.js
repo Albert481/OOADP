@@ -2,17 +2,17 @@
 var gravatar = require('gravatar');
 var passport = require('passport');
 
-// Signin GET
-exports.signin = function(req, res) {
+// Login GET
+exports.login = function(req, res) {
     // List all Users and sort by Date
     res.render('login', { title: 'Login Page', message: req.flash('loginMessage') });
 };
-// Signup GET
-exports.signup = function(req, res) {
-    // List all Users and sort by Date
-    res.render('signup', { title: 'Signup Page', message: req.flash('signupMessage') });
+// // Signup GET
+// exports.signup = function(req, res) {
+//     // List all Users and sort by Date
+//     res.render('signup', { title: 'Signup Page', message: req.flash('signupMessage') });
 
-};
+// };
 // Profile GET
 exports.profile = function(req, res) {
     // List all Users and sort by Date
@@ -27,6 +27,7 @@ exports.logout = function () {
 // check if user is logged in
 exports.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
+        req.user = req.user;
         return next();
     res.redirect('/login');
 };

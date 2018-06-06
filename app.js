@@ -74,16 +74,14 @@ app.use(flash());
 // Application Routes
 // Index route
 app.get('/', index.show)
-app.get('/login', auth.signin)
+app.get('/login', auth.login)
 
 app.post('/login', passport.authenticate('local-login', {
-    //Success go to Profile Page / Fail go to login page
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
 }));
 app.post('/signup', passport.authenticate('local-signup', {
-    //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true

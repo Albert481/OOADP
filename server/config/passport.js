@@ -22,8 +22,8 @@ module.exports = function (passport) {
     // using local strategy
     passport.use('local-login', new LocalStrategy({
         // change default username and password, to email and password
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: 'loginEmail',
+        passwordField: 'loginPassword',
         passReqToCallback: true
     },
         function (req, email, password, done) {
@@ -39,9 +39,9 @@ module.exports = function (passport) {
                 User.findOne({ where: { email: email } }).then((user) => {
                     // check errors and bring the mess  ages
                     if (!user)
-                        return done(null, false, req.flash('loginMessage', 'No such user found.'));
+                        return done(null, false, req.flash('loginMessage', 'Wrong email or password. Try again!'));
                     if (!isValidPassword(user.password, password))
-                        return done(null, false, req.flash('loginMessage', 'Wrong password!'));
+                        return done(null, false, req.flash('loginMessage', 'Wrong email or password. Try again!'));
                     // everything ok, get user
                     else {
                         return done(null, user.get());
@@ -55,8 +55,8 @@ module.exports = function (passport) {
     // Signup local strategy
     passport.use('local-signup', new LocalStrategy({
         // change default username and password, to email and password
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: 'registerEmail',
+        passwordField: 'registerPassword',
         passReqToCallback: true
     },
         function (req, email, password, done) {
@@ -70,11 +70,11 @@ module.exports = function (passport) {
                     User.findOne({ where: { email: email } }).then((user) => {
                         // check email
                         if (user) {
-                            return done(null, false, req.flash('signupMessage', 'Wohh! the email is already taken.'));
+                            return done(null, false, req.flash('loginMessage', 'Email is already taken!'));
                         } else {
                             // create the user
                             var userData = {
-                                name: req.body.name,
+                                name: req.body.registerName,
                                 email: email,
                                 password: password
                             }
@@ -91,7 +91,7 @@ module.exports = function (passport) {
                         }
                     }).catch((err) => {
                         console.log("Error:", err);
-                        return done(err, false, req.flash('signupMessage', 'Error!'))
+                        return done(err, false, req.flash('loginMessage', 'Error!'))
                     });
                 } else {
                     return done(null, req.user);

@@ -11,30 +11,15 @@
 <body>
     <% include ../partials/header %>
 
-        <div class="breadcrumb">
-            <div class="container">
-                <div class="breadcrumb-inner">
-                    <ul class="list-inline list-unstyled">
-                        <li>
-                            <a href="home.html">Home</a>
-                        </li>
-                        <li class='active'>Login</li>
-                    </ul>
-                </div>
-                <!-- /.breadcrumb-inner -->
-            </div>
-            <!-- /.container -->
-        </div>
-        <!-- /.breadcrumb -->
-
         <div class="body-content">
             <div class="container">
+                    <br>
                     <% if (message.length > 0) { %>
                         <div class="alert alert-warning alert-dismissible fade in" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <strong>Oops!</strong> <%= message %>.
+                            <strong>Oops!</strong> <%= message %>
                         </div>
                     <% } %>
                 <div class="sign-in-page">
@@ -42,25 +27,19 @@
                         <!-- Sign-in -->
                         <div class="col-md-6 col-sm-6 sign-in">
                             <h4 class="">Sign in</h4>
-                            <p class="">Hello, Welcome to your account.</p>
-                            <div class="social-sign-in outer-top-xs">
-                                <a href="#" class="facebook-sign-in">
-                                    <i class="fa fa-facebook"></i> Sign In with Facebook</a>
-                                <a href="#" class="twitter-sign-in">
-                                    <i class="fa fa-twitter"></i> Sign In with Twitter</a>
-                            </div>
+                            <p class="">Welcome to myShoppe! Please login.</p>
                             <form action="/login" class="register-form outer-top-xs" role="form" method="post">
                                 <div class="form-group">
                                     <label class="info-title" for="loginEmail">Email Address
                                         <span>*</span>
                                     </label>
-                                    <input type="email" class="form-control unicase-form-control text-input" id="loginEmail" name="email">
+                                    <input type="email" class="form-control unicase-form-control text-input" id="loginEmail" name="loginEmail">
                                 </div>
                                 <div class="form-group">
                                     <label class="info-title" for="loginPassword">Password
                                         <span>*</span>
                                     </label>
-                                    <input type="password" class="form-control unicase-form-control text-input" id="loginPassword" name="password">
+                                    <input type="password" class="form-control unicase-form-control text-input" id="loginPassword" name="loginPassword">
                                 </div>
                                 <div class="radio outer-xs">
                                     <label>
@@ -79,16 +58,16 @@
                             <p class="text title-tag-line">Create your new account.</p>
                             <form action="/signup" class="register-form outer-top-xs" role="form" method="post">
                                 <div class="form-group">
-                                    <label class="info-title" for="email">Email Address
+                                    <label class="info-title" for="registerEmail">Email Address
                                         <span>*</span>
                                     </label>
-                                    <input type="email" class="form-control unicase-form-control text-input" id="email" name="email">
+                                    <input type="email" class="form-control unicase-form-control text-input" id="registerEmail" name="registerEmail">
                                 </div>
                                 <div class="form-group">
-                                    <label class="info-title" for="name">Name
+                                    <label class="info-title" for="registerName">Name
                                         <span>*</span>
                                     </label>
-                                    <input type="text" class="form-control unicase-form-control text-input" id="name" name="name">
+                                    <input type="text" class="form-control unicase-form-control text-input" id="registerName" name="registerName">
                                 </div>
                                 <div class="form-group">
                                     <label class="info-title" for="phone">Phone Number
@@ -97,16 +76,16 @@
                                     <input type="number" class="form-control unicase-form-control text-input" id="phone" name="phone">
                                 </div>
                                 <div class="form-group">
-                                    <label class="info-title" for="password1">Password
+                                    <label class="info-title" for="registerPassword">Password
                                         <span>*</span>
                                     </label>
-                                    <input type="password" class="form-control unicase-form-control text-input" id="password" name="password">
+                                    <input type="password" class="form-control unicase-form-control text-input" id="registerPassword" name="registerPassword">
                                 </div>
                                 <div class="form-group">
-                                    <label class="info-title" for="password2">Confirm Password
+                                    <label class="info-title" for="registerPassword2">Confirm Password
                                         <span>*</span>
                                     </label>
-                                    <input type="password" class="form-control unicase-form-control text-input" id="password2" name="password2">
+                                    <input type="password" class="form-control unicase-form-control text-input" id="registerPassword2" name="registerPassword2">
                                 </div>
                                 <button type="submit" class="btn-upper btn btn-primary checkout-page-button">Sign Up</button>
                             </form>

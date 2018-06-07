@@ -101,10 +101,45 @@ app.get('/logout', function (req, res) {
 // Serve static files TEMPORARILY
 app.get('/categories', category.show)
 
-app.get('/chatmessage', chat.show)
+// app.get('/chatmessage', chat.show)
 
 // Setup chat
 var io = require('socket.io')(httpServer);
+var chatConnections = 0;
+var ChatMsg = require('./server/models/chatmessage');
+
+io.on('connection', function(socket) {
+    chatConnections++;
+    console.log("Num of chat users connected: " + chatConnections);
+
+    socket.on('disconnect', function() {
+        chatConnections--;
+        console.log("Num of chat users connected: " + chatConnections);
+    });
+})
+
+app.get('/chatmessage',chat.show, function(req, res) {
+    ChatMsg.findAll().then((chatMessages) => {
+        res.render('chatmessage', {
+            url: req.protocol + "://" + req.get("host") + req.url,
+            data: chatMessages
+        });
+    });
+});
+app.post('/chatmessage', function (req, res) {
+    var chatData = {
+        name: req.user.name,
+        message: req.body.chatMessage
+    }
+    // Save into database
+    ChatMsg.create(chatData).then((newMessage) => {
+        if (!newMessage) {
+            res.sendStatus(500);
+        }
+        io.emit('message', req.body)
+        res.sendStatus(200)
+    })
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

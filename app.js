@@ -128,8 +128,9 @@ app.get('/messages', function(req, res) {
 });
 app.post('/messages', function (req, res) {
     var chatData = {
-        name: req.body.name,
-        message: req.body.message
+        name: req.user.name,
+        message: req.body.message,
+        timestamp: new Date().getHours() + ":" + new Date().getMinutes()
     }
     // Save into database
     ChatMsg.create(chatData).then((newMessage) => {

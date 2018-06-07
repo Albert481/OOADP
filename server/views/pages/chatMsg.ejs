@@ -86,6 +86,7 @@
                     <% data.forEach(function(msg) { %> 
                     <li class="replies">
                             <p> <%=msg.message %> </p>
+                            <p> <%=msg.timestamp %> </p>
                     </li>
                     <%})%>
                 </ul>
@@ -107,7 +108,7 @@
     var socket = io()
     $(() => {
         $("#send").click(() => {
-            var message = { message: $("#message").val(), timestamp: Date.now()}
+            var message = { message: $("#message").val() }
             postMessage(message)
         })
     })

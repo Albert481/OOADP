@@ -18,6 +18,10 @@ const ChatMsg = sequelize.define('ChatMsg', {
         allowNull: false,
         defaultValue: '',
         trim: true
+    },
+    timestamp: {
+        type: Sequelize.STRING,
+        allowNull: true
     }
 });
 
@@ -25,7 +29,12 @@ const ChatMsg = sequelize.define('ChatMsg', {
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("ChatMsgs table synced");
-
+    return ChatMsg.upsert({
+        id: 1,
+        name: 'Albert',
+        message: 'Hello World',
+        timestamp: '12:04am'
+    }) 
 });
 
 module.exports = sequelize.model('ChatMsg', ChatMsg);

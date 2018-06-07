@@ -5,7 +5,7 @@ var passport = require('passport');
 // Login GET
 exports.login = function(req, res) {
     // List all Users and sort by Date
-    res.render('login', { title: 'Login Page', message: req.flash('loginMessage'), user: req.user });
+    res.render('login', { title: 'Login Page', message: req.flash('loginMessage') });
 };
 // // Signup GET
 // exports.signup = function(req, res) {

@@ -5,6 +5,8 @@
     <title>
         <%= title %>
     </title>
+    <script src="/javascripts/socket.io.js"></script>
+    <% include ../partials/javascript.ejs %>
     <% include ../partials/stylesheet %>
     <link rel="stylesheet" href="/stylesheets/chatmessage.css">
 </head>
@@ -76,25 +78,25 @@
             <div class="messages" id="messages">
                 <ul>
                     <li class="sent">
-                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
                         <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
                     </li>
+                    <% if (user) { %>
                     <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                         <p>When you're backed against the wall, break the god damn thing down.</p>
                     </li>
-                    <li>
-                        <% data.forEach(function(msg) { %>
-                            <h4> <%=msg.name%> </h4> <p> <% msg.message %> </p>
+                    <% } %>
+                    <li class="replies">
+                        <% data.forEach(function(msg) { %> 
+                            <p> <%=msg.message %> </p>
                         <%})%>
                     </li>
                 </ul>
             </div>
             <div class="message-input">
                 <div class="wrap">
-                <input type="text" placeholder="Write your message..." name="inputMessage"/>
+                <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
@@ -107,7 +109,7 @@
     var socket = io()
     $(() => {
         $("#send").click(() => {
-            var message = { name: $("#name").val(), message: $("#message").val()}
+            var message = { name: user, message: $("#message").val()}
             postMessage(message)
         })
     })

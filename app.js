@@ -30,7 +30,6 @@ var flash = require('connect-flash');
 
 // App setup
 var app = express();
-var io = socket();
 var serverPort = 3000;
 var httpServer = require('http').Server(app);
 
@@ -72,10 +71,10 @@ app.use(passport.session());
 app.use(flash());
 
 // Application Routes
-// app.use(function(req, res, next) {
-//     user: req.user;
-//     next();
-// })
+app.use(function(req, res, next) {
+    res.locals.user = req.user;
+    next();
+  });
 
 // Index route
 app.get('/', index.show)
@@ -106,7 +105,7 @@ app.get('/categories', category.show)
 // Setup chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
-var ChatMsg = require('./server/models/chatmessage');
+var ChatMsg = require('./server/models/chatMsg');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -118,18 +117,19 @@ io.on('connection', function(socket) {
     });
 })
 
-app.get('/chatmessage',chat.show, function(req, res) {
+app.get('/messages', function(req, res) {
     ChatMsg.findAll().then((chatMessages) => {
-        res.render('chatmessage', {
+        res.render('chatMsg', {
+            title: 'myShoppe',
             url: req.protocol + "://" + req.get("host") + req.url,
             data: chatMessages
         });
     });
 });
-app.post('/chatmessage', function (req, res) {
+app.post('/messages', function (req, res) {
     var chatData = {
-        name: req.user.name,
-        message: req.body.chatMessage
+        name: req.body.name,
+        message: req.body.message
     }
     // Save into database
     ChatMsg.create(chatData).then((newMessage) => {

@@ -24,12 +24,7 @@ const ChatMsg = sequelize.define('ChatMsg', {
 // force: true will drop the table if it already exists
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
-    console.log("chatmessage table synced");
-    return ChatMsg.upsert({
-        id: 1,
-        name: 'Albert',
-        message: 'Hello World'
-    })
+    console.log("ChatMsgs table synced");
 
 });
 

@@ -118,24 +118,13 @@ io.on('connection', function(socket) {
 
     });
 })
-
-app.get('/messages', function(req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        User.findAll().then((users) => {
-            res.render('chatMsg', {
-                title: 'myShoppe',
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                userchannel: users
-            })
-        });
-    });
-});
-
-app.post('/messages', function (req, res) {
+app.get('/messages', chat.receive);
+app.get('/messages/:id', chat.receive);
+app.post('/messages/:id', function (req, res) {
     var datetime = new Date();
     var chatData = {
-        name: req.user.name,
+        sendername: req.user.name,
+        recipientid: req.params.id,
         message: req.body.message,
         timestamp: datetime.getHours() + ":" + datetime.getMinutes()
     }
@@ -144,7 +133,7 @@ app.post('/messages', function (req, res) {
         if (!newMessage) {
             res.sendStatus(500);
         }
-        io.emit('message', chatData)
+		io.emit('message', chatData)
         res.sendStatus(200)
     })
 });

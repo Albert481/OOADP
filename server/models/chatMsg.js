@@ -10,7 +10,10 @@ const ChatMsg = sequelize.define('ChatMsg', {
         autoIncrement: true,
         primaryKey: true
     },
-    name: {
+    sendername: {
+        type: Sequelize.STRING
+    },
+    recipientid: {
         type: Sequelize.STRING
     },
     message: {
@@ -29,12 +32,6 @@ const ChatMsg = sequelize.define('ChatMsg', {
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("ChatMsgs table synced");
-    return ChatMsg.upsert({
-        id: 1,
-        name: 'Albert',
-        message: 'Hello World',
-        timestamp: '12:04'
-    }) 
 });
 
 module.exports = sequelize.model('ChatMsg', ChatMsg);

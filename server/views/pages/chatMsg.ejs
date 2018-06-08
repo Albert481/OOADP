@@ -17,7 +17,7 @@
             <div id="profile">
                 <div class="wrap">
                     <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
-                    <p>Mike Ross</p>
+                    <p> <%= user.name %> </p>
                     <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                     <div id="status-options">
                         <ul>
@@ -43,26 +43,18 @@
             </div>
             <div id="contacts">
                 <ul>
+                    <% userchannel.forEach(function(userch) { %>
                     <li class="contact">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                             <div class="meta">
-                                <p class="name">Louis Litt</p>
+                                <p class="name"> <%= userch.name %> </p>
                                 <p class="preview">You just got LITT up, Mike.</p>
                             </div>
                         </div>
                     </li>
-                    <li class="contact active">
-                        <div class="wrap">
-                            <span class="contact-status busy"></span>
-                            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                            <div class="meta">
-                                <p class="name">Harvey Specter</p>
-                                <p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-                            </div>
-                        </div>
-                    </li>
+                    <%})%>
                 </ul>
             </div>
             <div id="bottom-bar">
@@ -73,7 +65,7 @@
         <div class="content">
             <div class="contact-profile">
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p>Harvey Specter</p>
+                <p> <%= user.name %> </p>
             </div>
             <div class="messages" id="messages">
                 <ul id="inlineMessage">
@@ -105,6 +97,12 @@
 
 
 <script>
+    $(function(){
+        var $h3s = $('li').click(function(){
+            $h3s.removeClass('active');
+            $(this).addClass('active');
+        });
+    });
     var socket = io()
     $(() => {
         $("#send").click(() => {
@@ -118,12 +116,24 @@
     function addMessage(msg) {
         $("#inlineMessage").append(`<li class="replies">
                             <p> ${msg.message} </p>
+                            <p> ${msg.timestamp} </p>
                     </li>`)
     }
 
     function postMessage(message) {
         $.post('<%=url%>', message)
     }
+
+    socket.emit('subscribe', conversation_id);
+
+    socket.emit('send message', {
+        room: conversation_id,
+        message: "Some message"
+});
+
+socket.on('conversation private post', function(data) {
+    //display data.message
+});
 </script>
 
 

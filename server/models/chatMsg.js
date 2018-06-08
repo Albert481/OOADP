@@ -20,8 +20,8 @@ const ChatMsg = sequelize.define('ChatMsg', {
         trim: true
     },
     timestamp: {
-        type: Sequelize.STRING,
-        allowNull: true
+        type: Sequelize.TIME,
+        allowNull: true,
     }
 });
 
@@ -33,7 +33,7 @@ ChatMsg.sync({ force: false, logging: console.log}).then(() => {
         id: 1,
         name: 'Albert',
         message: 'Hello World',
-        timestamp: '12:04am'
+        timestamp: '12:04'
     }) 
 });
 

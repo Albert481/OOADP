@@ -106,6 +106,7 @@ app.get('/categories', category.show)
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
+var User = require('./server/models/users')
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -114,30 +115,36 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         chatConnections--;
         console.log("Num of chat users connected: " + chatConnections);
+
     });
 })
 
 app.get('/messages', function(req, res) {
     ChatMsg.findAll().then((chatMessages) => {
-        res.render('chatMsg', {
-            title: 'myShoppe',
-            url: req.protocol + "://" + req.get("host") + req.url,
-            data: chatMessages
+        User.findAll().then((users) => {
+            res.render('chatMsg', {
+                title: 'myShoppe',
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                userchannel: users
+            })
         });
     });
 });
+
 app.post('/messages', function (req, res) {
+    var datetime = new Date();
     var chatData = {
         name: req.user.name,
         message: req.body.message,
-        timestamp: new Date().getHours() + ":" + new Date().getMinutes()
+        timestamp: datetime.getHours() + ":" + datetime.getMinutes()
     }
     // Save into database
     ChatMsg.create(chatData).then((newMessage) => {
         if (!newMessage) {
             res.sendStatus(500);
         }
-        io.emit('message', req.body)
+        io.emit('message', chatData)
         res.sendStatus(200)
     })
 });

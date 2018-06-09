@@ -43,20 +43,20 @@
             </div>
             <div id="contacts">
                 <ul>
-                    <% userchannel.forEach(function(userch) { %>
-                    <% if (userch.name != user.name) { %>
-                    <li class="contact" id="<%= userch.id %>">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name"> <%= userch.name %> </p>
-                                <p class="preview">You just got LITT up, Mike.</p>
+                    <% conversations.forEach(function(conv) { %>
+                        <% if (user.id == (conv.senderid || conv.recipientid)) { %>
+                        <li class="contact" id="<%= conv.con_id %>">
+                            <div class="wrap">
+                                <span class="contact-status online"></span>
+                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <div class="meta">
+                                    <p class="name"> <%= conv.senderid %> </p>
+                                    <p class="preview">You just got LITT up, Mike.</p>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <% } %>
-                    <%})%>
+                        </li>
+                        <% } %>
+                    <% }) %>
                 </ul>
             </div>
             <div id="bottom-bar">
@@ -71,8 +71,8 @@
             </div>
             <div class="messages" id="messages">
                 <ul id="inlineMessage">
-                    <% data.forEach(function(msg) { %> 
-                    <% if (msg.sendername == user.name) { %>
+                    <% chatmessages.forEach(function(msg) { %> 
+                    <% if (msg.senderid == user.id) { %>
                     <li class="replies">
                     <% } else { %>
                     <li class="sent">
@@ -98,6 +98,7 @@
 
 <script>
     var socket = io()
+    // Allows enter key to send message
     $("input").keypress(function(event) {
     if (event.which == 13) {
         event.preventDefault();
@@ -105,30 +106,38 @@
         }
     });
 
+    // Change contact by clicking
     $(function(){
-        var $h3s = $('.contact').click(function(){
-            $h3s.removeClass('active');
+        var $contacts = $('.contact').click(function(){
+            $contacts.removeClass('active');
             $(this).addClass('active');
-            var user_id = $(this).attr('id')
-            history.pushState(null, null, '/messages/' + user_id);
+            var conversation_id = $(this).attr('id')
+            window.history.pushState('', '', '/messages/' + conversation_id);
+            
+            socket.emit('subscribe', conversation_id);
+
+            $("#content").load(location.href);
         });
     });
 
+    // Sends message
     $(() => {
         $("#send").click(() => {
             var message = { message: $("#message").val() }
             postMessage(message)
             $('#message').val('');
-
+            var conversation_id = '100';
+            socket.emit('sendmessage', { room: conversation_id, message: message });
         })
     })
 
-    socket.on('message', function(msg) {
-        $("#inlineMessage").append(`<li class="replies">
-         <p> ${msg.message}  </p>
-         <p> ${msg.timestamp} </p>
-         </li>`)
-    });
+    
+    function postMessage(message) {
+        var conversation_id = $('.contact.active').attr('id')
+        $.post('<%=urlPath%>'+ '/' + conversation_id, message)
+    }
+
+    // socket.on('message', addMessage)
 
     // function addMessage(msg) {
     //     $("#inlineMessage").append(`<li class="replies">
@@ -136,10 +145,6 @@
     //         <p> ${msg.timestamp} </p>
     //         </li>`)
     // }
-
-    function postMessage(message) {
-        $.post('<%=urlPath%>', message)
-    }
 
 </script>
 

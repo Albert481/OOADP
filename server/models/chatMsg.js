@@ -3,18 +3,24 @@ var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
-// This needs to have a foreign key linked to the users so that user knows who sent the message
 const ChatMsg = sequelize.define('ChatMsg', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    sendername: {
-        type: Sequelize.STRING
+    conversation_id: {
+        type: Sequelize.INTEGER,
+        // references: {
+        //     model: 'conversation',
+        //     key: 'con_id'
+        // }
+    },
+    senderid: {
+        type: Sequelize.INTEGER
     },
     recipientid: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER   
     },
     message: {
         type: Sequelize.STRING,
@@ -31,7 +37,14 @@ const ChatMsg = sequelize.define('ChatMsg', {
 // force: true will drop the table if it already exists
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
-    console.log("ChatMsgs table synced");
+    console.log("ChatMsg table synced");
+    // ChatMsg.upsert({
+    //     id: '1',
+    //     senderid: '1',
+    //     recipientid: '2',
+    //     message: 'Hello World',
+    //     timestamp: '12:00'
+    // })
 });
 
 module.exports = sequelize.model('ChatMsg', ChatMsg);

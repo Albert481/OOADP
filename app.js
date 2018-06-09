@@ -107,24 +107,51 @@ var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var User = require('./server/models/users')
+conversations = {};
 
 io.on('connection', function(socket) {
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
+
+    socket.on('sendmessage', function(data) {
+        var conversation_id = data.conversation_id;
+        if (conversation_id in conversations) {
+            console.log (conversation_id + ' is already in the conversations object');
+        } else {
+            socket.conversation_id = data;
+            conversations[socket.conversation_id] = socket;
+            conversations[conversation_id] = data.conversation_id;
+            console.log ('adding '  + conversation_id + ' to conversations.');
+        }
+    })
+
+    socket.on('subscribe', function(room) {
+        console.log('joining con_id:', room);
+        socket.join(room);
+    });
+    
+    socket.on('sendmessage', function(data) {
+        console.log('sending room post', data.room);
+        socket.broadcast.to(data.room).emit('conversation private post', {
+            message: data.message
+        });
+    });
 
     socket.on('disconnect', function() {
         chatConnections--;
         console.log("Num of chat users connected: " + chatConnections);
 
     });
-})
+});
+
 app.get('/messages', chat.receive);
 app.get('/messages/:id', chat.receive);
-app.post('/messages/:id', function (req, res) {
+app.post('/messages/:con_id', function (req, res) {
     var datetime = new Date();
     var chatData = {
-        sendername: req.user.name,
-        recipientid: req.params.id,
+        conversation_id: req.params.con_id,
+        senderid : req.user.id,
+        recipientid : '2',
         message: req.body.message,
         timestamp: datetime.getHours() + ":" + datetime.getMinutes()
     }
@@ -133,7 +160,7 @@ app.post('/messages/:id', function (req, res) {
         if (!newMessage) {
             res.sendStatus(500);
         }
-		io.emit('message', chatData)
+		// io.emit('message', chatData)
         res.sendStatus(200)
     })
 });

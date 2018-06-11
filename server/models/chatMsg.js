@@ -38,13 +38,14 @@ const ChatMsg = sequelize.define('ChatMsg', {
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("ChatMsg table synced");
-    // ChatMsg.upsert({
-    //     id: '1',
-    //     senderid: '1',
-    //     recipientid: '2',
-    //     message: 'Hello World',
-    //     timestamp: '12:00'
-    // })
+    ChatMsg.upsert({
+        id: '1',
+        conversation_id: '1',
+        senderid: '1',
+        recipientid: '2',
+        message: 'Hello World',
+        timestamp: '12:00'
+    })
 });
 
 module.exports = sequelize.model('ChatMsg', ChatMsg);

@@ -45,7 +45,7 @@
                 <ul>
                     <% conversations.forEach(function(conv) { %>
                         <% if (user.id == (conv.senderid || conv.recipientid)) { %>
-                        <li class="contact" id="<%= conv.con_id %>">
+                        <li class="contact" data-conid="<%= conv.con_id %>">
                             <div class="wrap">
                                 <span class="contact-status online"></span>
                                 <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
@@ -71,16 +71,19 @@
             </div>
             <div class="messages" id="messages">
                 <ul id="inlineMessage">
-                    <% chatmessages.forEach(function(msg) { %> 
-                    <% if (msg.senderid == user.id) { %>
-                    <li class="replies">
-                    <% } else { %>
-                    <li class="sent">
+                    <% if (chatmessages) { %>
+                        <% chatmessages.forEach(function(msg) { %> 
+                        <% if (msg.senderid == user.id) { %>
+                        <li class="replies">
+                        <% } else { %>
+                        <li class="sent">
+                        <% } %>
+                                <p> <%=msg.message %> </p>
+                                <p> <%=msg.timestamp %> </p>
+                        </li>
+                        <%})%>
                     <% } %>
-                            <p> <%=msg.message %> </p>
-                            <p> <%=msg.timestamp %> </p>
-                    </li>
-                    <%})%>
+                        
                 </ul>
             </div>
             <div class="message-input">
@@ -111,12 +114,10 @@
         var $contacts = $('.contact').click(function(){
             $contacts.removeClass('active');
             $(this).addClass('active');
-            var conversation_id = $(this).attr('id')
+            var conversation_id = $(this).data('conid')
             window.history.pushState('', '', '/messages/' + conversation_id);
             
             socket.emit('subscribe', conversation_id);
-
-            $("#content").load(location.href);
         });
     });
 
@@ -126,25 +127,23 @@
             var message = { message: $("#message").val() }
             postMessage(message)
             $('#message').val('');
-            var conversation_id = '100';
-            socket.emit('sendmessage', { room: conversation_id, message: message });
         })
     })
 
     
     function postMessage(message) {
-        var conversation_id = $('.contact.active').attr('id')
+        var conversation_id = $('.contact.active').data('conid')
+        socket.emit('sendmessage', { room: conversation_id, message: message });
         $.post('<%=urlPath%>'+ '/' + conversation_id, message)
     }
 
-    // socket.on('message', addMessage)
+    socket.on('sendmessage', addMessage)
 
-    // function addMessage(msg) {
-    //     $("#inlineMessage").append(`<li class="replies">
-    //         <p> ${msg.message}  </p>
-    //         <p> ${msg.timestamp} </p>
-    //         </li>`)
-    // }
+    function addMessage(msg) {
+        $("#inlineMessage").append(`<li class="replies">
+            <p> ${msg.message}  </p>
+            </li>`)
+    }
 
 </script>
 

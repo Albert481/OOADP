@@ -113,17 +113,17 @@ io.on('connection', function(socket) {
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
 
-    socket.on('sendmessage', function(data) {
-        var conversation_id = data.conversation_id;
-        if (conversation_id in conversations) {
-            console.log (conversation_id + ' is already in the conversations object');
-        } else {
-            socket.conversation_id = data;
-            conversations[socket.conversation_id] = socket;
-            conversations[conversation_id] = data.conversation_id;
-            console.log ('adding '  + conversation_id + ' to conversations.');
-        }
-    })
+    // socket.on('sendmessage', function(data) {
+    //     var conversation_id = data.conversation_id;
+    //     if (conversation_id in conversations) {
+    //         console.log (conversation_id + ' is already in the conversations object');
+    //     } else {
+    //         socket.conversation_id = data;
+    //         conversations[socket.conversation_id] = socket;
+    //         conversations[conversation_id] = data.conversation_id;
+    //         console.log ('adding '  + conversation_id + ' to conversations.');
+    //     }
+    // })
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
@@ -144,8 +144,8 @@ io.on('connection', function(socket) {
     });
 });
 
-app.get('/messages', chat.receive);
-app.get('/messages/:id', chat.receive);
+app.get('/messages/', chat.receive);
+app.get('/messages/:con_id', chat.receive);
 app.post('/messages/:con_id', function (req, res) {
     var datetime = new Date();
     var chatData = {

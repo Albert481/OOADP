@@ -146,11 +146,14 @@
         $.post('<%=urlPath%>'+ '/' + conversation_id, message)
     }
 
-    socket.on('sendmessage', addMessage)
+    socket.on('message', addMessage, function(message) {
+        console.log('passed')
+    })
 
     function addMessage(msg) {
         $("#inlineMessage").append(`<li class="replies">
             <p> ${msg.message}  </p>
+            <p> ${msg.timestamp} <p>
             </li>`)
     }
 </script>

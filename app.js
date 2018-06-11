@@ -130,12 +130,13 @@ io.on('connection', function(socket) {
         socket.join(room);
     });
     
-    socket.on('sendmessage', function(data) {
-        console.log('sending room post', data.room);
-        socket.broadcast.to(data.room).emit('conversation private post', {
-            message: data.message
-        });
-    });
+    // socket.on('sendmessage', function(data) {
+    //     console.log('sending room post', data.room);
+    //     io.in(data.room).emit('big-announcement', 'the game will start soon');
+    //     socket.broadcast.to(data.room).emit('conversation private post', {
+    //         message: data.message
+    //     });
+    // });
 
     socket.on('disconnect', function() {
         chatConnections--;
@@ -160,7 +161,8 @@ app.post('/messages/:con_id', function (req, res) {
         if (!newMessage) {
             res.sendStatus(500);
         }
-		// io.emit('message', chatData)
+        // io.emit('message', chatData)
+        io.in(req.params.con_id).emit('message', chatData);
         res.sendStatus(200)
     })
 });

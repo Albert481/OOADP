@@ -28,17 +28,17 @@ exports.receive = function(req, res) {
         con_id = req.params.con_id
     }
     Conversation.findAll().then((conversations) => {
-        sequelize.query('select msg.conversation_id, msg.senderid, msg.recipientid, msg.message, msg.timestamp from ChatMsgs msg join Conversations con on msg.conversation_id =' + con_id, { model: ChatMsg} ).then((chats) => {
+        sequelize.query('select msg.conversation_id, msg.senderid, msg.recipientid, msg.message, msg.timestamp from ChatMsgs msg where msg.conversation_id =' + con_id, { model: ChatMsg} ).then((chats) => {
             res.render('chatMsg', {
                 title: 'myShoppe',
                 chatmessages: chats,
                 conversations: conversations,
                 urlPath: req.protocol + "://" + req.get("host") + req.path
             });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
-        });
-    });
+    })
 };

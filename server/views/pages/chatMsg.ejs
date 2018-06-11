@@ -64,14 +64,14 @@
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
-        <div class="content">
-            <div class="contact-profile">
-                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p> <%= user.name %> </p>
-            </div>
-            <div class="messages" id="messages">
-                <ul id="inlineMessage">
-                    <% if (chatmessages) { %>
+        <container id="contentContainer">
+            <div class="content" id="contentMargin">
+                <div class="contact-profile">
+                    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                    <p> <%= user.name %> </p>
+                </div>
+                <div class="messages" id="messages">
+                    <ul id="inlineMessage">
                         <% chatmessages.forEach(function(msg) { %> 
                         <% if (msg.senderid == user.id) { %>
                         <li class="replies">
@@ -81,11 +81,10 @@
                                 <p> <%=msg.message %> </p>
                                 <p> <%=msg.timestamp %> </p>
                         </li>
-                        <%})%>
-                    <% } %>
-                        
-                </ul>
-            </div>
+                        <%})%>  
+                    </ul>
+                </div>
+            </container>
             <div class="message-input">
                 <div class="wrap">
                 <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
@@ -102,11 +101,11 @@
 <script>
     var socket = io()
     // Allows enter key to send message
-    $("input").keypress(function(event) {
-    if (event.which == 13) {
-        event.preventDefault();
+    $(document.body).delegate('input:text', 'keypress', function(e) {
+    if (e.which === 13) { // if is enter
+        e.preventDefault(); // don't submit form
         $("#send").click();
-        }
+    }
     });
 
     // Change contact by clicking
@@ -118,17 +117,27 @@
             window.history.pushState('', '', '/messages/' + conversation_id);
             
             socket.emit('subscribe', conversation_id);
+            
+            $.get('/messages/' + conversation_id)
+
+            $("#contentContainer").load(location.href + " #contentMargin");
+            // $.ajax({
+            //     type: 'GET',
+            //     url: conversation_id,
+            //     success: function(data){
+                    
+            //     }
+            // })
         });
     });
 
     // Sends message
-    $(() => {
-        $("#send").click(() => {
-            var message = { message: $("#message").val() }
-            postMessage(message)
-            $('#message').val('');
-        })
+    $(document).on("click" , '#send' ,function () {
+        var message = { message: $("#message").val() }
+        postMessage(message)
+        $('#message').val('');
     })
+    
 
     
     function postMessage(message) {
@@ -144,7 +153,6 @@
             <p> ${msg.message}  </p>
             </li>`)
     }
-
 </script>
 
 

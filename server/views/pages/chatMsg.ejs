@@ -124,8 +124,6 @@
             
             socket.emit('subscribe', conversation_id);
             
-            // $.get('/messages/' + conversation_id)
-            
             // refreshes div to load messages
             $("#contentContainer").load(location.href + " #contentMargin");
             // $.ajax({
@@ -149,7 +147,14 @@
     
     function postMessage(message) {
         var conversation_id = $('.contact.active').data('conid')
-        $.post('<%=urlPath%>'+ '/' + conversation_id, message)
+
+        // REVAMP THIS CODE
+        if (location.href[-1] == null) {
+            param = ''
+        } else {
+            param = conversation_id
+        }
+        $.post(location.href + param, message)
     }
 
     socket.on('message', addMessage, function(message) {

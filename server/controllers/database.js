@@ -12,6 +12,7 @@ const sequelize =new Sequelize({
     username: 'myshoppe_admin',
     password: 'admin',
     database: 'myshoppedb',
+    timezone: '+08:00',
     pool: {
         min: 0,
         max: 10,

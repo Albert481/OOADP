@@ -154,7 +154,7 @@ app.post('/messages/:con_id', function (req, res) {
         senderid : req.user.id,
         recipientid : '2',
         message: req.body.message,
-        timestamp: datetime.getHours() + ":" + datetime.getMinutes()
+        timestamp: datetime
     }
     // Save into database
     ChatMsg.create(chatData).then((newMessage) => {

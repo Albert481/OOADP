@@ -44,7 +44,7 @@ ChatMsg.sync({ force: false, logging: console.log}).then(() => {
         senderid: '1',
         recipientid: '2',
         message: 'Hello World',
-        timestamp: '12:00'
+        timestamp: ''
     })
 });
 

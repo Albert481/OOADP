@@ -561,7 +561,7 @@ body {
   }
   #frame .content .messages ul li {
     display: inline-block;
-    clear: both;
+    /* clear: both; */
     float: left;
     margin: 15px 15px 5px 15px;
     width: calc(100% - 25px);
@@ -574,8 +574,8 @@ body {
     margin: 6px 8px 0 0;
   }
   #frame .content .messages ul li.sent p {
-    background: #435f7a;
-    color: #f5f5f5;
+    background: #b5dbff;
+    color: #000000;
   }
   #frame .content .messages ul li.replies img {
     float: right;
@@ -593,9 +593,23 @@ body {
   #frame .content .messages ul li p {
     display: inline-block;
     padding: 10px 15px;
-    border-radius: 20px;
+    border-radius: 8px;
     max-width: 205px;
     line-height: 130%;
+  }
+  #frame .content .messages ul li.sent .timestamp {
+    font-size: 11px;
+    position: absolute;
+    left: 10px;
+    text-transform: uppercase;
+    color: #999;
+  }
+  #frame .content .messages ul li.replies .timestamp {
+    font-size: 11px;
+    position: absolute;
+    right: 10px;
+    text-transform: uppercase;
+    color: #999;
   }
   @media screen and (min-width: 735px) {
     #frame .content .messages ul li p {

@@ -44,7 +44,7 @@
             <div id="contacts">
                 <ul>
                     <% conversations.forEach(function(conv) { %>
-                        <% if (user.id == (conv.senderid || conv.recipientid)) { %>
+                        <% if (user.id == conv.senderid || user.id == conv.recipientid) { %>
                         <li class="contact" data-conid="<%= conv.con_id %>">
                             <div class="wrap">
                                 <span class="contact-status online"></span>
@@ -78,8 +78,10 @@
                         <% } else { %>
                         <li class="sent">
                         <% } %>
+                            <div>
                                 <p> <%=msg.message %> </p>
-                                <p> <%=msg.timestamp %> </p>
+                                <span class="timestamp"> <%=msg.timestamp %> </span>
+                            </div>
                         </li>
                         <%})%>  
                     </ul>
@@ -119,7 +121,8 @@
             socket.emit('subscribe', conversation_id);
             
             $.get('/messages/' + conversation_id)
-
+            
+            // refreshes div to load messages
             $("#contentContainer").load(location.href + " #contentMargin");
             // $.ajax({
             //     type: 'GET',
@@ -151,9 +154,12 @@
     })
 
     function addMessage(msg) {
-        $("#inlineMessage").append(`<li class="replies">
-            <p> ${msg.message}  </p>
-            <p> ${msg.timestamp} <p>
+        $("#inlineMessage").append(`
+            <li class="replies">
+                <div>
+                    <p> ${msg.message}  </p>
+                    <span class="timestamp"> ${msg.timestamp} </span>
+                </div>
             </li>`)
     }
 </script>

@@ -9,10 +9,18 @@ const Conversation = sequelize.define('Conversation', {
         primaryKey: true
     },
     senderid: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
     recipientid: {
-        type: Sequelize.INTEGER   
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Users',
+            key: 'id'
+        } 
     }
 });
 

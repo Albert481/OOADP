@@ -50,7 +50,11 @@
                                 <span class="contact-status online"></span>
                                 <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="meta">
-                                    <p class="name"> <%= conv.senderid %> </p>
+                                    <% if (conv.senderid == user.id) { %>
+                                        <p class="name"> <%= conv.recipientid %> </p>
+                                    <% } else { %>
+                                        <p class="name"> <%= conv.senderid %> </p>
+                                    <% } %>
                                     <p class="preview">You just got LITT up, Mike.</p>
                                 </div>
                             </div>
@@ -68,7 +72,7 @@
             <div class="content" id="contentMargin">
                 <div class="contact-profile">
                     <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                    <p> <%= user.name %> </p>
+                    <p id="chatTo"> </p>
                 </div>
                 <div class="messages" id="messages">
                     <ul id="inlineMessage">
@@ -120,7 +124,7 @@
             
             socket.emit('subscribe', conversation_id);
             
-            $.get('/messages/' + conversation_id)
+            // $.get('/messages/' + conversation_id)
             
             // refreshes div to load messages
             $("#contentContainer").load(location.href + " #contentMargin");
@@ -145,7 +149,6 @@
     
     function postMessage(message) {
         var conversation_id = $('.contact.active').data('conid')
-        socket.emit('sendmessage', { room: conversation_id, message: message });
         $.post('<%=urlPath%>'+ '/' + conversation_id, message)
     }
 

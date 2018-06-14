@@ -126,13 +126,6 @@
             
             // refreshes div to load messages
             $("#contentContainer").load(location.href + " #contentMargin");
-            // $.ajax({
-            //     type: 'GET',
-            //     url: conversation_id,
-            //     success: function(data){
-                    
-            //     }
-            // })
         });
     });
 
@@ -147,14 +140,7 @@
     
     function postMessage(message) {
         var conversation_id = $('.contact.active').data('conid')
-
-        // REVAMP THIS CODE
-        if (location.href[-1] == null) {
-            param = ''
-        } else {
-            param = conversation_id
-        }
-        $.post(location.href + param, message)
+        $.post(location.href, message)
     }
 
     socket.on('message', addMessage, function(message) {

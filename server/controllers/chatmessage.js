@@ -1,17 +1,5 @@
-<<<<<<< HEAD
-// Show chat screen
-exports.show = function(req, res) {
-	// Render home screen
-	res.render('chatmessage', {
-		title: 'myShoppe',
-	});
-};
-=======
-var express = require('express');
-var app = express();
 var ChatMsg = require('../models/chatMsg');
 var Conversation = require('../models/conversation')
-var User = require('../models/users')
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 
@@ -51,4 +39,3 @@ exports.receive = function(req, res) {
         });
     })
 };
->>>>>>> albert

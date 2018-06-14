@@ -106,7 +106,6 @@ app.get('/categories', category.show)
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
-var User = require('./server/models/users')
 conversations = {};
 
 io.on('connection', function(socket) {

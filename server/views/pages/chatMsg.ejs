@@ -144,7 +144,7 @@
     }
 
     socket.on('message', addMessage, function(message) {
-        console.log('passed')
+        scrollToBottom()
     })
 
     function addMessage(msg) {
@@ -155,7 +155,28 @@
                     <span class="timestamp"> ${msg.timestamp} </span>
                 </div>
             </li>`)
+        scrollToBottom();
     }
+
+    function scrollToBottom() {
+        // Selectors
+        var messages = $('#messages');
+        var newMessage = messages.children().children('li:last-child')
+        // Heights
+        var clientHeight = messages.prop('clientHeight');
+        var scrollTop = messages.prop('scrollTop');
+        var scrollHeight = messages.prop('scrollHeight');
+        var newMessageHeight = newMessage.innerHeight();
+        var lastMessageHeight = newMessage.prev().innerHeight();
+        
+        console.log(newMessage)
+        console.log(clientHeight, scrollTop, newMessageHeight, lastMessageHeight, scrollHeight)
+
+        if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
+            messages.scrollTop(scrollHeight);
+        }
+
+}
 </script>
 
 

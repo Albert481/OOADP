@@ -7,12 +7,17 @@
         <div class="header-top-inner">
           <div class="cnt-account">
             <ul class="list-unstyled">
+              <% if (user) { %>
+              <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
               <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
               <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
               <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+              <% } else { %>
               <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+              <% } %>
             </ul>
           </div>
+          <% if (user) { %>
           <!-- /.cnt-account -->
           <div class="cnt-block">
               <ul class="list-unstyled list-inline">
@@ -25,6 +30,7 @@
                 </li>
               </ul>
             </div>
+            <% } %>
           <!-- /.cnt-cart -->
           <div class="clearfix"></div>
         </div>

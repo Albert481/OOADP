@@ -27,7 +27,6 @@ exports.logout = function () {
 // check if user is logged in
 exports.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
-        req.user = req.user;
         return next();
     res.redirect('/login');
 };

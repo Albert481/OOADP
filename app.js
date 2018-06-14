@@ -30,7 +30,6 @@ var flash = require('connect-flash');
 
 // App setup
 var app = express();
-var io = socket();
 var serverPort = 3000;
 var httpServer = require('http').Server(app);
 
@@ -72,6 +71,11 @@ app.use(passport.session());
 app.use(flash());
 
 // Application Routes
+app.use(function(req, res, next) {
+    res.locals.user = req.user;
+    next();
+  });
+
 // Index route
 app.get('/', index.show)
 app.get('/login', auth.login)
@@ -96,10 +100,72 @@ app.get('/logout', function (req, res) {
 // Serve static files TEMPORARILY
 app.get('/categories', category.show)
 
-app.get('/chatmessage', chat.show)
+// app.get('/chatmessage', chat.show)
 
 // Setup chat
 var io = require('socket.io')(httpServer);
+var chatConnections = 0;
+var ChatMsg = require('./server/models/chatMsg');
+var User = require('./server/models/users')
+conversations = {};
+
+io.on('connection', function(socket) {
+    chatConnections++;
+    console.log("Num of chat users connected: " + chatConnections);
+
+    // socket.on('sendmessage', function(data) {
+    //     var conversation_id = data.conversation_id;
+    //     if (conversation_id in conversations) {
+    //         console.log (conversation_id + ' is already in the conversations object');
+    //     } else {
+    //         socket.conversation_id = data;
+    //         conversations[socket.conversation_id] = socket;
+    //         conversations[conversation_id] = data.conversation_id;
+    //         console.log ('adding '  + conversation_id + ' to conversations.');
+    //     }
+    // })
+
+    socket.on('subscribe', function(room) {
+        console.log('joining con_id:', room);
+        socket.join(room);
+    });
+    
+    // socket.on('sendmessage', function(data) {
+    //     console.log('sending room post', data.room);
+    //     io.in(data.room).emit('big-announcement', 'the game will start soon');
+    //     socket.broadcast.to(data.room).emit('conversation private post', {
+    //         message: data.message
+    //     });
+    // });
+
+    socket.on('disconnect', function() {
+        chatConnections--;
+        console.log("Num of chat users connected: " + chatConnections);
+
+    });
+});
+
+app.get('/messages/', chat.receive);
+app.get('/messages/:con_id', chat.receive);
+app.post('/messages/:con_id', function (req, res) {
+    var datetime = new Date();
+    var chatData = {
+        conversation_id: req.params.con_id,
+        senderid : req.user.id,
+        recipientid : '2',
+        message: req.body.message,
+        timestamp: datetime
+    }
+    // Save into database
+    ChatMsg.create(chatData).then((newMessage) => {
+        if (!newMessage) {
+            res.sendStatus(500);
+        }
+        // io.emit('message', chatData)
+        io.in(req.params.con_id).emit('message', chatData);
+        res.sendStatus(200)
+    })
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

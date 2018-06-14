@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <script src="/javascripts/socket.io.js"></script>
+    <% include ../partials/javascript.ejs %>
+    <% include ../partials/stylesheet %>
+    <link rel="stylesheet" href="/stylesheets/chatmessage.css">
+</head>
+
+<body>
+    <div id="frame">
+        <div id="sidepanel">
+            <div id="profile">
+                <div class="wrap">
+                    <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+                    <p> <%= user.name %> </p>
+                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                    <div id="status-options">
+                        <ul>
+                            <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+                            <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+                            <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+                            <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+                        </ul>
+                    </div>
+                    <div id="expanded">
+                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mikeross" />
+                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="ross81" />
+                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mike.ross" />
+                    </div>
+                </div>
+            </div>
+            <div id="search">
+                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+                <input type="text" placeholder="Search contacts..." />
+            </div>
+            <div id="contacts">
+                <ul>
+                    <% conversations.forEach(function(conv) { %>
+                        <% if (user.id == conv.senderid || user.id == conv.recipientid) { %>
+                        <li class="contact" data-conid="<%= conv.con_id %>">
+                            <div class="wrap">
+                                <span class="contact-status online"></span>
+                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <div class="meta">
+                                    <% if (conv.senderid == user.id) { %>
+                                        <p class="name"> <%= conv.recipientid %> </p>
+                                    <% } else { %>
+                                        <p class="name"> <%= conv.senderid %> </p>
+                                    <% } %>
+                                    <p class="preview">You just got LITT up, Mike.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <% } %>
+                    <% }) %>
+                </ul>
+            </div>
+            <div id="bottom-bar">
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+            </div>
+        </div>
+        <container id="contentContainer">
+            <div class="content" id="contentMargin">
+                <div class="contact-profile">
+                    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                    <p id="chatTo"> </p>
+                </div>
+                <div class="messages" id="messages">
+                    <ul id="inlineMessage">
+                        <% chatmessages.forEach(function(msg) { %> 
+                        <% if (msg.senderid == user.id) { %>
+                        <li class="replies">
+                        <% } else { %>
+                        <li class="sent">
+                        <% } %>
+                            <div>
+                                <p> <%=msg.message %> </p>
+                                <span class="timestamp"> <%=msg.timestamp %> </span>
+                            </div>
+                        </li>
+                        <%})%>  
+                    </ul>
+                </div>
+            </container>
+            <div class="message-input">
+                <div class="wrap">
+                <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    
+
+
+<script>
+    var socket = io()
+    // Allows enter key to send message
+    $(document.body).delegate('input:text', 'keypress', function(e) {
+    if (e.which === 13) { // if is enter
+        e.preventDefault(); // don't submit form
+        $("#send").click();
+    }
+    });
+
+    // Change contact by clicking
+    $(function(){
+        var $contacts = $('.contact').click(function(){
+            $contacts.removeClass('active');
+            $(this).addClass('active');
+            var conversation_id = $(this).data('conid')
+            window.history.pushState('', '', '/messages/' + conversation_id);
+            
+            socket.emit('subscribe', conversation_id);
+            
+            // refreshes div to load messages
+            $("#contentContainer").load(location.href + " #contentMargin");
+        });
+    });
+
+    // Sends message
+    $(document).on("click" , '#send' ,function () {
+        var message = { message: $("#message").val() }
+        postMessage(message)
+        $('#message').val('');
+    })
+    
+
+    
+    function postMessage(message) {
+        var conversation_id = $('.contact.active').data('conid')
+        $.post(location.href, message)
+    }
+
+    socket.on('message', addMessage, function(message) {
+        console.log('passed')
+    })
+
+    function addMessage(msg) {
+        $("#inlineMessage").append(`
+            <li class="replies">
+                <div>
+                    <p> ${msg.message}  </p>
+                    <span class="timestamp"> ${msg.timestamp} </span>
+                </div>
+            </li>`)
+    }
+</script>
+
+
+<footer>
+    <% include ../partials/javascript %>
+</footer>
+
+</body>
+
+</html>

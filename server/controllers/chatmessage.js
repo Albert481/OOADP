@@ -1,4 +1,3 @@
-var express = require('express');
 var ChatMsg = require('../models/chatMsg');
 var Conversation = require('../models/conversation')
 var myDatabase = require('./database');

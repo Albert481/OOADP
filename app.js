@@ -3,9 +3,9 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
-var socket = require('socket.io');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var moment = require('moment');
 
 // Import home controller
 var index = require('./server/controllers/index');
@@ -147,13 +147,13 @@ io.on('connection', function(socket) {
 app.get('/messages/', chat.receive);
 app.get('/messages/:con_id', chat.receive);
 app.post('/messages/:con_id', function (req, res) {
-    var datetime = new Date();
+    var formattedTime = moment().format('h:mm a');
     var chatData = {
         conversation_id: req.params.con_id,
         senderid : req.user.id,
         recipientid : '2',
         message: req.body.message,
-        timestamp: datetime
+        timestamp: formattedTime
     }
     // Save into database
     ChatMsg.create(chatData).then((newMessage) => {

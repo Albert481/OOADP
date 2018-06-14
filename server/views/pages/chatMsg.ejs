@@ -143,9 +143,7 @@
         $.post(location.href, message)
     }
 
-    socket.on('message', addMessage, function(message) {
-        scrollToBottom()
-    })
+    socket.on('message', addMessage)
 
     function addMessage(msg) {
         $("#inlineMessage").append(`
@@ -168,9 +166,6 @@
         var scrollHeight = messages.prop('scrollHeight');
         var newMessageHeight = newMessage.innerHeight();
         var lastMessageHeight = newMessage.prev().innerHeight();
-        
-        console.log(newMessage)
-        console.log(clientHeight, scrollTop, newMessageHeight, lastMessageHeight, scrollHeight)
 
         if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
             messages.scrollTop(scrollHeight);

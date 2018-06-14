@@ -29,7 +29,7 @@ const ChatMsg = sequelize.define('ChatMsg', {
         trim: true
     },
     timestamp: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
         allowNull: true,
     }
 });

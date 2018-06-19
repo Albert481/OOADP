@@ -6,7 +6,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var moment = require('moment');
+//import multer
+var multer = require('multer');
+var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
+//Import listing controller
+var listing = require('./server/controllers/listing');
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -182,6 +187,10 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
+app.get('/listing', listing.hasAuthorization, listing.show);
+app.post('/listing-gallery', listing.hasAuthorization, listing.create);
+app.delete('/listing/:listing_id', listing.hasAuthorization, listing.delete);
 
 module.exports = app;
 

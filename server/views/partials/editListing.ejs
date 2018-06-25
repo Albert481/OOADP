@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <% include ../partials/stylesheet %>
+    </head>
+     
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+<body>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Listing</h4>
+    </div>
+    <div class="modal-body">
+        <fieldset class="form-group">
+            <label for="inputListingID">Your ID</label>
+            <input type="text" id="inputListingID" name="listingId" class="form-control" required="true" value="<%=item.listingId%>">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" id="inputName" name="listingName" class="form-control" required="true" value="<%=item.name%>">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="inputDescription">Description</label>
+            <input type="text" id="inputDescription" name="group" class="form-control" required="true" value="<%=item.description%>">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="inputHobby">Price</label>
+            <input type="text" id="inputPrice" name="price" class="form-control" required="true" value="<%=item.price%>">
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+    </div>
+    <script>
+        function saveChanges() {
+            var url = "<%=hostPath%>/edit/<%=item.id%>";
+            var newValues = {
+                listingId: $("#inputListingID").val(),
+                name: $("#inputName").val(),
+                description: $("#inputDescription").val(),
+                price: $("#inputPrice").val()
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(newValues),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Updated successfully");
+                    location.href = "<%=hostPath%>"
+                },
+                error: function(result){
+                    alert("Error updating. Please try Again later.");
+                    discardChanges();
+                }
+            })
+        }
+
+        function discardChanges() {
+            location.href = "<%=hostPath%>"
+        }
+    </script>
+</body>
+<footer>
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+      </footer>
+</html>

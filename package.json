@@ -1,7 +1,6 @@
 {
   "name": "expressapp",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -32,5 +31,15 @@
   },
   "devDependencies": {
     "nodemon": "^1.9.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Albert481/myShoppe.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Albert481/myShoppe/issues"
+  },
+  "homepage": "https://github.com/Albert481/myShoppe#readme",
+  "description": ""
 }

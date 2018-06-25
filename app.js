@@ -95,7 +95,6 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/login',
     failureFlash: true
 }));
-
 // Logout Page
 app.get('/logout', function (req, res) {
     req.logout();
@@ -149,6 +148,12 @@ io.on('connection', function(socket) {
     });
 });
 
+app.get("/listing", listing.list);
+app.get("/listing/edit/:id", listing.editListing);
+app.post("/listing/new", listing.insert);
+app.post("/listing/edit/:id", listing.update);
+app.delete("/listing/:id", listing.delete);
+
 app.get('/messages/', chat.receive);
 app.get('/messages/:con_id', chat.receive);
 app.post('/messages/:con_id', function (req, res) {
@@ -187,10 +192,6 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-
-app.get('/listing', listing.hasAuthorization, listing.show);
-app.post('/listing-gallery', listing.hasAuthorization, listing.create);
-app.delete('/listing/:listing_id', listing.hasAuthorization, listing.delete);
 
 module.exports = app;
 

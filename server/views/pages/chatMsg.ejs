@@ -96,6 +96,19 @@
                 <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
                 <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                <form action="/charge" method="POST">
+                    <script
+                    src = "https://checkout.stripe.com/checkout.js"
+                    class = "stripe-button"
+                    data-key = "pk_test_1HN7ygkWSy5i67Sb0ouFzhBu"
+                    data-amount = "149900"
+                    data-name = "Cool PC"
+                    data-Description = "This is the cool PC you bought"
+                    data-currency = "sgd"
+                    >    
+                    </script>
+                <input type="hidden" name = "chargeAmount" value = "149900">
+                </form>
                 </div>
             </div>
         </div>
@@ -113,7 +126,6 @@
         $("#send").click();
     }
     });
-
     // Change contact by clicking
     $(function(){
         var $contacts = $('.contact').click(function(){
@@ -128,34 +140,37 @@
             $("#contentContainer").load(location.href + " #contentMargin");
         });
     });
-
     // Sends message
     $(document).on("click" , '#send' ,function () {
         var message = { message: $("#message").val() }
         postMessage(message)
         $('#message').val('');
     })
-    
 
+    // Make Offer
+    $(document).on("click" , '#makeoffer' ,function () {
+        
+        var offerMessage = { message: $("#offerprice").val() }
+        postMessage(offerMessage)
+        $('#message').val('');
+    })
+    
     
     function postMessage(message) {
         var conversation_id = $('.contact.active').data('conid')
         $.post(location.href, message)
     }
-
     socket.on('message', addMessage)
-
     function addMessage(msg) {
         $("#inlineMessage").append(`
             <li class="replies">
                 <div>
-                    <p> ${msg.message}  </p>
+                    <p>  ${msg.message}  </p>
                     <span class="timestamp"> ${msg.timestamp} </span>
                 </div>
             </li>`)
         scrollToBottom();
     }
-
     function scrollToBottom() {
         // Selectors
         var messages = $('#messages');
@@ -166,11 +181,9 @@
         var scrollHeight = messages.prop('scrollHeight');
         var newMessageHeight = newMessage.innerHeight();
         var lastMessageHeight = newMessage.prev().innerHeight();
-
         if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
             messages.scrollTop(scrollHeight);
         }
-
 }
 </script>
 
@@ -181,4 +194,4 @@
 
 </body>
 
-</html>
+</html> 

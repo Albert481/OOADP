@@ -30,14 +30,6 @@ const Listing = sequelize.define('Listing', {
     price: {
         type: Sequelize.INTEGER,
         allowNull: false
-    },
-    user_id:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
     }
 });
 

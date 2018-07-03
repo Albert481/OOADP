@@ -107,6 +107,18 @@ app.get('/categories', category.show)
 
 // app.get('/chatmessage', chat.show)
 
+
+// Manage Offers
+var manageOffers = require("./server/controllers/manageOffers")
+
+app.get("/manageoffers/", manageOffers.list);
+app.get("/editoffers/:id", manageOffers.editOffer)
+app.post("/offer/new", manageOffers.manageOffers)
+app.post("/editoffers/:id", manageOffers.update);
+app.delete("/manageoffers/:id", manageOffers.delete);
+
+
+
 // Setup chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;

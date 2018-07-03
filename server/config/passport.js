@@ -7,7 +7,7 @@ module.exports = function (passport) {
     // passport init setup
     // serialize the user for the session
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user.user_id);
     });
     // deserialize the user
     passport.deserializeUser(function (id, done) {

@@ -43,24 +43,20 @@
             </div>
             <div id="contacts">
                 <ul>
-                    <% conversations.forEach(function(conv) { %>
-                        <% if (user.id == conv.senderid || user.id == conv.recipientid) { %>
-                        <li class="contact" data-conid="<%= conv.con_id %>">
-                            <div class="wrap">
-                                <span class="contact-status online"></span>
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                                <div class="meta">
-                                    <% if (conv.senderid == user.id) { %>
-                                        <p class="name"> <%= conv.recipientid %> </p>
-                                    <% } else { %>
-                                        <p class="name"> <%= conv.senderid %> </p>
-                                    <% } %>
-                                    <p class="preview">You just got LITT up, Mike.</p>
+                    <% for (var i in conversations) { %>
+                        <% if (user.user_id != conversations[i].user_id) { %>
+                            <li class="contact" data-conid="<%= conversations[i].con_id %>">
+                                <div class="wrap">
+                                    <span class="contact-status online"></span>
+                                    <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                    <div class="meta">
+                                        <p class="name"> <%= conversations[i].name %> </p>
+                                        <p class="preview">You just got LITT up, DANKO.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
                         <% } %>
-                    <% }) %>
+                    <% } %>
                 </ul>
             </div>
             <div id="bottom-bar">
@@ -76,18 +72,20 @@
                 </div>
                 <div class="messages" id="messages">
                     <ul id="inlineMessage">
-                        <% chatmessages.forEach(function(msg) { %> 
-                        <% if (msg.senderid == user.id) { %>
-                        <li class="replies">
-                        <% } else { %>
-                        <li class="sent">
-                        <% } %>
-                            <div>
-                                <p> <%=msg.message %> </p>
-                                <span class="timestamp"> <%=msg.timestamp %> </span>
-                            </div>
-                        </li>
-                        <%})%>  
+                        <% console.log(chatmessages) %>
+                        <% for (var i in chatmessages) { %> 
+                            <% if (chatmessages[i].user_id == user.user_id) { %>
+                            <li class="replies">
+                            <% } else { %>
+                            <li class="sent">
+                            <% } %>
+                                <div>
+                                    <span> <%=chatmessages[i].name %> </p>
+                                    <p> <%=chatmessages[i].message %> </p>
+                                    <span class="timestamp"> <%=chatmessages[i].timestamp %> </span>
+                                </div>
+                            </li>
+                        <%}%>  
                     </ul>
                 </div>
             </container>
@@ -136,10 +134,7 @@
         $('#message').val('');
     })
     
-
-    
     function postMessage(message) {
-        var conversation_id = $('.contact.active').data('conid')
         $.post(location.href, message)
     }
 

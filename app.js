@@ -149,9 +149,7 @@ app.get('/messages/:con_id', chat.receive);
 app.post('/messages/:con_id', function (req, res) {
     var formattedTime = moment().format('h:mm a');
     var chatData = {
-        conversation_id: req.params.con_id,
-        senderid : req.user.id,
-        recipientid : '2',
+        //cu_id: req.params.cu_id,
         message: req.body.message,
         timestamp: formattedTime
     }

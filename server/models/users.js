@@ -4,7 +4,7 @@ var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
 const Users = sequelize.define('Users', {
-    id: {
+    user_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
@@ -24,7 +24,7 @@ const Users = sequelize.define('Users', {
 Users.sync({force: false, logging:console.log}).then(()=>{
     console.log("users table synced");
     return Users.upsert({
-        id: 1,
+        user_id: 1,
         name: 'Albert',
         email: 'albert@gmail.com',
         password: '1234'

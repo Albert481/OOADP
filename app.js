@@ -145,11 +145,11 @@ io.on('connection', function(socket) {
 });
 
 app.get('/messages/', chat.receive);
-app.get('/messages/:con_id', chat.receive);
-app.post('/messages/:con_id', function (req, res) {
+app.get('/messages/:con_id/:cu_id', chat.receive);
+app.post('/messages/:con_id/:cu_id', function (req, res) {
     var formattedTime = moment().format('h:mm a');
     var chatData = {
-        //cu_id: req.params.cu_id,
+        cu_id: req.params.cu_id,
         message: req.body.message,
         timestamp: formattedTime
     }

@@ -44,13 +44,13 @@
             <div id="contacts">
                 <ul>
                     <% for (var i in conversations) { %>
-                        <% if (user.user_id != conversations[i].user_id) { %>
-                            <li class="contact" data-conid="<%= conversations[i].con_id %>">
+                        <% if (user.user_id == conversations[i].user_id) { %>
+                            <li class="contact" data-cuid="<%= conversations[i].cu_id %>" data-conid="<%= conversations[i].con_id %>">
                                 <div class="wrap">
                                     <span class="contact-status online"></span>
                                     <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                     <div class="meta">
-                                        <p class="name"> <%= conversations[i].name %> </p>
+                                        <p class="name"> <%= conversations[i].con_id %> </p>
                                         <p class="preview">You just got LITT up, DANKO.</p>
                                     </div>
                                 </div>
@@ -68,11 +68,20 @@
             <div class="content" id="contentMargin">
                 <div class="contact-profile">
                     <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                    <p id="chatTo"> </p>
+                        <div style="float: right; width: 40px">
+                            <i class="icon fa fa-ellipsis-v" id="menuButton" expanded="false" style="text-align: center; width: 32px; height: 32px; cursor: pointer; margin: auto;"></i>
+                        </div>
+                        <span>
+                            <div id="dropdownMenu">
+                                <ul>
+                                    <li style="opacity: 1">Report</li>
+                                    <li style="opacity: 1">Block</li>
+                                </ul>
+                            </div>
+                        </span>
                 </div>
                 <div class="messages" id="messages">
                     <ul id="inlineMessage">
-                        <% console.log(chatmessages) %>
                         <% for (var i in chatmessages) { %> 
                             <% if (chatmessages[i].user_id == user.user_id) { %>
                             <li class="replies">
@@ -80,7 +89,6 @@
                             <li class="sent">
                             <% } %>
                                 <div>
-                                    <span> <%=chatmessages[i].name %> </p>
                                     <p> <%=chatmessages[i].message %> </p>
                                     <span class="timestamp"> <%=chatmessages[i].timestamp %> </span>
                                 </div>
@@ -104,6 +112,12 @@
 
 <script>
     var socket = io()
+
+    // When user clicks on menu button (Report/Block)
+    $(document).on("click", '#menuButton', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+    })
+
     // Allows enter key to send message
     $(document.body).delegate('input:text', 'keypress', function(e) {
     if (e.which === 13) { // if is enter
@@ -118,7 +132,8 @@
             $contacts.removeClass('active');
             $(this).addClass('active');
             var conversation_id = $(this).data('conid')
-            window.history.pushState('', '', '/messages/' + conversation_id);
+            var convuser_id = $(this).data('cuid')
+            window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
             
             socket.emit('subscribe', conversation_id);
             
@@ -141,14 +156,29 @@
     socket.on('message', addMessage)
 
     function addMessage(msg) {
-        $("#inlineMessage").append(`
+        var convuser_id = parseInt($('.contact.active').data('cuid'))
+        if (Number(msg.cu_id) == convuser_id) {
+            $("#inlineMessage").append(`
             <li class="replies">
                 <div>
                     <p> ${msg.message}  </p>
                     <span class="timestamp"> ${msg.timestamp} </span>
                 </div>
             </li>`)
-        scrollToBottom();
+            scrollToBottom();
+        } else {
+            $("#inlineMessage").append(`
+            <li class="sent">
+                <div>
+                    <p> ${msg.message}  </p>
+                    <span class="timestamp"> ${msg.timestamp} </span>
+                </div>
+            </li>`)
+            scrollToBottom();
+            console.log(typeof msg.cu_id, typeof convuser_id)
+        }
+        
+        
     }
 
     function scrollToBottom() {

@@ -68,11 +68,11 @@ Conversation.sync({ force: false, logging: console.log}).then(() => {
     console.log("Conversation table synced");
     Conversation.upsert({
         con_id: '1',
-        title: 'Chill out'
+        title: 'My garage band'
     }); 
     Conversation.upsert({
         con_id: '2',
-        title: 'Jeff'
+        title: 'my weeaboo toy'
     })
 });
 

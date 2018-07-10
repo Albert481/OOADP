@@ -44,14 +44,15 @@
             <div id="contacts">
                 <ul>
                     <% for (var i in conversations) { %>
+                        <!-- TO BE CHANGED -->
                         <% if (user.user_id == conversations[i].user_id) { %>
                             <li class="contact" data-cuid="<%= conversations[i].cu_id %>" data-conid="<%= conversations[i].con_id %>">
                                 <div class="wrap">
                                     <span class="contact-status online"></span>
                                     <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                     <div class="meta">
-                                        <p class="name"> <%= conversations[i].con_id %> </p>
-                                        <p class="preview">You just got LITT up, DANKO.</p>
+                                        <p class="name"> <%= conversations[i].title %> </p>
+                                        <p class="preview">You just got LITT UP, DANKO</p>
                                     </div>
                                 </div>
                             </li>
@@ -64,10 +65,16 @@
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
+        <% if (typeof chatmessages != 'undefined') { %>
         <container id="contentContainer">
             <div class="content" id="contentMargin">
                 <div class="contact-profile">
                     <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                    <% for (var i in conversations) { %>
+                        <% if ((conversations[i].con_id != con_id) && (conversations[i].user_id != user.user_id)) { %>
+                            <p><%=conversations[i].name %></p>
+                        <% } %>
+                    <% } %>
                         <div style="float: right; width: 40px">
                             <i class="icon fa fa-ellipsis-v" id="menuButton" expanded="false" style="text-align: center; width: 32px; height: 32px; cursor: pointer; margin: auto;"></i>
                         </div>
@@ -104,6 +111,14 @@
                 <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
+        <% } else { %>
+            <container id="contentContainer">
+                <div style="font-weight: 600; text-align: center;">
+                    <div>Welcome back! You have no new messages.</div>
+                    <div>Browse categories to chat and buy from sellers</div>
+                </div>
+            </container>
+        <% } %>
         </div>
     </div>
 </body>
@@ -138,7 +153,22 @@
             socket.emit('subscribe', conversation_id);
             
             // refreshes div to load messages
-            $("#contentContainer").load(location.href + " #contentMargin");
+            // $("#contentContainer").load(location.href + " #contentMargin");
+            console.log(location.href)
+            // scrollToBottomOnLoad();
+
+            $.ajax({
+                type: 'GET',
+                url: location.href,
+                success: function() {
+                    $("#contentContainer").load(location.href + " #contentMargin");
+                    console.log('win')
+                },
+                error: function() {
+                    console.log('error')
+                }
+        
+            })
         });
     });
 
@@ -175,7 +205,6 @@
                 </div>
             </li>`)
             scrollToBottom();
-            console.log(typeof msg.cu_id, typeof convuser_id)
         }
         
         
@@ -195,6 +224,12 @@
         if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
             messages.scrollTop(scrollHeight);
         }
+    
+    function scrollToBottomOnLoad() {
+        // Selector
+        var messages = $('#messages');
+        // TO BE DONE
+    }
 
 }
 </script>

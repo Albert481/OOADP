@@ -16,14 +16,14 @@
 
 <body>
   <div class="col-lg-5">
-    <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createStudent">
+    <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createOffer">
       Add New Offer
     </button>
   </div>
-  <div class="modal fade" id="createStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="createOffer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form action="/new" method="post">
+        <form action="/manageoffers/new" method="post">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -31,17 +31,14 @@
             <h4 class="modal-title" id="myModalLabel">Make New Offer</h4>
           </div>
           <div class="modal-body">
-            <fieldset class="form-group">
-              <label for="inputStudentID">Offer ID</label>
-              <input type="text" id="inputStudentID" name="studentId" class="form-control" placeholder="" required="true">
-            </fieldset>
+            
             <fieldset class="form-group">
               <label for="inputName">Listing</label>
-              <input type="text" id="inputName" name="studentName" class="form-control" placeholder="" required="true">
+              <input type="text" id="inputName" name="listing" class="form-control" placeholder="" required="true">
             </fieldset>
             <fieldset class="form-group">
               <label for="inputGroup">Offer Price</label>
-              <input type="text" id="inputGroup" name="group" class="form-control" placeholder="" required="true">
+              <input type="text" id="inputGroup" name="offerprice" class="form-control" placeholder="" required="true">
             </fieldset>
           </div>
           <div class="modal-footer">
@@ -99,7 +96,7 @@
           $(itemToRemove).remove();
         },
         error: function (result) {
-          alert("Unable to delete student record.");
+          alert("Unable to delete offer record.");
           console.log(result.message);
         }
       });

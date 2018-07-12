@@ -113,7 +113,7 @@ var manageOffers = require("./server/controllers/manageOffers")
 
 app.get("/manageoffers/", manageOffers.list);
 app.get("/editoffers/:id", manageOffers.editOffer)
-app.post("/offer/new", manageOffers.manageOffers)
+app.post("/manageoffers/new", manageOffers.insert)
 app.post("/editoffers/:id", manageOffers.update);
 app.delete("/manageoffers/:id", manageOffers.delete);
 

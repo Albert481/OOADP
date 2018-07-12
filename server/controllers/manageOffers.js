@@ -51,7 +51,7 @@ exports.manageOffers = function (req, res) {
     });
 };
 
-// List one specific student record from database
+// List one specific offer record from database
 exports.editOffer = function (req, res) {
     var record_num = req.params.id;
     offerPrice.findById(record_num).then(function (offerRecord) {
@@ -85,7 +85,7 @@ exports.update = function (req, res) {
     })
 }
 
-//Delete a student record from database
+//Delete an offer from database
 exports.delete = function (req, res) {
     var record_num = req.params.id;
     console.log("deleting" + record_num);

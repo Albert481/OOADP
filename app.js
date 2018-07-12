@@ -149,10 +149,10 @@ io.on('connection', function(socket) {
 });
 
 app.get("/listing", listing.list);
-app.get("/listing/edit/:id", listing.editListing);
-app.post("/listing/new", listing.insert);
-app.post("/listing/edit/:id", listing.update);
-app.delete("/listing/:id", listing.delete);
+app.get("/listing/edit/:listing_id", listing.editListing);
+app.post("/listing/new", upload.single('image'), listing.insert);
+app.post("/listing/edit/:listing_id", listing.update);
+app.delete("/listing/:listing_id", listing.delete);
 
 app.get('/messages/', chat.receive);
 app.get('/messages/:con_id', chat.receive);

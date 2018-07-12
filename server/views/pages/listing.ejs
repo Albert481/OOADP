@@ -1123,7 +1123,7 @@
                       <div class="modal fade" id="createListing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
-                            <form action="/listing/new" method="post">
+                            <form action="/listing/new" method="post" enctype="multipart/form-data">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
@@ -1132,12 +1132,17 @@
                               </div>
                               <div class="modal-body">
                                 <fieldset class="form-group">
-                                  <label for="inputListingID">Your ID number</label>
-                                  <input type="text" id="inputListingID" name="listingId" class="form-control" placeholder="0" value="<%= user.id %>" required="true" readonly>
+                                  <label for="inputuserid">Your ID number</label>
+                                  <input type="text" id="inputuserid" name="user_id" class="form-control" placeholder="0" value="<%= user.id %>" required="true" readonly>
                                 </fieldset>
                                 <fieldset class="form-group">
                                   <label for="inputName">Name</label>
                                   <input type="text" id="inputName" name="name" class="form-control" placeholder="John Tan" required="true">
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="inputImage">Image</label>
+                                    <input type="file" id="inputImage" name="image" class="form-control">
+                                    <span class="file-custom"></span>
                                 </fieldset>
                                 <fieldset class="form-group">
                                   <label for="inputListing">Description</label>
@@ -1146,6 +1151,11 @@
                                 <fieldset class="form-group">
                                   <label for="inputPrice">Price</label>
                                   <input type="text" id="inputPrice" name="price" class="form-control" placeholder="1.00" required="true">
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="inputStatus">Mark as sold</label>
+                                    <input type="radio" id="inputStatus" name="status" class="form-control" value="true">Yes
+                                    <input type="radio" id="inputStatus" name="status" class="form-control" value="false" checked>No
                                 </fieldset>
                               </div>
                               <div class="modal-footer">
@@ -1189,7 +1199,7 @@
                                                     <a href="#">position</a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a href="#">Price:Lowest first</a>
+                                                    <a onclick="lowestPrice()">Price:Lowest first</a>
                                                 </li>
                                                 <li role="presentation">
                                                     <a href="#">Price:Highest first</a>
@@ -1301,10 +1311,15 @@
                                                     <div class="product-image">
                                                         <div class="image">
                                                         <a href="detail.html">
-                                                            <img src="/images/products/p2.jpg" alt="">
+                                                            <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
                                                         </a>
                                                         </div>
                                                         <!-- /.image -->
+                                                        <% if (showList.status == 1) { %>
+                                                        <div class="tag sale">
+                                                            <span>SOLD</span>
+                                                        </div>
+                                                        <% }else { %>  <% } %>
                                                     </div>
                                                     <!-- /.product-image -->
                             <div class="product-info text-left">
@@ -1324,9 +1339,9 @@
                                     <span class="price"><p>$<%= showList.price %></p> </span>
                                 </div>
                                 <!-- /.product-price -->
-                                <% if (showList.listingId == user.id) { %>
-                                    <input type="button" class="btn btn-primary icon" id="editBtn" value="Edit">
-                                    <input type="button" class="btn btn-primary icon" id="deleteBtn" value="Delete">
+                                <% if (showList.user_id == user.id) { %>
+                                    <input type="button" class="editBtn btn btn-primary icon" id="editBtn" value="Edit">
+                                    <input type="button" class="deleteBtn btn btn-primary icon" id="deleteBtn" value="Delete">
                                 <% }else { %>  <% } %>
                             </div>
                             <!-- /.product-info -->
@@ -1366,7 +1381,7 @@
                         </div>
                         <!-- tab-pane -->
                         <div class="tab-pane fade" id="list-container">
-                                <div class="category-product">
+                            <div class="category-product">
                                         <% itemList.forEach (function(showList) { %>
                                     <div class="category-product-inner wow fadeInUp">
                                         <div class="products">
@@ -1375,7 +1390,7 @@
                                                     <div class="col col-sm-4 col-lg-4">
                                                         <div class="product-image">
                                                             <div class="image">
-                                                                <img src="images/products/p14.jpg" alt="">
+                                                                <img src="images/listingimages/<%= showList.imagename %>" alt="images/listingimages/<%= showList.imagename %>">
                                                             </div>
                                                         </div>
                                                         <!-- /.product-image -->
@@ -1417,9 +1432,9 @@
                                                                 <!-- /.action -->
                                                             </div>
                                                             <!-- /.cart -->
-                                                            <% if (showList.listingId == user.id) { %>
-                                                                <input type="button" class="btn btn-primary icon" id="editBtn" value="Edit">
-                                                                <input type="button" class="btn btn-primary icon" id="deleteBtn" value="Delete">
+                                                            <% if (showList.user_id == user.id) { %>
+                                                                <input type="button" class="btn btn-primary icon editBtn" id="editBtn" value="Edit">
+                                                                <input type="button" class="btn btn-primary icon deleteBtn" id="deleteBtn" value="Delete">
                                                             <% }else { %>  <% } %>
             
                                                             </div>
@@ -1436,7 +1451,7 @@
                                     <!-- /.product inner --> 
                                     <% }); %>                     
                             </div>
-                            <!-- /.category-product -->
+                                <!-- /.category-product -->
                         </div>
                         <!-- /.tab-pane #list-container -->
                     </div>
@@ -1562,20 +1577,27 @@
             </div>
             <!-- /.body-content -->
     <script>
+            $('.deleteBtn').click(function() {
+                var listing_id = $(this).data('id');      
+                $.ajax({
+                        url: '<%-urlPath%>'+'/'+listing_id,
+                        type: 'DELETE',
+                        success: function(result) {
+                            console.log(result.message);
+                            var itemToRemove = '.products[data-id='+listing_id+']';
+                            $(itemToRemove).remove();
+                        },
+                        error: function(result){
+                            alert("Unable to delete listing.");
+                            console.log(result.message);
+                        } 
+                    });  
+                });
+// $('#editBtn').click(function (){
+//         var record_num = $(this).closest('.category-product').data('id');
+//         location.href = "<%-urlPath %>/listing/edit/"+record_num;
+//     });
 /*
-  function seeMore() {
-        var more = document.getElementById("desc");
-        if (more.style.display === "none"){
-            more.style.display = "block";
-        } else {
-            more.style.display = "none";
-        }
-    }
-$('#editBtn').click(function () {
-      var record_num = $(this).data('id');
-      location.href = "<%-urlPath %>/listing/edit/"+record_num;
-    });
-
     $('#deleteBtn').click(function () {
       var record_num = $(this).data('id');
       $.ajax({

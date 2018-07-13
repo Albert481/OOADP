@@ -100,6 +100,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 //Profile
 app.get('/profile',auth.isLoggedIn, auth.profile);
+//UPDATE PROFILE
 app.get('/editprofile', profile.edit);
 app.post('/editprofile', profile.update);
 

@@ -18,6 +18,7 @@ exports.edit = function(req,res){
     });
 };
 
+//Update profile
 exports.update = function (req, res) {
     var record_num = req.user.id;
     var updateData = {

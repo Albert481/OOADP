@@ -1304,13 +1304,14 @@
                         <div class="category-product">
                             <div class="row">
                                     <% itemList.forEach (function(showList) { %>
+                                        <tr data-id="<%= showList.id %>">    
                                     <div class="col-sm-10 col-md-4 wow fadeInUp">
                                         <div class="productlist">
                                             <div class="products">
                                                 <div class="product">
                                                     <div class="product-image">
                                                         <div class="image">
-                                                        <a href="detail.html">
+                                                        <a href="/detail">
                                                             <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
                                                         </a>
                                                         </div>
@@ -1340,8 +1341,9 @@
                                 </div>
                                 <!-- /.product-price -->
                                 <% if (showList.user_id == user.id) { %>
-                                    <input type="button" class="editBtn btn btn-primary icon" id="editBtn" value="Edit">
-                                    <input type="button" class="deleteBtn btn btn-primary icon" id="deleteBtn" value="Delete">
+                                    <input type="button" class="btn btn-primary icon" id="editBtn" value="Edit">
+                                    <input type="button" class="btn btn-primary icon" id="deleteBtn" value="Delete">
+                                </tr>
                                 <% }else { %>  <% } %>
                             </div>
                             <!-- /.product-info -->
@@ -1577,27 +1579,28 @@
             </div>
             <!-- /.body-content -->
     <script>
-            $('.deleteBtn').click(function() {
-                var listing_id = $(this).data('id');      
-                $.ajax({
-                        url: '<%-urlPath%>'+'/'+listing_id,
-                        type: 'DELETE',
-                        success: function(result) {
-                            console.log(result.message);
-                            var itemToRemove = '.products[data-id='+listing_id+']';
-                            $(itemToRemove).remove();
-                        },
-                        error: function(result){
-                            alert("Unable to delete listing.");
-                            console.log(result.message);
-                        } 
-                    });  
-                });
-// $('#editBtn').click(function (){
-//         var record_num = $(this).closest('.category-product').data('id');
-//         location.href = "<%-urlPath %>/listing/edit/"+record_num;
-//     });
-/*
+$('#editBtn').click(function () {
+    var listing_num = $(this).closest('tr').data('id');
+    location.href = "/listing/edit:id/" + listing_num;
+    debugger;
+});
+            // $('#deleteBtn').click(function() {
+            //     var listing_id = $(this).data('id');      
+            //     $.ajax({
+            //             url: '<%-urlPath%>'+'/'+listing_id,
+            //             type: 'DELETE',
+            //             success: function(result) {
+            //                 console.log(result.message);
+            //                 var itemToRemove = '.products[data-id='+listing_id+']';
+            //                 $(itemToRemove).remove();
+            //             },
+            //             error: function(result){
+            //                 alert("Unable to delete listing.");
+            //                 console.log(result.message);
+            //             } 
+            //         });  
+            //     });
+    /*
     $('#deleteBtn').click(function () {
       var record_num = $(this).data('id');
       $.ajax({

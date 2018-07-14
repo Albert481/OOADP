@@ -12,6 +12,9 @@ const Conversation = sequelize.define('Conversation', {
     },
     title: {
         type: Sequelize.STRING
+    },
+    imagename:{
+        type: Sequelize.STRING
     }
 });
 
@@ -68,11 +71,13 @@ Conversation.sync({ force: false, logging: console.log}).then(() => {
     console.log("Conversation table synced");
     Conversation.upsert({
         con_id: '1',
-        title: 'My garage band'
+        title: 'My garage band',
+        imagename: 'vans.jpg'
     }); 
     Conversation.upsert({
         con_id: '2',
-        title: 'my weeaboo toy'
+        title: 'my weeaboo toy',
+        imagename: 'yeezy.jpg'
     })
 });
 

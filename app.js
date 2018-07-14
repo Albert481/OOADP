@@ -20,6 +20,8 @@ var auth = require('./server/controllers/auth');
 var category = require('./server/controllers/category');
 // Import chatmessage controller
 var chat = require('./server/controllers/chatmessage');
+// import profile controller
+var profile = require('./server/controllers/profile')
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -86,15 +88,22 @@ app.get('/', index.show)
 app.get('/login', auth.login)
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
+    successRedirect: '/profile',
     failureRedirect: '/login',
     failureFlash: true
 }));
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/',
+    successRedirect: '/profile',
     failureRedirect: '/login',
     failureFlash: true
 }));
+
+//Profile
+app.get('/profile',auth.isLoggedIn, auth.profile);
+//UPDATE PROFILE
+app.get('/editprofile', profile.edit);
+app.post('/editprofile', profile.update);
+
 // Logout Page
 app.get('/logout', function (req, res) {
     req.logout();
@@ -116,30 +125,10 @@ io.on('connection', function(socket) {
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
 
-    // socket.on('sendmessage', function(data) {
-    //     var conversation_id = data.conversation_id;
-    //     if (conversation_id in conversations) {
-    //         console.log (conversation_id + ' is already in the conversations object');
-    //     } else {
-    //         socket.conversation_id = data;
-    //         conversations[socket.conversation_id] = socket;
-    //         conversations[conversation_id] = data.conversation_id;
-    //         console.log ('adding '  + conversation_id + ' to conversations.');
-    //     }
-    // })
-
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
         socket.join(room);
     });
-    
-    // socket.on('sendmessage', function(data) {
-    //     console.log('sending room post', data.room);
-    //     io.in(data.room).emit('big-announcement', 'the game will start soon');
-    //     socket.broadcast.to(data.room).emit('conversation private post', {
-    //         message: data.message
-    //     });
-    // });
 
     socket.on('disconnect', function() {
         chatConnections--;
@@ -190,6 +179,10 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
+// app.get('/listing', listing.hasAuthorization, listing.show);
+// app.post('/listing-gallery', listing.hasAuthorization, listing.create);
+// app.delete('/listing/:listing_id', listing.hasAuthorization, listing.delete);
 
 module.exports = app;
 

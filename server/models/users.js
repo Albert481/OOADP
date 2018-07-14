@@ -17,6 +17,14 @@ const Users = sequelize.define('Users', {
     },
     password: {
         type: Sequelize.STRING
+    },
+    bio: {
+        type: Sequelize.STRING,
+        defaultValue: ""
+    },
+    address: {
+        type: Sequelize.STRING,
+        defaultValue: ""
     }
 });
 
@@ -27,7 +35,9 @@ Users.sync({force: false, logging:console.log}).then(()=>{
         user_id: 1,
         name: 'Albert',
         email: 'albert@gmail.com',
-        password: '1234'
+        password: '1234',
+        bio: "selling shoes",
+        address: "Hougang 1"
     })
     Users.upsert({
         user_id: 2,

@@ -51,7 +51,7 @@ exports.insert = function (req, res){
         imagename: req.file.originalname,
         description: req.body.description,
         price: req.body.price,
-        status: req.body.status
+        status: req.body.status,
     }
     ListingModel.create(listingData).then((newRecord, created) => {
         if (!newRecord){
@@ -91,7 +91,7 @@ exports.list = function (req, res){
 
 //Edit one listing
 exports.editListing = function(req,res){
-    var listing_num = req.user.id;
+    var listing_num = req.params.id;
     ListingModel.findById(listing_num).then(function (listingRecord) {
         res.render('editListing', {
             title: "Edit Listing",
@@ -107,11 +107,11 @@ exports.editListing = function(req,res){
 
 //Update listing
 exports.update = function (req, res) {
-    var listing_num = req.user.id;
+    var listing_num = req.params.id;
     var updateListing = {
         user_id: req.body.user_id,
         name: req.body.name,
-        imagename: req.file.originalname,
+        imagename: req.body.originalname,
         description: req.body.description,
         price: req.body.price,
         status: req.body.status

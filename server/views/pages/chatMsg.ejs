@@ -12,6 +12,42 @@
 </head>
 
 <body>
+    <div class="top-bar animate-dropdown" style="top: 0; position: absolute; max-width: 1800px; min-width: 360px; width: 95%;">
+        <div class="container" style="margin-right: 0%">
+            <div class="header-top-inner">
+            <div class="cnt-account">
+                <ul class="list-unstyled">
+                <% if (user) { %>
+                <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
+                <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
+                <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+                <% } else { %>
+                <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+                <% } %>
+                </ul>
+            </div>
+            <% if (user) { %>
+            <!-- /.cnt-account -->
+            <div class="cnt-block">
+                <ul class="list-unstyled list-inline">
+                    <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/editprofile">Settings</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                    </li>
+                </ul>
+                </div>
+                <% } %>
+            <!-- /.cnt-cart -->
+            <div class="clearfix"></div>
+            </div>
+            <!-- /.header-top-inner --> 
+        </div>
+        <!-- /.container --> 
+    </div>
     <div id="frame">
         <div id="sidepanel">
             <div id="profile">

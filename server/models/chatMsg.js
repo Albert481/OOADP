@@ -71,12 +71,12 @@ Conversation.sync({ force: false, logging: console.log}).then(() => {
     console.log("Conversation table synced");
     Conversation.upsert({
         con_id: '1',
-        title: 'My garage band',
+        title: 'Vans Old Skool - Size 10.0 Men',
         imagename: 'vans.jpg'
     }); 
     Conversation.upsert({
         con_id: '2',
-        title: 'my weeaboo toy',
+        title: 'YEEZY 500 “Super Moon Yellow',
         imagename: 'yeezy.jpg'
     })
 });

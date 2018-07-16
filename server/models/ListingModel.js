@@ -61,10 +61,10 @@ ListingModel.sync({force: true, logging: console.log}).then(() => {
     ListingModel.upsert({
         id: 2,
         user_id: 2,
-        name: "Vans Old Skool - Size 10.0 Men",
+        name: "YEEZY 500 Super Moon Yellow",
         imagename:"yeezy.jpg",
-        description: "Vans The Old Skool, Vans classic skate shoe and the first to bare the iconic side stripe, has a low-top lace-up silhouette with a durable suede and canvas upper with padded tongue and lining and Vans signature Waffle Outsole.",
-        price: 60.00,
+        description: "Yeezy 500 Super Moon Yellow features an upper constructed from cow suede", 
+        price: 360.00,
         status: 0
     })
 });

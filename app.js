@@ -10,6 +10,13 @@ var moment = require('moment');
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
+require('./server/models/users')
+require('./server/models/Conversation')
+require('./server/models/ConvUser')
+require('./server/models/chatMsg')
+
+//Import detail controller
+var detail = require('./server/controllers/detail')
 //Import listing controller
 var listing = require('./server/controllers/listing');
 // Import home controller
@@ -119,7 +126,6 @@ app.get('/categories', category.show)
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
-conversations = {};
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -136,12 +142,14 @@ io.on('connection', function(socket) {
 
     });
 });
-
+//app.use("/detail", detail.show);
+app.get("/detail/:id", detail.show);
+app.post("/detail/:id", detail.chat);
 app.get("/listing", listing.list);
-app.get("/listing/edit/:listing_id", listing.editListing);
+app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
-app.post("/listing/edit/:listing_id", listing.update);
-app.delete("/listing/:listing_id", listing.delete);
+app.post("/listing/edit/:id", listing.update);
+app.delete("/listing/:id", listing.delete);
 
 app.get('/messages/', chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.chatreceive);

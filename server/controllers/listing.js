@@ -91,14 +91,14 @@ exports.list = function (req, res){
 
 //Edit one listing
 exports.editListing = function(req,res){
-    var listing_num = req.params.listing_id;
-    StudentModel.findById(listing_num).then(function (listingRecord) {
+    var listing_num = req.params.id;
+    ListingModel.findById(listing_num).then(function (listingRecord) {
         res.render('editListing', {
             title: "Edit Listing",
             item: listingRecord,
             hostPath: req.protocol + "://" + req.get("host")
         });
-    }).catch((er) => {
+    }).catch((err) => {
         return res.status(400).send({
             message:err
         });
@@ -107,28 +107,28 @@ exports.editListing = function(req,res){
 
 //Update listing
 exports.update = function (req, res) {
-    var listing_num = req.params.listing_id;
+    var listing_num = req.params.id;
     var updateListing = {
         user_id: req.body.user_id,
         name: req.body.name,
-        imagename: req.file.originalname,
+        imagename: req.body.originalname,
         description: req.body.description,
         price: req.body.price,
         status: req.body.status
     }
-    StudentModel.update(updateListing, {where: {id: listing_num} }).then((updateRecord) => {
+    ListingModel.update(updateListing, {where: {id: listing_num} }).then((updateRecord) => {
         if (!updateRecord || updateRecord == 0){
             return res.send(400, {
                 message: "error"
             });
         }
-        res.status(200).send({message: "Updates listing:" + listing_num});
+        res.status(200).send({message: "Updated listing:" + listing_num});
     })
 }
 
 //Delete a listing record from database
 exports.delete = function (req, res){
-    var listing_num = req.params.listing_id;
+    var listing_num = req.params.id;
     console.log("deleting" + listing_num);
    ListingModel.destroy({ where: {id: listing_num } }).then((deletedListing) =>{
         if (!deletedListing){

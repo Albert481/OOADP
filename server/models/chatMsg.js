@@ -3,44 +3,6 @@ var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
-// Room ID
-const Conversation = sequelize.define('Conversation', {
-    con_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    title: {
-        type: Sequelize.STRING
-    },
-    imagename:{
-        type: Sequelize.STRING
-    }
-});
-
-// Links user_id and con_id
-const ConvUser = sequelize.define('ConvUser', {
-    cu_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    user_id: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: 'Users',
-            key: 'user_id'
-        }
-    },
-    con_id: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: Conversation,
-            key: 'con_id'
-        } 
-    }
-});
-
 const ChatMsg = sequelize.define('ChatMsg', {
     msg_id: {
         type: Sequelize.INTEGER,
@@ -50,7 +12,7 @@ const ChatMsg = sequelize.define('ChatMsg', {
     cu_id: {
         type: Sequelize.INTEGER,
         references: {
-            model: ConvUser,
+            model: 'ConvUsers',
             key: 'cu_id'
         }
     },
@@ -66,45 +28,7 @@ const ChatMsg = sequelize.define('ChatMsg', {
     }
 });
 
-Conversation.sync({ force: false, logging: console.log}).then(() => {
-    // Table created
-    console.log("Conversation table synced");
-    Conversation.upsert({
-        con_id: '1',
-        title: 'Vans Old Skool - Size 10.0 Men',
-        imagename: 'vans.jpg'
-    }); 
-    Conversation.upsert({
-        con_id: '2',
-        title: 'YEEZY 500 “Super Moon Yellow',
-        imagename: 'yeezy.jpg'
-    })
-});
 
-ConvUser.sync({ force: false, logging: console.log}).then(() => {
-    // Table created
-    console.log("ConvUser table synced");
-    ConvUser.upsert({
-        cu_id: '1',
-        user_id: '1',
-        con_id: '1'
-    }); 
-    ConvUser.upsert({
-        cu_id: '2',
-        user_id: '2',
-        con_id: '1'
-    }); 
-    ConvUser.upsert({
-        cu_id: '3',
-        user_id: '1',
-        con_id: '2'
-    }); 
-    ConvUser.upsert({
-        cu_id: '4',
-        user_id: '2',
-        con_id: '2'
-    }); 
-});
 
 // force: true will drop the table if it already exists
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
@@ -136,6 +60,4 @@ ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     })
 });
 
-module.exports = sequelize.model('Conversation', Conversation);
-module.exports = sequelize.model('ConvUser', ConvUser);
 module.exports = sequelize.model('ChatMsg', ChatMsg);

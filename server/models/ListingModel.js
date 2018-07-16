@@ -35,7 +35,7 @@ const ListingModel = sequelize.define('Listings', {
         type: Sequelize.BOOLEAN,
         allowNull: true,
         defaultValue: 0
-    },
+    }
     // created:{
     //     type: Sequelize.DATE,
     //     allowNull: false,
@@ -43,7 +43,7 @@ const ListingModel = sequelize.define('Listings', {
     //         model: 'Listings',
     //         key: 'createdAt'
     //     }
-    // }
+    //}
 });
 //force: true will drop the table if its already exists
 ListingModel.sync({force: true, logging: console.log}).then(() => {
@@ -61,10 +61,19 @@ ListingModel.sync({force: true, logging: console.log}).then(() => {
     ListingModel.upsert({
         id: 2,
         user_id: 2,
-        name: "YEEZY 500 Super Moon Yellow",
+        name: "YEEZY 500 “Super Moon Yellow”",
         imagename:"yeezy.jpg",
         description: "Yeezy 500 Super Moon Yellow features an upper constructed from cow suede", 
         price: 360.00,
+        status: 0
+    })
+    ListingModel.upsert({
+        id: 3,
+        user_id: 1,
+        name: "YEEZY WINTER CAPTAIN",
+        imagename:"yeezy.jpg",
+        description: "FAKE YEEZYS", 
+        price: 1.00,
         status: 0
     })
 });

@@ -106,7 +106,7 @@
             <div class="content" id="contentMargin">
                 <div class="contact-profile">
                     <% for (var i in conversations) { %>
-                        <% if ((conversations[i].con_id != con_id) && (conversations[i].user_id != user.user_id)) { %>
+                        <% if ((conversations[i].con_id == con_id) && (conversations[i].user_id != user.user_id)) { %>
                             <img src="<%= gravatar.url(conversations[i].email ,  {s: '100', r: 'x', d: 'retro'}, true) %>" alt="" />
                             <p><%=conversations[i].name %></p>
                         <% } %>

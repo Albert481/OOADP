@@ -1,5 +1,6 @@
 var users = require('../models/users');
 var chatMsg = require('../models/chatMsg');
+
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 // get gravatar icon from email

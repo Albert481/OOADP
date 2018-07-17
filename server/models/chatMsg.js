@@ -34,30 +34,6 @@ const ChatMsg = sequelize.define('ChatMsg', {
 ChatMsg.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("ChatMsg table synced");
-    ChatMsg.upsert({
-        msg_id: '1',
-        cu_id: '1',
-        message: 'Hello Aaron',
-        timestamp: '00:00 AM'
-    })
-    ChatMsg.upsert({
-        msg_id: '2',
-        cu_id: '2',
-        message: 'Hello Albert',
-        timestamp: '00:01 AM'
-    })
-    ChatMsg.upsert({
-        msg_id: '3',
-        cu_id: '3',
-        message: 'Waddup Aaron',
-        timestamp: '01:00 AM'
-    })
-    ChatMsg.upsert({
-        msg_id: '4',
-        cu_id: '4',
-        message: 'Waddup Albert',
-        timestamp: '01:01 AM'
-    })
 });
 
 module.exports = sequelize.model('ChatMsg', ChatMsg);

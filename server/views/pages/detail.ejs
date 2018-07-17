@@ -241,8 +241,10 @@
 									</div>
 
 									<div class="col-sm-7">
-										<a href="" id="viewchat" class="btn btn-primary"><i class=""></i> VIEW CHAT</a>
-										<a href="#" class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</a>
+										<form method="post">
+											<button type="submit" class="btn btn-primary"><i class=""></i> VIEW CHAT</a>
+											<button class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</a>
+										</form>
 									</div>
 
 									
@@ -466,11 +468,5 @@
 </footer>
 
 </body>
-
-<script>
-	$(document).on("click" , '#viewchat' ,function () {
-		$.post(location.href);
-    })
-</script>
 
 </html>

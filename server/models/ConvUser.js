@@ -28,26 +28,6 @@ const ConvUser = sequelize.define('ConvUser', {
 ConvUser.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("ConvUser table synced");
-    ConvUser.upsert({
-        cu_id: '1',
-        user_id: '1',
-        con_id: '1'
-    }); 
-    ConvUser.upsert({
-        cu_id: '2',
-        user_id: '2',
-        con_id: '1'
-    }); 
-    ConvUser.upsert({
-        cu_id: '3',
-        user_id: '1',
-        con_id: '2'
-    }); 
-    ConvUser.upsert({
-        cu_id: '4',
-        user_id: '2',
-        con_id: '2'
-    }); 
 });
 
 module.exports = sequelize.model('ConvUser', ConvUser);

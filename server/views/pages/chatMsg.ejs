@@ -164,6 +164,9 @@
 <script>
     var socket = io()
 
+    var con_id = "<%=con_id %>"
+    socket.emit('subscribe', con_id);
+
     // When user clicks on menu button (Report/Block)
     $(document).on("click", '#menuButton', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
@@ -190,7 +193,7 @@
             
             // refreshes div to load messages
             // $("#contentContainer").load(location.href + " #contentMargin");
-            console.log(location.href)
+            // console.log(location.href)
             // scrollToBottomOnLoad();
 
             $.ajax({
@@ -221,6 +224,9 @@
 
     function addMessage(msg) {
         var convuser_id = parseInt($('.contact.active').data('cuid'))
+        if (isNaN(convuser_id)) {
+            convuser_id = '<%= cu_id %>'
+        }
         if (Number(msg.cu_id) == convuser_id) {
             $("#inlineMessage").append(`
             <li class="replies">

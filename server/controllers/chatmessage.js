@@ -14,6 +14,7 @@ exports.receive = function(req, res) {
             title: 'myShoppe',
             conversations: convo,
             con_id: 0,
+            cu_id: 0,
             avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
             gravatar: gravatar,
             urlPath: req.protocol + "://" + req.get("host") + req.path
@@ -36,6 +37,7 @@ exports.chatreceive = function(req, res) {
                 chatmessages: chats,
                 conversations: convo,
                 con_id: req.params.con_id,
+                cu_id: req.params.cu_id,
                 avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
                 gravatar: gravatar,
                 urlPath: req.protocol + "://" + req.get("host") + req.path

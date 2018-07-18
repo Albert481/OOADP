@@ -54,14 +54,34 @@ exports.chat = function (req, res) {
                     })
                     
                 }))
-            }
+            } else {
             // If the conversation is found
-            if (findConExist[0] != null) {
                 sequelize.query('SELECT cu_id FROM ConvUsers WHERE user_id=\'' + req.user.user_id + '\' AND con_id=\'' + findConExist[0].con_id + '\'', { model: ConvUser, raw: true }).then(findConvExist => {
-                    console.log(findConvExist)
-                    var con_id = findConExist[0].con_id;
-                    var cu_id = findConvExist[0].cu_id;
-                    res.redirect('/messages/' + con_id + '/' + cu_id)
+                    if(findConvExist[0]==null) {
+                        Conversation.create(data).then((newConvo => {
+                            // Create new ConvUser for sender
+                            ConvUser.findOrCreate({
+                                where: { user_id: req.user.user_id, con_id: newConvo.con_id },
+                            }).spread(function (match, created) {
+                                // Find cu_id
+                                ConvUser.findOne({ where: { user_id: req.user.user_id, con_id: newConvo.con_id }, raw: true }).then(findKeyConv => {
+                                    res.redirect('/messages/' + findKeyConv.con_id + '/' + findKeyConv.cu_id)
+                                })
+                            });
+                            // Create new ConvUser for receiver
+                            ConvUser.findOrCreate({
+                                where: { user_id: convo[0].user_id, con_id: newConvo.con_id },
+                            }).spread(function (match, created) {
+                            })
+                            
+                        }))
+                    } else {
+                        console.log(findConvExist)
+                        var con_id = findConExist[0].con_id;
+                        var cu_id = findConvExist[0].cu_id;
+                        res.redirect('/messages/' + con_id + '/' + cu_id)
+                    }
+                    
                 })
             }
             

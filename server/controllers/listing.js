@@ -3,6 +3,7 @@ var myDatabase = require('./database');
 var fs = require('fs');
 var mime = require('mime');
 var gravatar = require('gravatar');
+var Users = require('../models/users');
 //set image file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 var Images = require('../models/ListingModel');
@@ -51,7 +52,7 @@ exports.insert = function (req, res){
         imagename: req.file.originalname,
         description: req.body.description,
         price: req.body.price,
-        status: req.body.status,
+        status: req.body.status
     }
     ListingModel.create(listingData).then((newRecord, created) => {
         if (!newRecord){
@@ -76,10 +77,17 @@ exports.insert = function (req, res){
 exports.list = function (req, res){
     ListingModel.findAll({
         attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
-    }).then(function (listings) {
+    }).then(function(listings) {
+        Users.findAll({
+            where : {
+                user_id : listings[0].user_id
+            }
+        }).then(function(usersInfo) {
+  //      console.log("NIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: " + usersInfo[0]);
         res.render('listing', {
             title: "Listing",
             itemList: listings,
+            userSeller: usersInfo[0],
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });
     }).catch((err) => {
@@ -87,7 +95,29 @@ exports.list = function (req, res){
             message: err
         });
     });
+});
 };
+//     sequelize.query('SELECT id, user_id, name, imagename, description, price, status FROM Listings', { model: ListingModel, raw: true
+//  //   ListingModel.findAll({//include: [{ all: true }]
+//     //    attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
+//         }).then(listings => {
+//             console.log("HELLO PLEASE SEEEEEEEEEEEEEEEEEEEEEEEEEE THIS" + listings[0].user_id);
+//             Users.findAll({
+//                 user_id: listings[0].user_id
+//             }).then(user_info => {
+//                 res.render('listing', {
+//                     title:"Listing",
+//                     itemList: listings,
+//                     userSeller: user_info,
+//                     urlPath: req.protocol + "://" + req.get("host") + req.url
+//                 });
+//             }).catch((err) => {
+//              return res.status(400).send({
+//                  message: err
+//         });
+//     });
+// });
+// };
 
 //Edit one listing
 exports.editListing = function(req,res){

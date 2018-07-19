@@ -13,7 +13,7 @@ const ListingModel = sequelize.define('Listings', {
         allowNull: false,
         references:{
             model: 'Users',
-            key: 'id'
+            key: 'user_id'
         }
     },
     name: {
@@ -55,7 +55,8 @@ ListingModel.sync({force: false, logging: console.log}).then(() => {
         name: "Vans Old Skool - Size 10.0 Men",
         imagename:"vans.jpg",
         description: "Vans The Old Skool, Vans classic skate shoe and the first to bare the iconic side stripe, has a low-top lace-up silhouette with a durable suede and canvas upper with padded tongue and lining and Vans signature Waffle Outsole.",
-        price: 60.00
+        price: 60.00,
+        status: 0
     });
     ListingModel.upsert({
         id:2,

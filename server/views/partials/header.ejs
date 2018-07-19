@@ -1,3 +1,40 @@
+<style>
+  .list-unstyled {
+    position: relative
+  }
+
+  .notification {
+    position: absolute;
+    bottom: 8px;
+    right: 247px;
+    background: #d2232a;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    font-size: 10px;
+    line-height: 15px;
+    color: #fff;
+    text-align: center;
+  }
+
+  .animating {
+    animation: animate 1s cubic-bezier(0, 1, 1, 0);
+  }
+
+  @keyframes animate {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.7);
+    }
+  }
+</style>
+
+<script src="/javascripts/socket.io.js"></script>
+<% include ../partials/javascript.ejs %>
+
 <!-- ============================================== HEADER ============================================== -->
 <header class="header-style-1"> 
   
@@ -8,7 +45,7 @@
           <div class="cnt-account">
             <ul class="list-unstyled">
               <% if (user) { %>
-              <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
+              <li><a href="/messages" id="decreaseCounter"><i class="icon fa fa-inbox"></i>Messages<span class="notification">1</span></a></li>
               <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
               <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
               <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
@@ -309,3 +346,27 @@
     <!-- ============================================== NAVBAR : END ============================================== --> 
     
   </header>
+
+  <script>
+    var socket= io();
+
+    var counterValue = parseInt($('.notification').html()); // Get the current bubble value
+
+    function removeAnimation() {
+      setTimeout(function () {
+        $('.notification').removeClass('animating')
+      }, 1000);
+    }
+
+    $('#decreaseCounter').on('click', function () {
+      counterValue--; // decrement
+      $('.notification').html(counterValue).addClass('animating'); // animate it
+      removeAnimation(); // remove CSS animating class
+    })
+
+    function increaseCounter() {
+      counterValue++; // increment
+      $('.notification').html(counterValue).addClass('animating'); // animate it
+      removeAnimation(); // remove CSS animating class 
+    }
+  </script>

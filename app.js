@@ -127,13 +127,22 @@ var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 
+var socket_clients = {}
+
 io.on('connection', function(socket) {
+    // socket_clients[1] = socket.id;
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
+
+    // socket.on('username', function(data) {
+    //     socket_clients[data.user.user_id] = socket.id;
+    //     console.log(socket_clients, "JEFF")
+    // })
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
         socket.join(room);
+        
     });
 
     socket.on('disconnect', function() {

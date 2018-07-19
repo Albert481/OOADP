@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheet %>
+</head>
+<body>
+    <% include ../partials/header %>
+
+            <% reviews.forEach(function(reviews){ %>
+                <a href="#" class="list-group-item" data-id="<%= reviews.id%>">
+                    <img src="<%= gravatar %>" alt="" style="float: left; margin-right: 10px">
+                            <h4 class="list-group-item-heading">
+                                By: <%= reviews.name %>
+                            </h4>
+                            <p class="list-group-item-text">
+                                <%= reviews.content %>
+                            </p>
+                            <small class="text-muted">
+                                satisfaction: <%= reviews.satisfaction %>
+                            </small>
+                        </form>
+                    </div>
+                </a>
+                <% }); %>
+        </div>
+    </div>
+</div>
+
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+    </body>
+    </html>

@@ -1,6 +1,9 @@
 // get gravatar icon from email
 var gravatar = require('gravatar');
 var passport = require('passport');
+var ListingModel = require('../models/ListingModel');
+var myDatabase = require('./database')
+var sequelize = myDatabase.sequelize;
 
 // Login GET
 exports.login = function(req, res) {
@@ -15,8 +18,10 @@ exports.login = function(req, res) {
 // };
 // Profile GET
 exports.profile = function(req, res) {
+    sequelize.query('select u.user_id, l.id, l.user_id, l.name, l.imagename, l.description, l.price, l.status from Users u join Listings l on l.user_id = u.user_id', {model : ListingModel}).then ((listings) =>{
     // List all Users and sort by Date
-    res.render('profile', { title: 'Profile Page', user : req.user, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
+    res.render('profile', { title: 'Profile Page', user : req.user, itemList : listings, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
+    })
 };
 // Logout function
 exports.logout = function () {

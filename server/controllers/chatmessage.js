@@ -1,6 +1,6 @@
 var users = require('../models/users');
 var chatMsg = require('../models/chatMsg');
-
+var SeenMsg = require('../models/seenMsg');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 // get gravatar icon from email
@@ -48,4 +48,8 @@ exports.chatreceive = function(req, res) {
             });
         });
     });
+    var seenData = {
+        seen: true
+    }
+    SeenMsg.update(seenData, { where: { user_id: req.user.user_id, con_id: req.params.con_id} })
 };

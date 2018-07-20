@@ -10,11 +10,6 @@ var moment = require('moment');
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
-require('./server/models/users')
-require('./server/models/Conversation')
-require('./server/models/ConvUser')
-require('./server/models/chatMsg')
-
 //Import detail controller
 var detail = require('./server/controllers/detail')
 //Import listing controller
@@ -126,6 +121,7 @@ app.get('/categories', category.show)
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
+var SeenMsg = require('./server/models/seenMsg');
 
 var socket_clients = {}
 
@@ -178,6 +174,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         io.in(req.params.con_id).emit('message', chatData);
         res.sendStatus(200)
     })
+    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id }})
 });
 
 // catch 404 and forward to error handler

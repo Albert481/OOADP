@@ -3,6 +3,7 @@ var sequelize = myDatabase.sequelize;
 var ListingModel = require('../models/ListingModel');
 var Conversation = require('../models/Conversation');
 var ConvUser = require('../models/ConvUser');
+var SeenMsg = require('../models/seenMsg');
 var myDatabase = require('./database');
 
 // exports.show = function(req, res) {
@@ -47,11 +48,13 @@ exports.chat = function (req, res) {
                             res.redirect('/messages/' + findKeyConv.con_id + '/' + findKeyConv.cu_id)
                         })
                     });
+                    SeenMsg.create({user_id: req.user.user_id, con_id: newConvo.con_id, seen: false});
                     // Create new ConvUser for receiver
                     ConvUser.findOrCreate({
                         where: { user_id: convo[0].user_id, con_id: newConvo.con_id },
                     }).spread(function (match, created) {
                     })
+                    SeenMsg.create({user_id: convo[0].user_id, con_id: newConvo.con_id, seen: false});
                     
                 }))
             } else {

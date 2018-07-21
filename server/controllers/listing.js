@@ -83,7 +83,6 @@ exports.list = function (req, res){
                 user_id : listings[0].user_id
             }
         }).then(function(usersInfo) {
-  //      console.log("NIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: " + usersInfo[0]);
         res.render('listing', {
             title: "Listing",
             itemList: listings,

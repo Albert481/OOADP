@@ -6,14 +6,8 @@ var ConvUser = require('../models/ConvUser');
 var myDatabase = require('./database');
 var Users = require('../models/users');
 var gravatar = require('gravatar');
+//var offerPrice = require('../models/offerPrice');
 
-// exports.show = function(req, res) {
-// 	// Render home screen
-// 	res.render('detail', {
-// 		title: 'detail',
-// 		callToAction: 'ITP211'
-//     });
-// };
 exports.show = function (req, res){
     var listing_num = req.params.id;
     //ListingModel.findById(listing_num).then(function (listings) {
@@ -36,10 +30,16 @@ exports.show = function (req, res){
                 user_id : listings[0].user_id
             }
         }).then(function(user_info) {
+        // offerPrice.findAll({
+        //     where: {
+        //         listing_id: listings[0].id
+        //     }
+        // }).then(function(priceOffer) {
             res.render('detail', {
                 title:"Detail",
                 itemList: listings[0],
                 user: user_info[0],
+   //             offeredPrice: priceOffer[0],
                 gravatar: gravatar.url(user_info[0].email,  {s: '100', r: 'x', d: 'retro'}, true),
             })
         })
@@ -70,15 +70,3 @@ exports.chat = function (req, res){
         })        
     });
 };
-// exports.show = function (req, res) {
-//     var listing_num = req.user.id;
-//     ListingModel.findAll({
-//         attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
-//     }).then(function(listings){
-//         res.render('detail', {
-//             title: "Detail",
-//             itemList: listings,
-//             urlPath: req.protocol + "://" + req.get("host") + req.url
-//         })
-//     })
-// }

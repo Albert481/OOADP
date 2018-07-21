@@ -10,8 +10,13 @@ var moment = require('moment');
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
+require('./server/models/users')
+require('./server/models/Conversation')
+require('./server/models/ConvUser')
+require('./server/models/chatMsg')
+
 //Import detail controller
-var detail = require('./server/controllers/detail')
+var detail = require('./server/controllers/detail');
 //Import listing controller
 var listing = require('./server/controllers/listing');
 // Import home controller
@@ -22,6 +27,8 @@ var auth = require('./server/controllers/auth');
 var category = require('./server/controllers/category');
 // Import chatmessage controller
 var chat = require('./server/controllers/chatmessage');
+// import profile controller
+var profile = require('./server/controllers/profile')
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -88,15 +95,23 @@ app.get('/', index.show)
 app.get('/login', auth.login)
 
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
+    successRedirect: '/profile',
     failureRedirect: '/login',
     failureFlash: true
 }));
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/',
+    successRedirect: '/profile',
     failureRedirect: '/login',
     failureFlash: true
 }));
+
+//var i = [auth.profile, listing.list].forEach;
+//Profile
+app.get('/profile', auth.isLoggedIn, auth.profile);
+//UPDATE PROFILE
+app.get('/editprofile', profile.edit);
+app.post('/editprofile', profile.update);
+
 // Logout Page
 app.get('/logout', function (req, res) {
     req.logout();
@@ -112,7 +127,6 @@ app.get('/categories', category.show)
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
-conversations = {};
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -149,8 +163,8 @@ io.on('connection', function(socket) {
 
     });
 });
-//app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
+app.post("/detail/:id", detail.chat);
 app.get("/listing", listing.list);
 app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);

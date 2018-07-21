@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheet %>
+</head>
+<body>
+    <% include ../partials/header %>
+
+    <div class="container">
+        <h1><%= title %></h1>
+        <div class="datails">
+
+            <div class="card text-xs-center">
+                <br>
+                <img class="card-img-top" src="<%= avatar %>" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title"><%= user.name %></h4>
+                    <p class="card-text">
+                        <strong>Email</strong>: <%= user.email %> <br>
+                        <strong>bio</strong>: <%= user.bio %> <br>
+                        <strong>mailing address</strong>: <%= user.address %><br>
+                    </p>
+                    <a href="/logout" class="btn btn-default">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <button class="btn btn-primary" onclick="location.href ='/listing'">Add Listing</button>
+    <section class="section latest-blog outer-bottom-vs wow fadeInUp">
+        <h3 class="section-title">Listings from <%=user.name %></h3>
+                <% itemList.forEach (function(showList) { %>
+            <div class="blog-slider-container outer-top-xs">
+                <% if (showList.user_id == user.user_id) { %> 
+         <div class="owl-carousel blog-slider custom-carousel">       
+            <div class="item">
+              <div class="blog-post">
+                <div class="blog-post-image">
+                  <div class="image"> <a href="blog.html"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" style="width:200px;height:250px;" ></a> </div>
+                </div>
+                <!-- /.blog-post-image -->
+                <div class="blog-post-info text-left">
+                  <h3 class="name"><a href="/detail/<%= showList.id %>"><%= showList.name %></a></h3>
+                <!--  <span class="info">By Saraha Smith &nbsp;|&nbsp; 21 March 2016 </span> -->
+                  <p class="text">$<%= showList.price %></p>
+                  <a href="/detail/<%= showList.id %>" class="lnk btn btn-primary">See more</a>
+                </div>
+                  <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
+                  <input type="button" class="btn btn-primary icon deleteBtn" value="Delete">
+              <!-- /.blog-post-info --> 
+              </div>
+              <!-- /.blog-post --> 
+            </div>
+            <!-- /.item --> 
+        </div>
+        <!-- /.owl-carousel -->
+   <!--     <% }else if (showList.user_id.length == -1) { %>
+            <p>No listing yet.</p>  
+        <% } %> -->
+        </div>
+        <!-- /.blog-slider-container -->
+        <% }); %>  
+      </section>
+      <!-- /.section --> 
+    <footer>
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+    </footer>
+    </body>
+    </html>

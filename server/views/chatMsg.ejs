@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <script src="/javascripts/socket.io.js"></script>
+    <% include ../partials/javascript.ejs %>
+    <% include ../partials/stylesheet %>
+    <link rel="stylesheet" href="/stylesheets/chatmessage.css">
+</head>
+
+<body>
+    <div class="top-bar animate-dropdown" style="top: 0; position: absolute; max-width: 1800px; min-width: 360px; width: 95%;">
+        <div class="container" style="margin-right: 0%">
+            <div class="header-top-inner">
+            <div class="cnt-account">
+                <ul class="list-unstyled">
+                <% if (user) { %>
+                <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
+                <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
+                <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+                <% } else { %>
+                <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+                <% } %>
+                </ul>
+            </div>
+            <% if (user) { %>
+            <!-- /.cnt-account -->
+            <div class="cnt-block">
+                <ul class="list-unstyled list-inline">
+                    <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/editprofile">Settings</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                    </li>
+                </ul>
+                </div>
+                <% } %>
+            <!-- /.cnt-cart -->
+            <div class="clearfix"></div>
+            </div>
+            <!-- /.header-top-inner --> 
+        </div>
+        <!-- /.container --> 
+    </div>
+    <div id="frame">
+        <div id="sidepanel">
+            <div id="profile">
+                <div class="wrap">
+                    <img id="profile-img" src="<%= avatar %>" class="online" alt="" />
+                    <p> <%= user.name %> </p>
+                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                    <div id="status-options">
+                        <ul>
+                            <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+                            <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+                            <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+                            <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+                        </ul>
+                    </div>
+                    <div id="expanded">
+                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mikeross" />
+                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="ross81" />
+                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mike.ross" />
+                    </div>
+                </div>
+            </div>
+            <div id="search">
+                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+                <input type="text" placeholder="Search contacts..." />
+            </div>
+            <div id="contacts">
+                <ul>
+                    <% for (var i in conversations) { %>
+                        <!-- TO BE CHANGED -->
+                        <% if (user.user_id == conversations[i].user_id) { %>
+                            <li class="contact" data-cuid="<%= conversations[i].cu_id %>" data-conid="<%= conversations[i].con_id %>">
+                                <div class="wrap">
+                                    <span class="contact-status online"></span>
+                                    <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
+                                    <div class="meta">
+                                        <p class="name"> <%= conversations[i].title %> </p>
+                                        <p class="preview">You just got LITT UP, DANKO</p>
+                                    </div>
+                                </div>
+                            </li>
+                        <% } %>
+                    <% } %>
+                </ul>
+            </div>
+            <div id="bottom-bar">
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+            </div>
+        </div>
+        <% if (typeof chatmessages != 'undefined') { %>
+        <container id="contentContainer">
+            <div class="content" id="contentMargin">
+                <div class="contact-profile">
+                    <% for (var i in conversations) { %>
+                        <% if ((conversations[i].con_id == con_id) && (conversations[i].user_id != user.user_id)) { %>
+                            <img src="<%= gravatar.url(conversations[i].email ,  {s: '100', r: 'x', d: 'retro'}, true) %>" alt="" />
+                            <p><%=conversations[i].name %></p>
+                        <% } %>
+                    <% } %>
+                        <div style="float: right; width: 40px">
+                            <i class="icon fa fa-ellipsis-v" id="menuButton" expanded="false" style="text-align: center; width: 32px; height: 32px; cursor: pointer; margin: auto;"></i>
+                        </div>
+                        <span>
+                            <div id="dropdownMenu">
+                                <ul>
+                                    <li style="opacity: 1">Report</li>
+                                    <li style="opacity: 1">Block</li>
+                                </ul>
+                            </div>
+                        </span>
+                </div>
+                <div class="messages" id="messages">
+                    <ul id="inlineMessage">
+                        <% for (var i in chatmessages) { %> 
+                            <% if (chatmessages[i].user_id == user.user_id) { %>
+                            <li class="replies">
+                            <% } else { %>
+                            <li class="sent">
+                            <% } %>
+                                <div>
+                                    <p> <%=chatmessages[i].message %> </p>
+                                    <span class="timestamp"> <%=chatmessages[i].timestamp %> </span>
+                                </div>
+                            </li>
+                        <%}%>  
+                    </ul>
+                </div>
+            </container>
+            <div class="message-input">
+                <div class="wrap">
+                <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        <% } else { %>
+            <container id="contentContainer">
+                <div style="font-weight: 600; text-align: center;">
+                    <div>Welcome back! You have no new messages.</div>
+                    <div>Browse categories to chat and buy from sellers</div>
+                </div>
+            </container>
+        <% } %>
+        </div>
+    </div>
+</body>
+    
+
+
+<script>
+    var socket = io()
+    // When user clicks on menu button (Report/Block)
+    $(document).on("click", '#menuButton', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+    })
+    // Allows enter key to send message
+    $(document.body).delegate('input:text', 'keypress', function(e) {
+    if (e.which === 13) { // if is enter
+        e.preventDefault(); // don't submit form
+        $("#send").click();
+    }
+    });
+    // Change contact by clicking
+    $(function(){
+        var $contacts = $('.contact').click(function(){
+            $contacts.removeClass('active');
+            $(this).addClass('active');
+            var conversation_id = $(this).data('conid')
+            var convuser_id = $(this).data('cuid')
+            window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
+            
+            socket.emit('subscribe', conversation_id);
+            
+            // refreshes div to load messages
+            // $("#contentContainer").load(location.href + " #contentMargin");
+            console.log(location.href)
+            // scrollToBottomOnLoad();
+            $.ajax({
+                type: 'GET',
+                url: location.href,
+                success: function() {
+                    $("#contentContainer").load(location.href + " #contentMargin");
+                },
+                error: function() {
+                }
+        
+            })
+        });
+    });
+    // Sends message
+    $(document).on("click" , '#send' ,function () {
+        var message = { message: $("#message").val() }
+        postMessage(message)
+        $('#message').val('');
+    })
+    
+    function postMessage(message) {
+        $.post(location.href, message)
+    }
+    socket.on('message', addMessage)
+    function addMessage(msg) {
+        var convuser_id = parseInt($('.contact.active').data('cuid'))
+        if (Number(msg.cu_id) == convuser_id) {
+            $("#inlineMessage").append(`
+            <li class="replies">
+                <div>
+                    <p> ${msg.message}  </p>
+                    <span class="timestamp"> ${msg.timestamp} </span>
+                </div>
+            </li>`)
+            scrollToBottom();
+        } else {
+            $("#inlineMessage").append(`
+            <li class="sent">
+                <div>
+                    <p> ${msg.message}  </p>
+                    <span class="timestamp"> ${msg.timestamp} </span>
+                </div>
+            </li>`)
+            scrollToBottom();
+        }
+        
+        
+    }
+    function scrollToBottom() {
+        // Selectors
+        var messages = $('#messages');
+        var newMessage = messages.children().children('li:last-child')
+        // Heights
+        var clientHeight = messages.prop('clientHeight');
+        var scrollTop = messages.prop('scrollTop');
+        var scrollHeight = messages.prop('scrollHeight');
+        var newMessageHeight = newMessage.innerHeight();
+        var lastMessageHeight = newMessage.prev().innerHeight();
+        if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
+            messages.scrollTop(scrollHeight);
+        }
+    
+    function scrollToBottomOnLoad() {
+        // Selector
+        var messages = $('#messages');
+        // TO BE DONE
+    }
+}
+</script>
+
+
+<footer>
+    <% include ../partials/javascript %>
+</footer>
+
+</body>
+
+</html>

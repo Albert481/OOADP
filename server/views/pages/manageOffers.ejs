@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/stylesheet %>
+</head>
+
+<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+
+<header>
+  <% include ../partials/header %>
+</header>
+
+<body>
+  <div class="col-lg-5">
+    <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createOffer">
+      Add To Cart
+    </button>
+  </div>
+  <div class="modal fade" id="createOffer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form action="/manageoffers/new" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Make New Offer</h4>
+          </div>
+          <div class="modal-body">
+            
+            <fieldset class="form-group">
+              <label for="inputID">ID</label>
+              <input type="text" id="inputID" name="id" class="form-control" value="" required="true">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="inputListingID">Listing_ID</label>
+              <input type="text" id="inputListingID" name="listing_id" class="form-control" value="" required="true">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="inputListing">Listing Name</label>
+              <input type="text" id="inputListing" name="name" class="form-control" placeholder="" required="true" value="<% itemList.name %>">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="inputOffer">Offer Price</label>
+              <input type="text" id="inputOffer" name="offerprice" class="form-control" placeholder="" required="true">
+            </fieldset>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Confirm Offer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <table class="table">
+    <thread>
+      <tr>
+        <th>ID</th>
+        <th>Listing ID</th>
+        <th>Listing Name</th>
+        <th>Offer Price</th>
+      </tr>
+      <!-- <%console.log(itemList)%> -->
+      <% for(var i in itemList){ %>
+        <tr class="rowRecord" data-id="<%= itemList[i].id %>">
+            <!-- <%console.log(itemList[i])%> -->
+          <td>
+            <%= itemList[i].id %>
+          </td>
+          <td>
+            <%= itemList[i].listing_id %>
+          </td>
+          <td>
+            <%= itemList[i].name %>
+          </td>
+          <td>
+            <%= itemList[i].offerprice %>
+          </td>
+          <td>
+            <input type="button" class="editBtn" value="Edit">
+            <input type="button" class="deleteBtn"  value="Remove">
+          </td>
+        </tr>
+        <% } %>
+    </thread>
+  </table>
+
+  <script>
+    $('.editBtn').click(function () {
+      var record_num = $(this).closest("tr").data('id');
+      location.href = "editoffers/"+record_num;
+    });
+
+    $('.deleteBtn').click(function () {
+      var record_num = $(this).closest("tr").data('id');
+      $.ajax({
+        url: '<%-urlPath%>' + record_num,
+        type: 'DELETE',
+        success: function (result) {
+          console.log(result.message);
+          var itemToRemove = '.rowRecord[data-id=' + record_num + ']';
+          $(itemToRemove).remove();
+        },
+        error: function (result) {
+          alert("Unable to delete offer record.");
+          console.log(result.message);
+        }
+      });
+    });
+  </script>
+
+<footer>
+  <% include ../partials/footer %>
+  <% include ../partials/javascript %>
+</footer>
+
+</body>
+
+</html>

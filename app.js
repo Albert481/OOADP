@@ -10,8 +10,12 @@ var moment = require('moment');
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
+//Import detail controller
+var detail = require('./server/controllers/detail')
 //Import listing controller
 var listing = require('./server/controllers/listing');
+// Manage Offers
+var manageOffers = require("./server/controllers/manageOffers")
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -115,6 +119,7 @@ app.get('/categories', category.show)
 
 // app.get('/chatmessage', chat.show)
 
+
 // Setup chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
@@ -137,11 +142,18 @@ io.on('connection', function(socket) {
     });
 });
 
+app.get("/detail/:id", detail.show);
 app.get("/listing", listing.list);
 app.get("/listing/edit/:listing_id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
 app.post("/listing/edit/:listing_id", listing.update);
 app.delete("/listing/:listing_id", listing.delete);
+
+app.get("/manageoffers/", manageOffers.list);
+app.get("/editoffers/:id", manageOffers.editOffer)
+app.post("/manageoffers/new", manageOffers.insert)
+app.post("/editoffers/:id", manageOffers.update);
+app.delete("/manageoffers/:id", manageOffers.delete);
 
 app.get('/messages/', chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.chatreceive);

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'>
+
+    
+    <script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+    <script src='/javascripts/bootstrap.min.js'></script>
+    <% include ../partials/stylesheet %>
+</head>
+
+<header>
+    <% include ../partials/header %>
+  </header>
+
+<body>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Offers</h4>
+    </div>
+    <div class="modal-body">
+        <fieldset class="form-group">
+            <label for="inputOfferPrice">Offer Price</label>
+            <input type="text" id="inputOfferPrice" name="group" class="form-control" placeholder="Offer Price" required="true" value="<%=item.offerprice%>">
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+    </div>
+    <script>
+        function saveChanges() {
+            var url = "<%=hostPath%>/editoffers/<%=item.id%>";
+            var newValues = {
+                offerprice: $("#inputOfferPrice").val()
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(newValues),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Offer updated successfully");
+                    location.href = "<%=hostPath%>"
+                },
+                error: function(result){
+                    alert("Error updating offer");
+                    discardChanges();
+                }
+            })
+        }
+
+        function discardChanges() {
+            location.href = "<%=hostPath%>"
+        }
+    </script>
+</body>
+
+<footer>
+    <% include ../partials/footer %>
+    <% include ../partials/javascript %>
+</footer>
+
+</html>

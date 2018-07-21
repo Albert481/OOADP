@@ -8,7 +8,7 @@ var sequelize = myDatabase.sequelize;
 //List Reviews
 exports.show = function (req, res){
     //List all reviews and sort by Date
-    sequelize.query('select r.id, r.name, r.satisfaction, r.content, u.email AS [user_id] from Reviews r join Users u on r.user_id = u.user_id', 
+    sequelize.query('select r.id, r.name, r.satisfaction, r.content, l.id AS [listing_id] from Reviews r join Listings l on r.listing_id = l.id', 
     {model: Reviews}).then((reviews) => {
         res.render('reviews', {
             title: 'Review Page',
@@ -27,10 +27,10 @@ exports.show = function (req, res){
 exports.create = function (req, res) {
     console.log("creating reviews")
     var reviewData = {
+        listing_id: req.body.listing_id,
         name: req.body.name,
         satisfaction: req.body.satisfaction,
         content: req.body.content,
-        user_id: req.user.user_id
     }
 
     Reviews.create(reviewData).then((newReview, created) => {
@@ -39,7 +39,7 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
-        res.redirect('/detail/:id');
+        res.redirect('/listing');
     })
 };
 

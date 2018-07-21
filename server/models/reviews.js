@@ -9,10 +9,6 @@ const Reviews = sequelize.define('Reviews', {
         autoIncrement: true,
         primaryKey: true
     },
-    // created: {
-    //     type: Sequelize.DATE,
-    //     defaultValue: Sequelize.NOW
-    // },
     name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -36,12 +32,12 @@ const Reviews = sequelize.define('Reviews', {
             key: 'user_id'
         }
     },
-    listing_id:{
+    purcahse_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'Listings',
-            key: 'id'
+            model: 'Purchase',
+            key: 'purchase_id'
         }        
     }
 });
@@ -56,7 +52,7 @@ Reviews.sync({ force: false, logging: console.log}).then(() => {
         satisfaction: 'Positive',
         content: 'lol',
         user_id: 1,
-        listing_id: 1
+        purchase_id: 1
     })
 });
 

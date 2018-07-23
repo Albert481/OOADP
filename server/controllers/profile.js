@@ -8,6 +8,7 @@ exports.edit = function(req,res){
     user.findById(record_num).then(function(userRecord){
         res.render('editprofile', {
             title: "Edit Profile",
+            notifi_id: req.notifi_id,
             user: req.user,
             hostPath: req.protocol + "://" + req.get("host")
         });
@@ -41,6 +42,7 @@ exports.update = function (req, res) {
 //edit profile authorization
 exports.hasAuthorization = function (req, res, next) {
     if (req.isAuthenticated())
+        res.notifi_id = req.user.user_id
         return next();
     res.redirect('/login');
 }

@@ -296,6 +296,38 @@
 			</div><!-- /.col -->
 			<div class="clearfix"></div>
 		</div><!-- /.row -->
+						<!-- ============================================== UPSELL PRODUCTS ============================================== -->
+<section class="section featured-product wow fadeInUp">
+		<h3 class="section-title">You may also like:</h3>
+		<div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+		<% suggestList.forEach (function(listSuggest) { %>
+		<% if (listSuggest.id != itemList.id) { %>
+			<div class="item item-carousel">
+				<div class="products">
+		<div class="product">		
+			<div class="product-image">
+				<div class="image">
+					<a href="/detail/<%= listSuggest.id %>"><img  src="/images/listingimages/<%= listSuggest.imagename %>" alt="<%= listSuggest.imagename %>"></a>
+				</div><!-- /.image -->			          		   
+			</div><!-- /.product-image -->
+			<div class="product-info text-left">
+				<h3 class="name"><a href="/detail/<%= listSuggest.id %>"><%= listSuggest.name %></a></h3>
+				<div class="product-price">	
+					<span class="price"></span>
+				</div><!-- /.product-price -->
+			</div><!-- /.product-info -->
+						<div class="cart clearfix animate-effect">
+					<div class="action">
+					</div><!-- /.action -->
+				</div><!-- /.cart -->
+				</div><!-- /.product -->
+				</div><!-- /.products -->
+			</div><!-- /.item -->
+		<% } else { %>  
+		<% } %>
+		<% }); %>
+		</div><!-- /.home-owl-carousel -->
+	</section><!-- /.section -->
 		<!-- ============================================== BRANDS CAROUSEL ============================================== -->
 <div id="brands-carousel" class="logo-slider wow fadeInUp">
 

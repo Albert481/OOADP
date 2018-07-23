@@ -2,18 +2,25 @@ var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
-// Room ID
 const Conversation = sequelize.define('Conversation', {
     con_id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    title: {
-        type: Sequelize.STRING
+    senderid: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
-    imagename:{
-        type: Sequelize.STRING
+    recipientid: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Users',
+            key: 'id'
+        } 
     }
 });
 
@@ -22,14 +29,14 @@ Conversation.sync({ force: false, logging: console.log}).then(() => {
     console.log("Conversation table synced");
     Conversation.upsert({
         con_id: '1',
-        title: 'Vans Old Skool - Size 10.0 Men',
-        imagename: 'vans.jpg'
+        senderid: '1',
+        recipientid: '2'
     }); 
     Conversation.upsert({
         con_id: '2',
-        title: 'YEEZY 500 “Super Moon Yellow”',
-        imagename: 'yeezy.jpg'
+        senderid: '1',
+        recipientid: '3'
     })
 });
 
-module.exports = sequelize.model('Conversation', Conversation);
+module.exports = sequelize.model('Conversation', Conversation)

@@ -10,6 +10,10 @@ var moment = require('moment');
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
 
+var myDatabase = require('./server/controllers/database');
+var Sequelize = myDatabase.sequelize;
+const Op = Sequelize.Op
+
 //Import detail controller
 var detail = require('./server/controllers/detail')
 //Import listing controller
@@ -134,6 +138,11 @@ io.on('connection', function(socket) {
     //     socket_clients[data.user.user_id] = socket.id;
     //     console.log(socket_clients, "JEFF")
     // })
+    socket.on('myUser', function(userRoom) {
+        console.log('joining own room for notification:', userRoom);
+        socket.join(userRoom);
+        
+    });
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
@@ -156,8 +165,8 @@ app.post("/listing/new", upload.single('image'), listing.insert);
 app.post("/listing/edit/:id", listing.update);
 app.delete("/listing/:id", listing.delete);
 
-app.get('/messages/', chat.receive);
-app.get('/messages/:con_id/:cu_id', chat.chatreceive);
+app.get('/messages/', chat.hasAuthorization, chat.receive);
+app.get('/messages/:con_id/:cu_id', chat.hasAuthorization, chat.chatreceive);
 app.post('/messages/:con_id/:cu_id', function (req, res) {
     var formattedTime = moment().format('h:mm a');
     var chatData = {
@@ -174,7 +183,10 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         io.in(req.params.con_id).emit('message', chatData);
         res.sendStatus(200)
     })
-    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id }})
+    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
+    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
+        io.in(otherUser.user_id).emit('notification');
+    })
 });
 
 // catch 404 and forward to error handler

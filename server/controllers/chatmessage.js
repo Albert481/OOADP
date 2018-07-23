@@ -53,3 +53,10 @@ exports.chatreceive = function(req, res) {
     }
     SeenMsg.update(seenData, { where: { user_id: req.user.user_id, con_id: req.params.con_id} })
 };
+
+//ChatMsg authorization middleware
+exports.hasAuthorization = function (req, res, next) {
+    if(req.isAuthenticated())
+        return next();
+    res.redirect('/login');
+};

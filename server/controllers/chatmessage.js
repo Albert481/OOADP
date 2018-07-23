@@ -15,6 +15,7 @@ exports.receive = function(req, res) {
             conversations: convo,
             con_id: 0,
             cu_id: 0,
+            notifi_id: res.notifi_id,
             avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
             gravatar: gravatar,
             urlPath: req.protocol + "://" + req.get("host") + req.path
@@ -38,6 +39,7 @@ exports.chatreceive = function(req, res) {
                 conversations: convo,
                 con_id: req.params.con_id,
                 cu_id: req.params.cu_id,
+                notifi_id: res.notifi_id,
                 avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
                 gravatar: gravatar,
                 urlPath: req.protocol + "://" + req.get("host") + req.path
@@ -57,6 +59,7 @@ exports.chatreceive = function(req, res) {
 //ChatMsg authorization middleware
 exports.hasAuthorization = function (req, res, next) {
     if(req.isAuthenticated())
+        res.notifi_id = req.user.user_id
         return next();
     res.redirect('/login');
 };

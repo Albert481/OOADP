@@ -10,16 +10,6 @@ var gravatar = require('gravatar');
 
 exports.show = function (req, res){
     var listing_num = req.params.id;
-    //ListingModel.findById(listing_num).then(function (listings) {
-    //    res.render('detail', {
-    //        title: "Detail",
-    //        itemList: listings
-    //    });
-    //}).catch((err) => {
-    //    return res.status(400).send({
-    //        message: err
-    //    });
-    //});
     ListingModel.findAll({
         where: {
             id : listing_num
@@ -30,17 +20,17 @@ exports.show = function (req, res){
                 user_id : listings[0].user_id
             }
         }).then(function(user_info) {
-        // offerPrice.findAll({
-        //     where: {
-        //         listing_id: listings[0].id
-        //     }
-        // }).then(function(priceOffer) {
+            ListingModel.findAll({
+                attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
+            }).then(function(suggestList) {
             res.render('detail', {
                 title:"Detail",
                 itemList: listings[0],
                 user: user_info[0],
-   //             offeredPrice: priceOffer[0],
+                notifi_id: req.notifi_id,
+                suggestList: suggestList,
                 gravatar: gravatar.url(user_info[0].email,  {s: '100', r: 'x', d: 'retro'}, true),
+            })
             })
         })
     })
@@ -70,3 +60,9 @@ exports.chat = function (req, res){
         })        
     });
 };
+exports.hasAuthorization = function(req, res, next){
+    if (req.isAuthenticated())
+        req.notifi_id = req.user.user_id
+        return next;
+    res.redirect('/login');
+}

@@ -35,7 +35,7 @@ const ListingModel = sequelize.define('Listings', {
         type: Sequelize.BOOLEAN,
         allowNull: true,
         defaultValue: 0
-    },
+    }
     // created:{
     //     type: Sequelize.DATE,
     //     allowNull: false,
@@ -46,7 +46,7 @@ const ListingModel = sequelize.define('Listings', {
     // }
 });
 //force: true will drop the table if its already exists
-ListingModel.sync({force: true, logging: console.log}).then(() => {
+ListingModel.sync({force: false, logging: console.log}).then(() => {
     //Table created
     console.log("Listings table synced");
     ListingModel.upsert({

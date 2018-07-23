@@ -25,7 +25,11 @@ var category = require('./server/controllers/category');
 // Import chatmessage controller
 var chat = require('./server/controllers/chatmessage');
 // import profile controller
-var profile = require('./server/controllers/profile')
+var profile = require('./server/controllers/profile');
+//import reviews controller
+var reviews = require('./server/controllers/reviews');
+//import purchase controller
+var purchase = require('./server/controllers/purchase');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -141,6 +145,14 @@ io.on('connection', function(socket) {
 
     });
 });
+
+//purchase
+app.get("/purchase", purchase.show);
+app.get("/purchaseinfo/:id", purchase.list);
+
+//reviews
+app.get("/reviews/:id", reviews.show);
+app.post("/purchaseinfo/:id", reviews.create);
 
 app.get("/detail/:id", detail.show);
 app.get("/listing", listing.list);

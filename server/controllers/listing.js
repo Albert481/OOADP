@@ -52,7 +52,8 @@ exports.insert = function (req, res){
         imagename: req.file.originalname,
         description: req.body.description,
         price: req.body.price,
-        status: req.body.status
+        status: req.body.status,
+        notifi_id: req.notifi_id,
     }
     ListingModel.create(listingData).then((newRecord, created) => {
         if (!newRecord){
@@ -167,4 +168,10 @@ exports.delete = function (req, res){
         }
         res.status(200).send({message: "Deleted listing:" + listing_num});
     });
+}
+exports.hasAuthorization = function(req, res, next){
+    if (req.isAuthenticated())
+        req.notifi_id = req.user.user_id
+        return next;
+    res.redirect('/login');
 }

@@ -27,6 +27,8 @@ exports.show = function (req, res){
 exports.create = function (req, res) {
     console.log("creating reviews")
     var reviewData = {
+        purchase_id: req.body.purchase_id,
+        user_id: req.user.user_id,
         listing_id: req.body.listing_id,
         name: req.body.name,
         satisfaction: req.body.satisfaction,
@@ -39,7 +41,7 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
-        res.redirect('/listing');
+        res.redirect('/purchase');
     })
 };
 
@@ -55,10 +57,3 @@ exports.create = function (req, res) {
 //         res.status(200).send({message: "Deleted reviews :" + record_num});
 //     })
 // }
-
-//Comments authorization middleware
-exports.hasAuthorization = function (req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/login');
-};

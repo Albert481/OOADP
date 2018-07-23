@@ -28,16 +28,23 @@ const Reviews = sequelize.define('Reviews', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'users',
+            model: 'Users',
             key: 'user_id'
         }
     },
-    purcahse_id:{
+    listing_id: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Listings',
+            key: 'id'
+        }
+    },
+    purchase_id:{
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'Purchase',
-            key: 'purchase_id'
+            model: 'Purchases',
+            key: 'id'
         }        
     }
 });
@@ -52,6 +59,7 @@ Reviews.sync({ force: false, logging: console.log}).then(() => {
         satisfaction: 'Positive',
         content: 'lol',
         user_id: 1,
+        listing_id: 1,
         purchase_id: 1
     })
 });

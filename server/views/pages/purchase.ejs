@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/stylesheet %>
+</head>
+
+<script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+
+<header>
+  <% include ../partials/header %>
+</header>
+<body>
+<!--CREATE REVIEW-->
+<% purchase.forEach (function(purchase) { %>
+<!--SHOW PURCHASES-->
+
+  <table class="table">
+    <thread>
+      <tr>
+        <th>Purchase No.</th>
+        <th>Listing ID</th>
+        <th>Offer ID</th>
+      </tr>
+        <tr>
+          <td>
+            <%= purchase.id %>
+          </td>
+          <td>
+            <%= purchase.listing_id %>
+          </td>
+          <td>
+              <%= purchase.offer_id %>
+          </td>
+          <td>
+            <a class="btn btn-secondary" href="/purchaseinfo/<%= purchase.id %>" class="btn btn-secondary pull-right">More Details</a>
+          </td>
+        </tr>
+    </thread>
+  </table>
+
+    <% }); %>
+
+<footer>
+  <% include ../partials/footer %>
+  <% include ../partials/javascript %>
+</footer>
+
+</body>
+
+</html>

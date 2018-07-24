@@ -44,13 +44,7 @@ const Purchase =  sequelize.define('Purchase', {
 Purchase.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("purchase table synced");
-    Purchase.upsert({
-        id: 1,
-        user_id: 1,
-        listing_id: 1,
-        offer_id: 1,
-        status: 'new'
-    })
+    
 });
 
 module.exports = sequelize.model('Purchase', Purchase);

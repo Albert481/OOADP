@@ -43,7 +43,33 @@ Users.sync({force: false, logging:console.log}).then(()=>{
         user_id: 2,
         name: 'Aaron',
         email: 'aaron@gmail.com',
-        password: '1234'
+        password: '1234',
+        bio: "selling shoes",
+        address: "Hougang 1"
+    })
+    Users.upsert({
+        user_id: 3,
+        name: 'angelica',
+        email: 'angelica@gmail.com',
+        password: '1234',
+        bio: "selling shoes",
+        address: "Hougang 1"
+    })
+    Users.upsert({
+        user_id: 4,
+        name: 'jingxin',
+        email: 'jingxin@gmail.com',
+        password: '1234',
+        bio: "selling shoes",
+        address: "Hougang 1"
+    })
+    Users.upsert({
+        user_id: 5,
+        name: 'hamizan',
+        email: 'hamizan@gmail.com',
+        password: '1234',
+        bio: "selling shoes",
+        address: "Hougang 1"
     })
 });
 

@@ -26,6 +26,7 @@ exports.list = function (req, res) {
         res.render('manageOffers', {
             title: "Manage Offers",
             itemList: offer,
+            notifi_id: res.notifi_id,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         })
     }).catch((err) => {
@@ -42,6 +43,7 @@ exports.manageOffers = function (req, res) {
         res.render('manageOffers', {
             title: "Manage Offer",
             item: offerRecord,
+            notifi_id: res.notifi_id,
             hostPath: req.protocol + "://" + req.get("host")
         });
     }).catch((err) => {
@@ -58,6 +60,7 @@ exports.editOffer = function (req, res) {
         res.render('editOffers', {
             title: "Edit Offer",
             item: offerRecord,
+            notifi_id: res.notifi_id,
             hostPath: req.protocol + "://" + req.get("host")
         });
     }).catch((err) => {
@@ -98,3 +101,10 @@ exports.delete = function (req, res) {
         res.status(200).send({ message: "Deleted offer record:" + record_num});
     });
 }
+
+exports.hasAuthorization = function (req, res, next) {
+    if(req.isAuthenticated())
+        res.notifi_id = req.user.user_id
+        return next();
+    res.redirect('/login');
+};

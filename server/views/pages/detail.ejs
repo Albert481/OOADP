@@ -33,6 +33,19 @@
 				<div class="home-banner outer-top-n">
 <img src="assets/images/banners/LHS-banner.jpg" alt="Image">
 </div>		
+<!-- ============================================== Testimonials============================================== -->
+<div class="sidebar-widget  wow fadeInUp outer-top-vs ">
+		<div id="advertisement" class="advertisement">
+			<div class="item">
+				<h3 class="section-title">Seller's Info</h3>
+				<div class="avatar"><img class="card-img-top" src="<%= gravatar %>" alt="<%= gravatar %>"></div>
+				<div class="clients_author"><%= user.name%>	<!--<span><%= user.bio %></span>-->	</div><!-- /.container-fluid -->
+				<div class="testimonials"><em>"</em> <%= user.bio %><em>"</em></div>
+				<button class="btn btn-primary"><a href="" style="color:white">Seller Profile</a></button>
+			 </div><!-- /.item -->
+		</div><!-- /.owl-carousel -->
+	</div>
+<!-- ============================================== Testimonials: END ============================================== -->	
 <!-- ============================================== NEWSLETTER ============================================== -->
 <div class="sidebar-widget newsletter wow fadeInUp outer-bottom-small outer-top-vs">
 	<h3 class="section-title">Newsletters</h3>
@@ -49,34 +62,6 @@
 </div><!-- /.sidebar-widget -->
 <!-- ============================================== NEWSLETTER: END ============================================== -->
 
-<!-- ============================================== Testimonials============================================== -->
-<div class="sidebar-widget  wow fadeInUp outer-top-vs ">
-	<div id="advertisement" class="advertisement">
-        <div class="item">
-            <div class="avatar"><img src="assets/images/testimonials/member1.png" alt="Image"></div>
-		<div class="testimonials"><em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-		<div class="clients_author">John Doe	<span>Abc Company</span>	</div><!-- /.container-fluid -->
-        </div><!-- /.item -->
-
-         <div class="item">
-         	<div class="avatar"><img src="assets/images/testimonials/member3.png" alt="Image"></div>
-		<div class="testimonials"><em>"</em>Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-		<div class="clients_author">Stephen Doe	<span>Xperia Designs</span>	</div>    
-        </div><!-- /.item -->
-
-        <div class="item">
-            <div class="avatar"><img src="assets/images/testimonials/member2.png" alt="Image"></div>
-		<div class="testimonials"><em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-		<div class="clients_author">Saraha Smith	<span>Datsun &amp; Co</span>	</div><!-- /.container-fluid -->
-        </div><!-- /.item -->
-
-    </div><!-- /.owl-carousel -->
-</div>
-    
-<!-- ============================================== Testimonials: END ============================================== -->
-
- 
-
 				</div>
 			</div><!-- /.sidebar -->
 			<div class='col-md-9'>
@@ -88,8 +73,8 @@
 
 	        <div id="owl-single-product">
             <div class="single-product-gallery-item" id="slide1">
-                <a data-lightbox="image-1" data-title="Gallery" href="images/listingimages/<%= itemList.imagename %>">
-                    <img class="img-responsive" alt="<%= itemList.imagename %>" src="images/listingimages/<%= itemList.imagename %>" data-echo="" />
+                <a data-lightbox="image-1" data-title="Gallery" href="/images/listingimages/<%= itemList.imagename %>">
+                    <img class="img-responsive" alt="<%= itemList.imagename %>" src="/images/listingimages/<%= itemList.imagename %>" data-echo="/images/listingimages/<%= itemList.imagename %>" />
                 </a>
             </div><!-- /.single-product-gallery-item -->
 
@@ -99,59 +84,6 @@
         <div class="single-product-gallery-thumbs gallery-thumbs">
 
             <div id="owl-single-product-thumbnails">
-                <div class="item">
-                    <a class="horizontal-thumb active" data-target="#owl-single-product" data-slide="1" href="#slide1">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p17.jpg" />
-                    </a>
-                </div>
-
-                <div class="item">
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="2" href="#slide2">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p18.jpg"/>
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="3" href="#slide3">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p19.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="4" href="#slide4">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p20.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="5" href="#slide5">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p21.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="6" href="#slide6">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p22.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="7" href="#slide7">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p23.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="8" href="#slide8">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p24.jpg" />
-                    </a>
-                </div>
-                <div class="item">
-
-                    <a class="horizontal-thumb" data-target="#owl-single-product" data-slide="9" href="#slide9">
-                        <img class="img-responsive" width="85" alt="" src="assets/images/blank.gif" data-echo="assets/images/products/p25.jpg" />
-					</a>
-                </div>
             </div><!-- /#owl-single-product-thumbnails -->
 
             
@@ -225,26 +157,25 @@
 							<div class="quantity-container info-container">
 								<div class="row">
 									
-									<div class="col-sm-3">
-										<span class="label">Offer Price:</span>
+									<div class="col-sm-2">
+										<span class="label">Qty :</span>
 									</div>
-									<form action="/manageoffers/new" method="post">
-										<div class="col-sm-2">
-											<div class="cart-quantity">
-												<div class="quant-input">
-													<input type="text" id="inputOffer" name="offerprice" class="form-control" placeholder="0.00" required="true">
-													
-												</div>
-											</div>
-										</div>
-										<input type="hidden" id="inputListing" name="listing_id"  value="<%= itemList.id %>" required="true">
-										<div class="col-sm-7">
-											<!-- <a href="" class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</a> -->
-											<button type="submit" class="btn btn-primary">Confirm Offer</button>
-										</div>
-									</form>
-
-									
+									<div class="col-sm-2">
+										<div class="cart-quantity">
+											<div class="quant-input">
+								                <div class="arrows">
+								                  <div class="arrow plus gradient"><span class="ir"><i class="icon fa fa-sort-asc"></i></span></div>
+								                  <div class="arrow minus gradient"><span class="ir"><i class="icon fa fa-sort-desc"></i></span></div>
+								                </div>
+								                <input type="text" value="1">
+							              </div>
+							            </div>
+									</div>
+									<div class="col-sm-7">
+										<a href="" id="viewchat" class="btn btn-primary"><i class=""></i> VIEW CHAT</a>
+										<a href="/manageoffers/" class="btn btn-primary">Make An Offer</a>
+										<a href="#" class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</a>
+									</div>
 								</div><!-- /.row -->
 							</div><!-- /.quantity-container -->
 						</div><!-- /.product-info -->
@@ -256,7 +187,7 @@
 					<div class="row">
 						<div class="col-sm-3">
 							<ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
-								<li class="active"><a href="/reviews/<%= itemList.id%>">SEE REVIEW</a></li>
+								<li class="active"><a data-toggle="tab" href="#review">REVIEW</a></li>
 								<li><a data-toggle="tab" href="#tags">TAGS</a></li>
 							</ul><!-- /.nav-tabs #product-tabs -->
 						</div>
@@ -365,6 +296,38 @@
 			</div><!-- /.col -->
 			<div class="clearfix"></div>
 		</div><!-- /.row -->
+						<!-- ============================================== UPSELL PRODUCTS ============================================== -->
+<section class="section featured-product wow fadeInUp">
+		<h3 class="section-title">You may also like:</h3>
+		<div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+		<% suggestList.forEach (function(listSuggest) { %>
+		<% if (listSuggest.id != itemList.id) { %>
+			<div class="item item-carousel">
+				<div class="products">
+		<div class="product">		
+			<div class="product-image">
+				<div class="image">
+					<a href="/detail/<%= listSuggest.id %>"><img  src="/images/listingimages/<%= listSuggest.imagename %>" alt="<%= listSuggest.imagename %>"></a>
+				</div><!-- /.image -->			          		   
+			</div><!-- /.product-image -->
+			<div class="product-info text-left">
+				<h3 class="name"><a href="/detail/<%= listSuggest.id %>"><%= listSuggest.name %></a></h3>
+				<div class="product-price">	
+					<span class="price"></span>
+				</div><!-- /.product-price -->
+			</div><!-- /.product-info -->
+						<div class="cart clearfix animate-effect">
+					<div class="action">
+					</div><!-- /.action -->
+				</div><!-- /.cart -->
+				</div><!-- /.product -->
+				</div><!-- /.products -->
+			</div><!-- /.item -->
+		<% } else { %>  
+		<% } %>
+		<% }); %>
+		</div><!-- /.home-owl-carousel -->
+	</section><!-- /.section -->
 		<!-- ============================================== BRANDS CAROUSEL ============================================== -->
 <div id="brands-carousel" class="logo-slider wow fadeInUp">
 
@@ -465,5 +428,11 @@
 </footer>
 
 </body>
+
+<script>
+	$(document).on("click" , '#viewchat' ,function () {
+		$.post(location.href);
+    })
+</script>
 
 </html>

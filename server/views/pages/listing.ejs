@@ -999,22 +999,7 @@
                             <!-- /.sidebar-widget-body -->
                         </div>
                         <!-- /.sidebar-widget -->
-                        <!-- ============================================== COLOR: END ============================================== -->
-                        <!-- ============================================== COMPARE============================================== -->
-                        <div class="sidebar-widget wow fadeInUp outer-top-vs">
-                            <h3 class="section-title">Compare products</h3>
-                            <div class="sidebar-widget-body">
-                                <div class="compare-report">
-                                    <p>You have no
-                                        <span>item(s)</span> to compare</p>
-                                </div>
-                                <!-- /.compare-report -->
-                            </div>
-                            <!-- /.sidebar-widget-body -->
-                        </div>
-                        <!-- /.sidebar-widget -->
-                        <!-- ============================================== COMPARE: END ============================================== -->
-                        <!-- ============================================== PRODUCT TAGS ============================================== -->
+                        <!-- ============================================== COLOR: END ============================================== -->                       <!-- ============================================== PRODUCT TAGS ============================================== -->
                         <div class="sidebar-widget product-tag wow fadeInUp outer-top-vs">
                             <h3 class="section-title">Product tags</h3>
                             <div class="sidebar-widget-body outer-top-xs">
@@ -1034,64 +1019,9 @@
                             <!-- /.sidebar-widget-body -->
                         </div>
                         <!-- /.sidebar-widget -->
-                        <!----------- Testimonials------------->
-                        <div class="sidebar-widget  wow fadeInUp outer-top-vs ">
-                            <div id="advertisement" class="advertisement">
-                                <div class="item">
-                                    <div class="avatar">
-                                        <img src="images/testimonials/member1.png" alt="Image">
-                                    </div>
-                                    <div class="testimonials">
-                                        <em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum
-                                        metus eud molest sed consectetuer.
-                                        <em>"</em>
-                                    </div>
-                                    <div class="clients_author">John Doe
-                                        <span>Abc Company</span>
-                                    </div>
-                                    <!-- /.container-fluid -->
-                                </div>
-                                <!-- /.item -->
 
-                                <div class="item">
-                                    <div class="avatar">
-                                        <img src="images/testimonials/member3.png" alt="Image">
-                                    </div>
-                                    <div class="testimonials">
-                                        <em>"</em>Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum
-                                        metus eud molest sed consectetuer.
-                                        <em>"</em>
-                                    </div>
-                                    <div class="clients_author">Stephen Doe
-                                        <span>Xperia Designs</span>
-                                    </div>
-                                </div>
-                                <!-- /.item -->
-
-                                <div class="item">
-                                    <div class="avatar">
-                                        <img src="images/testimonials/member2.png" alt="Image">
-                                    </div>
-                                    <div class="testimonials">
-                                        <em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum
-                                        metus eud molest sed consectetuer.
-                                        <em>"</em>
-                                    </div>
-                                    <div class="clients_author">Saraha Smith
-                                        <span>Datsun &amp; Co</span>
-                                    </div>
-                                    <!-- /.container-fluid -->
-                                </div>
-                                <!-- /.item -->
-
-                            </div>
-                            <!-- /.owl-carousel -->
-                        </div>
 
                         <!-- ============================================== Testimonials: END ============================================== -->
-
-                        <div class="home-banner">
-                            <img src="images/banners/LHS-banner.jpg" alt="Image"> </div>
                     </div>
                     <!-- /.sidebar-filter -->
                 </div>
@@ -1133,7 +1063,7 @@
                               <div class="modal-body">
                                 <fieldset class="form-group">
                                   <label for="inputuserid">Your ID number</label>
-                                  <input type="text" id="inputuserid" name="user_id" class="form-control" placeholder="0" value="<%= user.id %>" required="true" readonly>
+                                  <input type="text" id="inputuserid" name="user_id" class="form-control" value="<%= user.user_id %>" required="true" readonly>
                                 </fieldset>
                                 <fieldset class="form-group">
                                   <label for="inputName">Name</label>
@@ -1310,9 +1240,18 @@
                                                 <div class="product">
                                                     <div class="product-image">
                                                         <div class="image">
-                                                        <a href="/detail/<%= showList.id %>">
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="width:250px; height:250px; background-color:white;text-align:center; vertical-align:middle">
+                                                                        <a href="/detail/<%= showList.id %>">
+                                                                            <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
+                                                                        </a>
+                                                                    </td>   
+                                                                </tr>
+                                                            </table>
+<!--                                                        <a href="/detail/<%= showList.id %>">
                                                             <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
-                                                        </a>
+                                                        </a> -->
                                                         </div>
                                                         <!-- /.image -->
                                                         <% if (showList.status == 1) { %>
@@ -1334,17 +1273,24 @@
                                 <div class="rating rateit-small"></div>
                                 <div class="description">
                                     <span class="description" id="desc">
-                                      <%= showList.description %>
+                                            <span class="info">By <%= userSeller.name %> &nbsp;|&nbsp; Date </span></br>
+                                        <button class="btn btn-secondary"><a href="/detail/<%= showList.id %>" style="color:#000000;">See Description Here</a></button>
                                     </span>
                                 </div>
-                                <div class="product-price">
-                                    <span class="price"><p>$<%= showList.price %></p> </span>
-                                </div>
+                                        <div class="product-price">
+                                            <span class="price"><p>$<%= showList.price %></p> </span>
+                                        </div>
                                 <!-- /.product-price -->
+                                <table>
+                                <tr>
+                                <td>
                                 <% if (showList.user_id == user.user_id) { %>
                                     <input type="button" class="btn btn-primary icon editBtn" id="editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
                                     <input type="button" class="btn btn-primary icon deleteBtn" id="deleteBtn" value="Delete">
                                 <% }else { %>  <% } %>
+                                </td>
+                                </tr>
+                                </table>
                             </div>
                             <!-- /.product-info -->
                             <div class="cart clearfix animate-effect">
@@ -1392,7 +1338,9 @@
                                                     <div class="col col-sm-4 col-lg-4">
                                                         <div class="product-image">
                                                             <div class="image">
-                                                                <img src="images/listingimages/<%= showList.imagename %>" alt="images/listingimages/<%= showList.imagename %>">
+                                                                <a href="/detail/<%= showList.id %>">
+                                                                    <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
+                                                                </a>
                                                             </div>
                                                         </div>
                                                         <!-- /.product-image -->
@@ -1405,7 +1353,7 @@
                                                                     </div>
                                                              <!--   <div class="rating rateit-small"></div> -->
                                                                 <div class="description">
-                                                                  <span class="description"><%= showList.description %></span>
+                                                                  <span class="description"><button href="/detail/<%= showList.id %>">See Description Here</button></span>
                                                                 </div>
                                                                 <div class="product-price">
                                                                     <span class="price"><p>$<%= showList.price %></p> </span>
@@ -1434,7 +1382,7 @@
                                                                 <!-- /.action -->
                                                             </div>
                                                             <!-- /.cart -->
-                                                            <% if (showList.user_id == user.id) { %>
+                                                            <% if (showList.user_id == user.user_id) { %>
                                                                 <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
                                                                 <input type="button" class="btn btn-primary icon deleteBtn" value="Delete">
                                                             <% }else { %>  <% } %>

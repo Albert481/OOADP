@@ -50,32 +50,23 @@ ListingModel.sync({force: false, logging: console.log}).then(() => {
     //Table created
     console.log("Listings table synced");
     ListingModel.upsert({
-        id: 1,
+        id:1,
         user_id: 1,
         name: "Vans Old Skool - Size 10.0 Men",
         imagename:"vans.jpg",
         description: "Vans The Old Skool, Vans classic skate shoe and the first to bare the iconic side stripe, has a low-top lace-up silhouette with a durable suede and canvas upper with padded tongue and lining and Vans signature Waffle Outsole.",
         price: 60.00,
         status: 0
-    })
+    });
     ListingModel.upsert({
-        id: 2,
+        id:2,
         user_id: 2,
         name: "YEEZY 500 “Super Moon Yellow”",
         imagename:"yeezy.jpg",
-        description: "Yeezy 500 Super Moon Yellow features an upper constructed from cow suede", 
-        price: 360.00,
-        status: 0
-    })
-    ListingModel.upsert({
-        id: 3,
-        user_id: 1,
-        name: "YEEZY WINTER CAPTAIN",
-        imagename:"yeezy.jpg",
-        description: "FAKE YEEZYS", 
-        price: 1.00,
-        status: 0
-    })
+        description: "Yeezy 500 Super Moon Yellow features an upper constructed from cow suede, premium leather and mesh with nubuck accents.",
+        price: 320.00,
+        status: 1
+    });
 });
 
 module.exports = sequelize.model('Listings', ListingModel)

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheet %>
+</head>
+<body>
+    <% include ../partials/header %>
+
+    <div class="container">
+        <h1><%= title %></h1>
+        <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="/purchaseinfo/<%= purchase.id %>" method="post">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Leave Feedback</h4>
+                            </div>
+            
+                            <div class="modal-body">
+            
+                                <fieldset class="form-group">
+                                    <!--<label for="inputname">Name</label> -->
+                                    <input type="hidden" id="inputname" name="name" class="form-control" value="<%= user.name %>" required="" readonly>
+                                </fieldset>
+                                <table class="table">	
+                                    <thead>
+                                      <tr>
+                                        <th class="cell-label">&nbsp;</th>
+                                        <th>Negative</th>
+                                        <th>Neutral</th>
+                                        <th>Positive</th>
+                                      </tr>
+                                    </thead>	
+                                    <tbody>
+                                      <tr>
+                                        <td class="cell-label">User Sastisfication</td>
+                                        <td><input type="radio" name="satisfaction" class="radio" value="Negative"></td>
+                                        <td><input type="radio" name="satisfaction" class="radio" value="Neutral"></td>
+                                        <td><input type="radio" name="satisfaction" class="radio" value="Positive"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                <fieldset class="form-group">
+                                    <label for="inputContent">Content</label>
+                                    <textarea id="inputContent" name="content" rows="8" cols="40" class="form-control" placeholder="Comment Description" required=""></textarea>
+                                </fieldset>
+                                <!--hidden-->
+                                <input type="hidden" id="inputuserid" name="user_id"  value="<%= user.user_id %>" required="true" readonly>
+                                <input type="hidden" id="inputlistingid" name="listing_id"  value="<%= purchase.listing_id %>" required="true" readonly>
+                                <input type="hidden" id="inputpurchaseid" name="purchase_id"  value="<%= purchase.id %>" required="true" readonly>
+            
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit Review</button>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!--Purchase info-->
+        <div class="datails">
+
+            <div class="card text-xs-center">
+                <br>
+                <div class="card-block">
+                    <h4 class="card-title">Purchase ID: <%= purchase.id %></h4>
+                    <p class="card-text">
+                        <strong>Listing ID</strong>: <%= purchase.listing_id %> <br>
+                        <strong>Offer ID</strong>: <%=purchase.offer_id %> <br>
+                    </p>
+                    <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createPost">Leave Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+    </body>
+    </html>

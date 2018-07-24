@@ -18,6 +18,8 @@ const Op = Sequelize.Op
 var detail = require('./server/controllers/detail')
 //Import listing controller
 var listing = require('./server/controllers/listing');
+// Manage Offers
+var manageOffers = require("./server/controllers/manageOffers")
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -27,7 +29,11 @@ var category = require('./server/controllers/category');
 // Import chatmessage controller
 var chat = require('./server/controllers/chatmessage');
 // import profile controller
-var profile = require('./server/controllers/profile')
+var profile = require('./server/controllers/profile');
+//import reviews controller
+var reviews = require('./server/controllers/reviews');
+//import purchase controller
+var purchase = require('./server/controllers/purchase');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -121,6 +127,7 @@ app.get('/categories', category.show)
 
 // app.get('/chatmessage', chat.show)
 
+
 // Setup chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
@@ -164,6 +171,12 @@ app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
 app.post("/listing/edit/:id", listing.update);
 app.delete("/listing/:id", listing.delete);
+
+app.get("/manageoffers/", manageOffers.list);
+app.get("/editoffers/:id", manageOffers.editOffer)
+app.post("/manageoffers/new", manageOffers.insert)
+app.post("/editoffers/:id", manageOffers.update);
+app.delete("/manageoffers/:id", manageOffers.delete);
 
 app.get('/messages/', chat.hasAuthorization, chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.hasAuthorization, chat.chatreceive);

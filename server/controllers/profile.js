@@ -4,10 +4,11 @@ var sequelize = myDatabase.sequelize;
 
 //Edit profile
 exports.edit = function(req,res){
-    var record_num = req.user.id;
+    var record_num = req.user.user_id;
     user.findById(record_num).then(function(userRecord){
         res.render('editprofile', {
             title: "Edit Profile",
+            notifi_id: req.notifi_id,
             user: req.user,
             hostPath: req.protocol + "://" + req.get("host")
         });
@@ -20,7 +21,7 @@ exports.edit = function(req,res){
 
 //Update profile
 exports.update = function (req, res) {
-    var record_num = req.user.id;
+    var record_num = req.user.user_id;
     var updateData = {
         name: req.body.name,
         email: req.body.email,
@@ -41,6 +42,7 @@ exports.update = function (req, res) {
 //edit profile authorization
 exports.hasAuthorization = function (req, res, next) {
     if (req.isAuthenticated())
+        res.notifi_id = req.user.user_id
         return next();
     res.redirect('/login');
 }

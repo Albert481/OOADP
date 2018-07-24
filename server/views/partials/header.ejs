@@ -47,7 +47,7 @@
               <% if (user) { %>
               <li><a href="/messages" id="decreaseCounter"><i class="icon fa fa-inbox"></i>Messages<span class="notification">1</span></a></li>
               <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-              <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
+              <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
               <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
               <% } else { %>
               <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
@@ -61,6 +61,8 @@
                 <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="/profile">Profile</a></li>
+                    <li><a href="/purchase">Purchase history</a></li>
+                    <li><a href="/listing">Listing</a></li>
                     <li><a href="/editprofile">Settings</a></li>
                     <li><a href="/logout">Logout</a></li>
                   </ul>

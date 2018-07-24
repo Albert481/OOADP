@@ -34,7 +34,7 @@ exports.update = function (req, res) {
                 message: "error"
             });
         }
-        res.status(200).send({message: "Updated student record: " + record_num});
+        res.status(200).send({message: "Updated Profile " + record_num});
     })
 
 }

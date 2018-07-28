@@ -102,7 +102,6 @@ exports.list = function (req, res){
 //  //   ListingModel.findAll({//include: [{ all: true }]
 //     //    attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
 //         }).then(listings => {
-//             console.log("HELLO PLEASE SEEEEEEEEEEEEEEEEEEEEEEEEEE THIS" + listings[0].user_id);
 //             Users.findAll({
 //                 user_id: listings[0].user_id
 //             }).then(user_info => {
@@ -127,6 +126,7 @@ exports.editListing = function(req,res){
         res.render('editListing', {
             title: "Edit Listing",
             item: listingRecord,
+            notifi_id: -1,
             hostPath: req.protocol + "://" + req.get("host")
         });
     }).catch((err) => {

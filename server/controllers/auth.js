@@ -20,7 +20,7 @@ exports.login = function(req, res) {
 exports.profile = function(req, res) {
     sequelize.query('select u.user_id, l.id, l.user_id, l.name, l.imagename, l.description, l.price, l.status from Users u join Listings l on l.user_id = u.user_id', {model : ListingModel}).then ((listings) =>{
     // List all Users and sort by Date
-    res.render('profile', { title: 'Profile Page', user : req.user, notifi_id: req.notifi_id, itemList : listings, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
+    res.render('profile', { title: 'Profile Page', user : req.user, notifi_id: req.notifi_id, itemList : listings, urlPath: req.protocol + "://" + req.get("host") + req.url, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
     })
 };
 // Logout function

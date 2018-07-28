@@ -163,7 +163,7 @@ io.on('connection', function(socket) {
 
     });
 });
-//app.use("/detail", detail.show);
+
 app.get("/detail/:id", detail.show);
 app.post("/detail/:id", detail.chat);
 app.get("/listing", listing.list);

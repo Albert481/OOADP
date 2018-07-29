@@ -29,7 +29,7 @@ const Purchases =  sequelize.define('Purchases', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'offerPrices',
+            model: 'offerPrice',
             key: 'id'
         }
     },

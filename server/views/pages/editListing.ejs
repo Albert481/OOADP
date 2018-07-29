@@ -24,7 +24,7 @@
             </fieldset>
             <fieldset class="form-group">
                 <label for="inputImage">Image</label>
-                <input type="file" id="inputImage" name="image" class="form-control" src="images/listingimages/<%= item.imagename %>" alt="<%= item.imagename %>">
+                <input type="file" id="inputImage" name="image" class="form-control">
                 <span class="file-custom"></span>
             </fieldset>
             <fieldset class="form-group">
@@ -51,8 +51,8 @@
             var newValues = {
                 user_id: $("#inputuserid").val(),
                 name: $("#inputName").val(),
-                image: "images/listingimages/<%= item.imagename %>",
-            //    image: $("#inputImage").src(),
+            //    image: "images/listingimages/<%= item.imagename %>",
+                image: $("#inputImage").attr('src'),
                 description: $("#inputDescription").val(),
                 price: $("#inputPrice").val(),
                 status: $("#inputStatus:checked").val()

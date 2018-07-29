@@ -13,6 +13,7 @@ exports.show = function (req, res){
         res.render('reviews', {
             title: 'Review Page',
             reviews: reviews,
+            notifi_id: req.notifi_id,
             gravatar: gravatar.url(reviews.user_id, { s: '80', r: 'x', d: 'retro'}, true),
             urlPath: req.protocol + "://" + req.get("host") + req.url
         })
@@ -57,3 +58,10 @@ exports.create = function (req, res) {
 //         res.status(200).send({message: "Deleted reviews :" + record_num});
 //     })
 // }
+
+exports.hasAuthorization = function (req, res, next) {
+    if (req.isAuthenticated())
+        res.notifi_id = req.user.user_id
+        return next();
+    res.redirect('/login');
+}

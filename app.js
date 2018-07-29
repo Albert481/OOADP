@@ -178,6 +178,14 @@ app.post("/manageoffers/new", manageOffers.insert)
 app.post("/editoffers/:id", manageOffers.update);
 app.delete("/manageoffers/:id", manageOffers.delete);
 
+//purchase
+app.get("/purchase", purchase.show);
+app.get("/purchaseinfo/:id", purchase.list);
+
+//reviews
+app.get("/reviews/:id", reviews.show);
+app.post("/purchaseinfo/:id", reviews.create);
+
 app.get('/messages/', chat.hasAuthorization, chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.hasAuthorization, chat.chatreceive);
 app.post('/messages/:con_id/:cu_id', function (req, res) {
@@ -222,6 +230,7 @@ app.use(function (err, req, res, next) {
 // app.get('/listing', listing.hasAuthorization, listing.show);
 // app.post('/listing-gallery', listing.hasAuthorization, listing.create);
 // app.delete('/listing/:listing_id', listing.hasAuthorization, listing.delete);
+
 
 module.exports = app;
 

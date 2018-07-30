@@ -12,6 +12,7 @@ exports.show = function (req, res){
             title: 'Purchase History',
             purchase: purchase,
             user: user,
+            notifi_id: req.notifi_id,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         })
     }).catch((err) => {
@@ -28,6 +29,7 @@ exports.list = function (req, res) {
     Purchases.findById(purchase_num).then(function(purchaseRec){
         res.render('purchaseinfo', {
             title: 'Purchase Info',
+            notifi_id: req.notifi_id,
             purchase: purchaseRec,
             hostPath: req.protocol + "://" + req.get("host")
         });
@@ -37,3 +39,11 @@ exports.list = function (req, res) {
         });
     });
 };
+
+
+exports.hasAuthorization = function (req, res, next) {
+    if (req.isAuthenticated())
+        res.notifi_id = req.user.user_id
+        return next();
+    res.redirect('/login');
+}

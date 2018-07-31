@@ -96,10 +96,13 @@ app.use(function(req, res, next) {
     if (req.user != undefined) {
         SeenMsg.count({ where: {'user_id': req.user.user_id, 'seen': 0} }).then((userseen) => {
             res.locals.notificount = userseen;
+            next();
         }) 
+    } else {
+        next();
     }
-    next();
-});
+    
+   });
 
 // Index route
 app.get('/', index.show)

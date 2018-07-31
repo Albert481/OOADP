@@ -134,8 +134,10 @@
                                     <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
                                     <div class="meta">
                                         <p class="name"> <%= conversations[i].title %> </p>
-                                        <p class="preview">You just got LITT UP, DANKO</p>
-                                        <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"><%=notificount%> <% } else { %> class="connoti" style="visibility: visible"><%=notificount%> <% } %></div>
+                                        <% if (conversations[i].seen == 0) { %>
+                                            <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"><%=notificount%> <% } else { %> class="connoti" style="visibility: visible"><%=notificount%> <% } %></div>
+                                        <% } %>
+                                        
                                     </div>
                                 </div>
                             </li>

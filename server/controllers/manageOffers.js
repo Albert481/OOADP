@@ -15,16 +15,17 @@ exports.insert = function (req, res) {
                 message: "error"
             });
         }
-        res.redirect('/');
+        res.redirect('/manageoffers');
     })
 };
 
 // List all the offer records in database
 exports.list = function (req, res) {
-    sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id', { model: offerPrice, raw: true}).then((offer) => {
+    var user_id = req.user.user_id;
+    sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id WHERE o.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
         
         res.render('manageOffers', {
-            title: "Manage Offers",
+            title: "My Cart",
             itemList: offer,
             notifi_id: res.notifi_id,
             urlPath: req.protocol + "://" + req.get("host") + req.url

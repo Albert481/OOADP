@@ -33,7 +33,18 @@ const offerPrice = sequelize.define('offerPrice', {
 offerPrice.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("OfferPrice tables synched");
-    
+    offerPrice.upsert({
+        id: 1,
+        user_id: 1,
+        listing_id: 2,
+        offerprice: 60.00
+    }),
+    offerPrice.upsert({
+        id: 2,
+        user_id: 1,
+        listing_id: 1,
+        offerprice: 60.00
+    })
 });
 
 module.exports = sequelize.model('offerPrice', offerPrice);

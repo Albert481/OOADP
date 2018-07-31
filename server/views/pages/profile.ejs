@@ -27,17 +27,17 @@
         </div>
     </div>
     <br/>
-    <button class="btn btn-primary" onclick="location.href ='/listing'">Add Listing</button>
     <section class="section latest-blog outer-bottom-vs wow fadeInUp">
         <h3 class="section-title">Listings from <%=user.name %></h3>
                 <% itemList.forEach (function(showList) { %>
-            <div class="blog-slider-container outer-top-xs">
+            <div class="blog-slider-container outer-top-xs deletelist" data-id="<%= showList.id%>">
                 <% if (showList.user_id == user.user_id) { %> 
+        <form action="/profile" method="delete">
          <div class="owl-carousel blog-slider custom-carousel">       
             <div class="item">
               <div class="blog-post">
-                <div class="blog-post-image">
-                  <div class="image"> <a href="blog.html"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" style="width:200px;height:250px;" ></a> </div>
+                <div class="blog-post-image" style="width:250px; height:250px">
+                  <div class="image"> <a href="blog.html"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a> </div>
                 </div>
                 <!-- /.blog-post-image -->
                 <div class="blog-post-info text-left">
@@ -47,7 +47,7 @@
                   <a href="/detail/<%= showList.id %>" class="lnk btn btn-primary">See more</a>
                 </div>
                   <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
-                  <input type="button" class="btn btn-primary icon deleteBtn" value="Delete">
+                  <input type="button" class="btn btn-primary icon deleteBtn" data-id="<%= showList.id%>" value="Delete">
               <!-- /.blog-post-info --> 
               </div>
               <!-- /.blog-post --> 
@@ -55,14 +55,31 @@
             <!-- /.item --> 
         </div>
         <!-- /.owl-carousel -->
-   <!--     <% }else if (showList.user_id.length == -1) { %>
-            <p>No listing yet.</p>  
-        <% } %> -->
+        </form>
+        <% } %>
         </div>
         <!-- /.blog-slider-container -->
         <% }); %>  
       </section>
-      <!-- /.section --> 
+      <!-- /.section -->
+      <script>
+            $('.deleteBtn').click(function() {
+                var listing_id = $(this).data('id');      
+                $.ajax({
+                        url: '/listing/'+listing_id,
+                        type: 'DELETE',
+                        success: function(result) {
+                            console.log(result.message);
+                            var itemToRemove = '.deletelist[data-id='+listing_id+']';
+                            $(itemToRemove).remove();
+                        },
+                        error: function(result){
+                            alert("Unable to delete listing.");
+                            console.log(result.message);
+                        } 
+                    });  
+            });
+</script> 
     <footer>
         <% include ../partials/footer %>
         <% include ../partials/javascript %>

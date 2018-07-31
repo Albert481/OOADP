@@ -92,8 +92,14 @@ app.use(flash());
 // Application Routes
 app.use(function(req, res, next) {
     res.locals.user = req.user;
+    res.locals.notificount = -1;
+    if (req.user != undefined) {
+        SeenMsg.count({ where: {'user_id': req.user.user_id, 'seen': 0} }).then((userseen) => {
+            res.locals.notificount = userseen;
+        }) 
+    }
     next();
-  });
+});
 
 // Index route
 app.get('/', index.show)
@@ -134,22 +140,9 @@ var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
 
-var socket_clients = {}
-
 io.on('connection', function(socket) {
-    // socket_clients[1] = socket.id;
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
-
-    // socket.on('username', function(data) {
-    //     socket_clients[data.user.user_id] = socket.id;
-    //     console.log(socket_clients, "JEFF")
-    // })
-    socket.on('myUser', function(userRoom) {
-        console.log('joining own room for notification:', userRoom);
-        socket.join(userRoom);
-        
-    });
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
@@ -163,6 +156,16 @@ io.on('connection', function(socket) {
 
     });
 });
+
+var nsp = io.of('/noti');
+nsp.on('connection', function(socket) {
+    socket.on('myUser', function(userRoom) {
+        console.log('joining own room for notification:', userRoom);
+        socket.join(userRoom);
+        
+    });
+})
+
 //app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
 app.post("/detail/:id", detail.chat);
@@ -196,10 +199,18 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         io.in(req.params.con_id).emit('message', chatData);
         res.sendStatus(200)
     })
-    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
-    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-        io.in(otherUser.user_id).emit('notification');
+
+    // Check any unseen message existing, if yes, dont update, dont send notification
+    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw: true}).then((ifMsgSeen) => {
+        if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
+            SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
+            Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
+                nsp.in(otherUser[0].user_id).emit('notification');
+            })
+        }
+        
     })
+    
 });
 
 // catch 404 and forward to error handler

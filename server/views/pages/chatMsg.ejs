@@ -9,6 +9,50 @@
     <% include ../partials/javascript.ejs %>
     <% include ../partials/stylesheet %>
     <link rel="stylesheet" href="/stylesheets/chatmessage.css">
+    <style>
+    .list-unstyled {
+        position: relative
+      }
+    
+      .notification {
+        position: absolute;
+        bottom: 8px;
+        right: 247px;
+        background: #d2232a;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        font-size: 10px;
+        line-height: 15px;
+        color: #fff;
+        text-align: center;
+      }
+    
+      .animating {
+        animation: animate 1s cubic-bezier(0, 1, 1, 0);
+      }
+    
+      @keyframes animate {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.7);
+        }
+      }
+
+    .connoti {
+        min-width: 2rem;
+        font-size: 1rem;
+        text-align: center;
+        color: #fff;
+        background-color: #33a0e8;
+        margin-left: .4rem;
+        border-radius: .4rem;
+        padding: .2rem .4rem;
+    }
+    </style>
 </head>
 
 <body>
@@ -17,30 +61,32 @@
             <div class="header-top-inner">
             <div class="cnt-account">
                 <ul class="list-unstyled">
-                <% if (user) { %>
-                <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
-                <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-                <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
-                <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
-                <% } else { %>
-                <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
-                <% } %>
+                    <% if (user) { %>
+                    <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
+                    <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                    <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
+                    <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+                    <% } else { %>
+                    <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+                    <% } %>
                 </ul>
             </div>
             <% if (user) { %>
-            <!-- /.cnt-account -->
-            <div class="cnt-block">
-                <ul class="list-unstyled list-inline">
-                    <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/editprofile">Settings</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    </ul>
-                    </li>
-                </ul>
-                </div>
-                <% } %>
+          <!-- /.cnt-account -->
+          <div class="cnt-block">
+              <ul class="list-unstyled list-inline">
+                <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/purchase">Purchase history</a></li>
+                    <li><a href="/listing">Listing</a></li>
+                    <li><a href="/editprofile">Settings</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <% } %>
             <!-- /.cnt-cart -->
             <div class="clearfix"></div>
             </div>
@@ -89,6 +135,7 @@
                                     <div class="meta">
                                         <p class="name"> <%= conversations[i].title %> </p>
                                         <p class="preview">You just got LITT UP, DANKO</p>
+                                        <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"><%=notificount%> <% } else { %> class="connoti" style="visibility: visible"><%=notificount%> <% } %></div>
                                     </div>
                                 </div>
                             </li>
@@ -190,11 +237,6 @@
             window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
             
             socket.emit('subscribe', conversation_id);
-            
-            // refreshes div to load messages
-            // $("#contentContainer").load(location.href + " #contentMargin");
-            // console.log(location.href)
-            // scrollToBottomOnLoad();
 
             $.ajax({
                 type: 'GET',
@@ -270,6 +312,18 @@
         var messages = $('#messages');
         // TO BE DONE
     }
+
+    function removeAnimation() {
+        setTimeout(function () {
+          $('.notification').removeClass('animating')
+        }, 500);
+      }
+
+    function decreaseCounter() {
+        counterValue--; // decrement
+        $('.notification').html(counterValue).addClass('animating'); // animate it
+        removeAnimation(); // remove CSS animating class
+      }
 
 }
 </script>

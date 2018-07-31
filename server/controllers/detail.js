@@ -80,13 +80,13 @@ exports.chat = function (req, res) {
                             res.redirect('/messages/' + findKeyConv.con_id + '/' + findKeyConv.cu_id)
                         })
                     });
-                    SeenMsg.create({user_id: req.user.user_id, con_id: newConvo.con_id, seen: false});
+                    SeenMsg.create({user_id: req.user.user_id, con_id: newConvo.con_id, seen: true});
                     // Create new ConvUser for receiver
                     ConvUser.findOrCreate({
                         where: { user_id: convo[0].user_id, con_id: newConvo.con_id },
                     }).spread(function (match, created) {
                     })
-                    SeenMsg.create({user_id: convo[0].user_id, con_id: newConvo.con_id, seen: false});
+                    SeenMsg.create({user_id: convo[0].user_id, con_id: newConvo.con_id, seen: true});
                     
                 }))
             } else {
@@ -108,6 +108,8 @@ exports.chat = function (req, res) {
                                 where: { user_id: convo[0].user_id, con_id: newConvo.con_id },
                             }).spread(function (match, created) {
                             })
+                            SeenMsg.create({user_id: req.user.user_id, con_id: newConvo.con_id, seen: true});
+                            SeenMsg.create({user_id: convo[0].user_id, con_id: newConvo.con_id, seen: true});
                             
                         }))
                     } else {

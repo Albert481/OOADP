@@ -22,7 +22,7 @@ exports.show = function (req, res){
             }
         }).then(function(user_info) {
             ListingModel.findAll({
-                attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
+                attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
             }).then(function(suggestList) {
             res.render('detail', {
                 title:"Detail",
@@ -127,16 +127,3 @@ exports.chat = function (req, res) {
 
     })
 }
-
-// exports.show = function (req, res) {
-//     var listing_num = req.user.id;
-//     ListingModel.findAll({
-//         attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
-//     }).then(function(listings){
-//         res.render('detail', {
-//             title: "Detail",
-//             itemList: listings,
-//             urlPath: req.protocol + "://" + req.get("host") + req.url
-//         })
-//     })
-// }

@@ -169,7 +169,7 @@ app.post("/detail/:id", detail.chat);
 app.get("/listing", listing.list);
 app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
-app.post("/listing/edit/:id", listing.update);
+app.post("/listing/edit/:id", upload.single('image'), listing.update);
 app.delete("/listing/:id", listing.delete);
 
 app.get("/manageoffers/", manageOffers.list);

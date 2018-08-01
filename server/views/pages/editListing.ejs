@@ -40,6 +40,16 @@
                 <input type="radio" id="inputStatus" name="status" class="form-control" value="true" checked >Yes
                 <input type="radio" id="inputStatus" name="status" class="form-control" value="false">No
             </fieldset>
+            <fieldset class="form-group">
+                    <label for="inputCategory">Category</label>
+                    <br>
+                <select class="col-sm-12" id="inputCategory" name="category">
+                        <option id="inputCategory" value="Clothing">Clothing</option>
+                        <option id="inputCategory" value="Shoes">Shoes</option>
+                        <option id="inputCategory" value="Watches">Watches</option>
+                        <option id="inputCategory" value="Jewellery">Jewellery</option>
+                </select>
+            </fieldset>
           </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
@@ -55,7 +65,8 @@
                 image: $("#inputImage").attr('src'),
                 description: $("#inputDescription").val(),
                 price: $("#inputPrice").val(),
-                status: $("#inputStatus:checked").val()
+                status: $("#inputStatus:checked").val(),
+                category: $("#inputCategory").find(':selected').val()
             }
             $.ajax({
                 url: url,

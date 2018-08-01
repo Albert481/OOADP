@@ -22,6 +22,10 @@ const ConvUser = sequelize.define('ConvUser', {
             model: 'Conversations',
             key: 'con_id'
         } 
+    },
+    blocked: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     }
 });
 

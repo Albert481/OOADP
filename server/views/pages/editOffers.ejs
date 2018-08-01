@@ -18,7 +18,7 @@
 
 <body>
     <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Edit Offers</h4>
+        <h4 class="modal-title" id="myModalLabel">Edit Offer</h4>
     </div>
     <div class="modal-body">
         <fieldset class="form-group">
@@ -44,7 +44,7 @@
                 contentType: "application/json",
                 success: function(result){
                     alert("Offer updated successfully");
-                    location.href = "<%=hostPath%>"
+                    location.href = "<%=hostPath%>/manageoffers"
                 },
                 error: function(result){
                     alert("Error updating offer");

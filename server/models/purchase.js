@@ -3,7 +3,7 @@ var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
-const Purchase =  sequelize.define('Purchase', {
+const Purchases =  sequelize.define('Purchases', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -29,7 +29,7 @@ const Purchase =  sequelize.define('Purchase', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'offerPrice',
+            model: 'offerPrices',
             key: 'id'
         }
     },
@@ -41,16 +41,21 @@ const Purchase =  sequelize.define('Purchase', {
 });
 
 // force: true will drop the table if it already exists
-Purchase.sync({ force: false, logging: console.log}).then(() => {
+Purchases.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("purchase table synced");
-    Purchase.upsert({
+    Purchases.upsert({
         id: 1,
-        user_id: 1,
-        listing_id: 1,
         offer_id: 1,
-        status: 'new'
+        user_id: 3,
+        listing_id: 2
+    }),
+    Purchases.upsert({
+        id: 2,
+        offer_id: 2,
+        user_id: 3,
+        listing_id: 1
     })
 });
 
-module.exports = sequelize.model('Purchase', Purchase);
+module.exports = sequelize.model('Purchases', Purchases);

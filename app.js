@@ -142,6 +142,7 @@ var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
+var ConvUsers = require('./server/models/ConvUser')
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -150,6 +151,18 @@ io.on('connection', function(socket) {
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
         socket.join(room);
+    });
+
+    socket.on('block', function(blockdata) {
+        console.log('blocked user: ', blockdata);
+        ConvUsers.find({where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }}).then((ifBlocked) => {
+            if (ifBlocked.blocked == false) {
+                ConvUsers.update({blocked: true}, { where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }})
+            } else {
+                ConvUsers.update({blocked: false}, { where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }})
+            }
+            
+        })
         
     });
 
@@ -201,27 +214,33 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         message: req.body.message,
         timestamp: formattedTime
     }
-    // Save into database
-    ChatMsg.create(chatData).then((newMessage) => {
-        if (!newMessage) {
-            res.sendStatus(500);
-        }
-        // io.emit('message', chatData)
-        io.in(req.params.con_id).emit('message', chatData);
-        res.sendStatus(200)
-    })
 
-    // Check any unseen message existing, if yes, dont update, dont send notification
-    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw: true}).then((ifMsgSeen) => {
-        if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
-            SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
-            Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-                nsp.in(otherUser[0].user_id).emit('notification');
+    Sequelize.query('SELECT * FROM ConvUsers WHERE cu_id=' + req.params.cu_id, {model: ConvUsers, raw: true}).then((ifBlocked) => {
+        if (ifBlocked[0].blocked == false) {
+            // Save into database
+            ChatMsg.create(chatData).then((newMessage) => {
+                if (!newMessage) {
+                    res.sendStatus(500);
+                }
+                // io.emit('message', chatData)
+                io.in(req.params.con_id).emit('message', chatData);
+                res.sendStatus(200)
             })
+
+            // Check any unseen message existing, if yes, dont update, dont send notification
+            Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw: true}).then((ifMsgSeen) => {
+                if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
+                    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
+                    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
+                        nsp.in(otherUser[0].user_id).emit('notification');
+                    })
+                }
+                
+            })
+        } else {
+            console.log('User was blocked, hence message not saved')
         }
-        
     })
-    
 });
 
 // catch 404 and forward to error handler

@@ -100,28 +100,11 @@
                 <div class="wrap">
                     <img id="profile-img" src="<%= avatar %>" class="online" alt="" />
                     <p> <%= user.name %> </p>
-                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-                    <div id="status-options">
-                        <ul>
-                            <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
-                            <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
-                            <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
-                            <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
-                        </ul>
-                    </div>
-                    <div id="expanded">
-                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mikeross" />
-                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="ross81" />
-                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mike.ross" />
-                    </div>
                 </div>
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="Search contacts..." />
+                <input type="text" placeholder="Search..." />
             </div>
             <div id="contacts">
                 <ul>
@@ -134,20 +117,20 @@
                                     <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
                                     <div class="meta">
                                         <p class="name"> <%= conversations[i].title %> </p>
-                                        <% if (conversations[i].seen == 0) { %>
-                                            <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"><%=notificount%> <% } else { %> class="connoti" style="visibility: visible"><%=notificount%> <% } %></div>
+                                        <% for (var j in msgseen) { %>
+                                            <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
+                                                <% console.log(conversations[i].con_id, msgseen[0][j].con_id) %>
+                                                <% if (msgseen[0][j].seen == false) { %>
+                                                    <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"> <% } else { %> class="connoti" style="visibility: visible"> <% } %></div>
+                                                <% } %>
+                                            <% } %>
                                         <% } %>
-                                        
                                     </div>
                                 </div>
                             </li>
                         <% } %>
                     <% } %>
                 </ul>
-            </div>
-            <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
         <% if (typeof chatmessages != 'undefined') { %>
@@ -166,8 +149,12 @@
                         <span>
                             <div id="dropdownMenu">
                                 <ul>
-                                    <li style="opacity: 1">Report</li>
-                                    <li style="opacity: 1">Block</li>
+                                    <% console.log(isBlocked[0][0].blocked) %>
+                                    <% if (isBlocked[0][0].blocked == false) { %>
+                                    <li type="button" id="blockUser1" style="opacity: 1" data-toggle="modal" data-target="#exampleModal">Block User</li>
+                                    <% } else {%>
+                                    <li type="button" id="unblockUser" style="opacity: 1" data-toggle="modal">Unblock User</li>
+                                    <% } %>
                                 </ul>
                             </div>
                         </span>
@@ -187,6 +174,26 @@
                             </li>
                         <%}%>  
                     </ul>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Block user?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                            Are you sure you want to block this user? You will no longer receive any messages and any conversations with the user will be hidden from your inbox.
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" id="blockUser" data-dismiss="modal" class="btn btn-danger">Block User</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </container>
             <div class="message-input">
@@ -214,11 +221,29 @@
     var socket = io()
 
     var con_id = "<%=con_id %>"
+    var convuser_id = '<%= cu_id %>'
+
     socket.emit('subscribe', con_id);
 
     // When user clicks on menu button (Report/Block)
     $(document).on("click", '#menuButton', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
+    })
+
+    // When user blocks user
+    $(document).on("click", '#blockUser', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+        var socket = io()
+        socket.emit('block', {con_id, convuser_id})
+        document.getElementById("blockUser1").innerHTML = "Unblock user"
+    })
+
+    // When user unblocks user
+    $(document).on("click", '#unblockUser', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+        var socket = io()
+        socket.emit('block', {con_id, convuser_id})
+        document.getElementById("unblockUser").innerHTML = "Block user"
     })
 
     // Allows enter key to send message
@@ -308,6 +333,7 @@
         if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
             messages.scrollTop(scrollHeight);
         }
+    }
     
     function scrollToBottomOnLoad() {
         // Selector
@@ -315,19 +341,34 @@
         // TO BE DONE
     }
 
-    function removeAnimation() {
-        setTimeout(function () {
-          $('.notification').removeClass('animating')
-        }, 500);
-      }
+    var socket = io('/noti');
+    
+    var counterValue = parseInt($('.notification').html()); // Get the current bubble value
 
-    function decreaseCounter() {
-        counterValue--; // decrement
-        $('.notification').html(counterValue).addClass('animating'); // animate it
-        removeAnimation(); // remove CSS animating class
-      }
+    <% if (user) { %>
+        socket.emit('myUser', '<%=user.user_id%>');
+    
+        socket.on('notification', function() {
+            if ((counterValue == '') || (counterValue < 1)) {
+            counterValue = 0;
+            }
+            increaseCounter()
+            console.log('Counter up')
+        })
 
-}
+        function removeAnimation() {
+            setTimeout(function () {
+            $('.notification').removeClass('animating')
+            }, 500);
+        }
+
+        function increaseCounter() {
+            counterValue++; // increment
+            $('.notification').css("visibility", "visible");
+            $('.notification').html(counterValue).addClass('animating'); // animate it
+            removeAnimation(); // remove CSS animating class 
+        }
+    <% } %>
 </script>
 
 

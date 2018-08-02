@@ -138,7 +138,7 @@ app.get('/categories', category.show)
 
 
 // Setup chat
-var io = require('socket.io')(httpServer);
+const io = require('socket.io')(httpServer, { wsEngine: 'ws' });
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
@@ -171,16 +171,17 @@ io.on('connection', function(socket) {
         console.log("Num of chat users connected: " + chatConnections);
 
     });
-});
 
-var nsp = io.of('/noti');
-nsp.on('connection', function(socket) {
     socket.on('myUser', function(userRoom) {
         console.log('joining own room for notification:', userRoom);
         socket.join(userRoom);
         
     });
-})
+
+    socket.on("typing", function(data) {  
+        socket.broadcast.to(data.con_id).emit("isTyping", {typing: data.typing});
+    });
+});
 
 //app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
@@ -232,7 +233,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
                 if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
                     SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
                     Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-                        nsp.in(otherUser[0].user_id).emit('notification');
+                        io.in(otherUser[0].user_id).emit('notification');
                     })
                 }
                 

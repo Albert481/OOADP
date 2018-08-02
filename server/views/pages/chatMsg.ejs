@@ -266,7 +266,7 @@
         document.getElementById("dropdownMenu").classList.toggle("show");
         var socket = io()
         socket.emit('block', {con_id, convuser_id})
-        document.getElementById("menuBlockUser").innerHTML = "Block User"
+        document.getElementById("menuUnblockUser").innerHTML = "Block User"
     })
 
     // Allows enter key to send message
@@ -362,6 +362,22 @@
         }
     }
 
+    var temp;
+    // Detect typing
+    $("#message").keypress(function (e) {
+        if (e.which !== 13) {
+            clearTimeout(temp)
+            socket.emit("typing", {typing: true, con_id: con_id});
+            temp = setTimeout(function() {
+                socket.emit("typing", {typing: false, con_id: con_id})
+            }, 1500)
+        }
+    });
+
+    socket.on('isTyping'), function(data) {
+        console.log('hello')
+    }
+
     function scrollToBottom() {
         // Selectors
         var messages = $('#messages');
@@ -387,8 +403,6 @@
         var scrollHeight = messages.prop('scrollHeight');
         messages.scrollTop(clientHeight + scrollHeight);
     }
-
-    var socket = io('/noti');
     
     var counterValue = parseInt($('.notification').html()); // Get the current bubble value
 

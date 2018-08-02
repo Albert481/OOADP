@@ -20,6 +20,8 @@ var detail = require('./server/controllers/detail')
 var listing = require('./server/controllers/listing');
 // Manage Offers
 var manageOffers = require("./server/controllers/manageOffers")
+// Incoming Offers
+var incomingOffers = require("./server/controllers/incomingOffers")
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -200,6 +202,10 @@ app.get("/editoffers/:id", manageOffers.editOffer)
 app.post("/manageoffers/new", manageOffers.insert)
 app.post("/editoffers/:id", manageOffers.update);
 app.delete("/manageoffers/:id", manageOffers.delete);
+app.get("/incomingoffers/", incomingOffers.list);
+app.delete("/incomingoffers/:id", incomingOffers.delete);
+app.post("/incomingoffers/accept/:id", incomingOffers.acceptoffer);
+app.post("/incomingoffers/decline/:id", incomingOffers.declineoffer);
 
 //purchase
 app.get("/purchase", purchase.show);

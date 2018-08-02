@@ -7,8 +7,7 @@ exports.insert = function (req, res) {
     var offerData = {
         user_id: req.user.user_id,
         listing_id: req.body.listing_id,
-        offerprice: req.body.offerprice,
-        offerstatus: req.body.offerstatus
+        offerprice: req.body.offerprice
     }
     offerPrice.create(offerData).then((newRecord, created) => {
         if (!newRecord) {
@@ -23,10 +22,10 @@ exports.insert = function (req, res) {
 // List all the offer records in database
 exports.list = function (req, res) {
     var user_id = req.user.user_id;
-    sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice, offerstatus FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id WHERE o.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
+    sequelize.query('SELECT o.id, o.offerprice, l.name AS itemname, b.name AS buyername, offerstatus FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id INNER JOIN users b ON b.user_id = o.user_id WHERE l.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
         
-        res.render('manageOffers', {
-            title: "My Cart",
+        res.render('incomingOffers', {
+            title: "Incoming Offers",
             itemList: offer,
             notifi_id: res.notifi_id,
             urlPath: req.protocol + "://" + req.get("host") + req.url
@@ -39,11 +38,11 @@ exports.list = function (req, res) {
 };
 
 // List one specific offer record from database
-exports.manageOffers = function (req, res) {
+exports.incomingOffers = function (req, res) {
     var record_num = req.params.id;
     offerPrice.findById(record_num).then(function (offerRecord) {
-        res.render('manageOffers', {
-            title: "Manage Offer",
+        res.render('incomingOffers', {
+            title: "Incoming Offer",
             item: offerRecord,
             notifi_id: res.notifi_id,
             hostPath: req.protocol + "://" + req.get("host")
@@ -72,13 +71,27 @@ exports.editOffer = function (req, res) {
     });
 };
 
-//Update offer record in database
-exports.update = function (req, res) {
+//Accept Offer
+exports.acceptoffer = function (req, res) {
     var record_num = req.params.id;
     var updateData = {
-        id: req.body.id,
-        listing: req.body.listing,
-        offerprice: req.body.offerprice
+        offerstatus: "Accepted"
+    }
+    offerPrice.update(updateData, { where: { id: record_num } }).then((updatedRecord) => {
+        if (!updatedRecord || updatedRecord == 0) {
+            return res.send(400, {
+                message: "error"
+            });
+        }
+        res.status(200).send({ message: "Updated offer record:" + record_num });
+    })
+}
+
+//Decline Offer
+exports.declineoffer = function (req, res) {
+    var record_num = req.params.id;
+    var updateData = {
+        offerstatus: "Declined"
     }
     offerPrice.update(updateData, { where: { id: record_num } }).then((updatedRecord) => {
         if (!updatedRecord || updatedRecord == 0) {

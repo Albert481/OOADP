@@ -64,7 +64,8 @@ exports.insert = function (req, res){
         description: req.body.description,
         price: req.body.price,
         status: req.body.status,
-        category: req.body.category
+        category: req.body.category,
+        notifi_id: req.notifi_id
     }
     ListingModel.create(listingData).then((newRecord, created) => {
         if (!newRecord){

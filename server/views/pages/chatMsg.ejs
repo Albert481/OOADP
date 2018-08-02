@@ -9,6 +9,50 @@
     <% include ../partials/javascript.ejs %>
     <% include ../partials/stylesheet %>
     <link rel="stylesheet" href="/stylesheets/chatmessage.css">
+    <style>
+    .list-unstyled {
+        position: relative
+      }
+    
+      .notification {
+        position: absolute;
+        bottom: 8px;
+        right: 247px;
+        background: #d2232a;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        font-size: 10px;
+        line-height: 15px;
+        color: #fff;
+        text-align: center;
+      }
+    
+      .animating {
+        animation: animate 1s cubic-bezier(0, 1, 1, 0);
+      }
+    
+      @keyframes animate {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.7);
+        }
+      }
+
+    .connoti {
+        min-width: 2rem;
+        font-size: 1rem;
+        text-align: center;
+        color: #fff;
+        background-color: #33a0e8;
+        margin-left: .4rem;
+        border-radius: .4rem;
+        padding: .2rem .4rem;
+    }
+    </style>
 </head>
 
 <body>
@@ -17,30 +61,32 @@
             <div class="header-top-inner">
             <div class="cnt-account">
                 <ul class="list-unstyled">
-                <% if (user) { %>
-                <li><a href="/messages"><i class="icon fa fa-inbox"></i>Messages</a></li>
-                <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-                <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
-                <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
-                <% } else { %>
-                <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
-                <% } %>
+                    <% if (user) { %>
+                    <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
+                    <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                    <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
+                    <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+                    <% } else { %>
+                    <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+                    <% } %>
                 </ul>
             </div>
             <% if (user) { %>
-            <!-- /.cnt-account -->
-            <div class="cnt-block">
-                <ul class="list-unstyled list-inline">
-                    <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/editprofile">Settings</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    </ul>
-                    </li>
-                </ul>
-                </div>
-                <% } %>
+          <!-- /.cnt-account -->
+          <div class="cnt-block">
+              <ul class="list-unstyled list-inline">
+                <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/purchase">Purchase history</a></li>
+                    <li><a href="/listing">Listing</a></li>
+                    <li><a href="/editprofile">Settings</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <% } %>
             <!-- /.cnt-cart -->
             <div class="clearfix"></div>
             </div>
@@ -54,28 +100,11 @@
                 <div class="wrap">
                     <img id="profile-img" src="<%= avatar %>" class="online" alt="" />
                     <p> <%= user.name %> </p>
-                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-                    <div id="status-options">
-                        <ul>
-                            <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
-                            <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
-                            <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
-                            <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
-                        </ul>
-                    </div>
-                    <div id="expanded">
-                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mikeross" />
-                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="ross81" />
-                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mike.ross" />
-                    </div>
                 </div>
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="Search contacts..." />
+                <input type="text" placeholder="Search..." />
             </div>
             <div id="contacts">
                 <ul>
@@ -87,18 +116,33 @@
                                     <span class="contact-status online"></span>
                                     <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
                                     <div class="meta">
+                                        <% for (var k in conversations) { %>
+                                            <% if ((conversations[i].con_id == conversations[k].con_id) && (conversations[k].user_id != user.user_id)) { %>
+                                            <div style="height: 20px; display: flex;">
+                                                <div style="text-align: left; width: 75%"> 
+                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2; width: 50%"><%=conversations[k].name %> </p>
+                                                </div>
+                                                <div style="text-align: right;"> 
+                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2;">DATE </p>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                        <% } %>
                                         <p class="name"> <%= conversations[i].title %> </p>
-                                        <p class="preview">You just got LITT UP, DANKO</p>
+                                        <% for (var j in msgseen) { %>
+                                            <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
+                                                <% console.log(conversations[i].con_id, msgseen[0][j].con_id) %>
+                                                <% if (msgseen[0][j].seen == false) { %>
+                                                    <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"> <% } else { %> class="connoti" style="visibility: visible"> <% } %></div>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
                                     </div>
                                 </div>
                             </li>
                         <% } %>
                     <% } %>
                 </ul>
-            </div>
-            <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
         <% if (typeof chatmessages != 'undefined') { %>
@@ -117,8 +161,11 @@
                         <span>
                             <div id="dropdownMenu">
                                 <ul>
-                                    <li style="opacity: 1">Report</li>
-                                    <li style="opacity: 1">Block</li>
+                                    <% if (isBlocked[0][0].blocked == false) { %>
+                                    <li type="button" id="menuBlockUser" style="opacity: 1">Block User</li>
+                                    <% } else {%>
+                                    <li type="button" id="menuUnblockUser" style="opacity: 1" data-toggle="modal">Unblock User</li>
+                                    <% } %>
                                 </ul>
                             </div>
                         </span>
@@ -139,6 +186,26 @@
                         <%}%>  
                     </ul>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Block user?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                            Are you sure you want to block this user? You will no longer receive any messages and any conversations with the user will be hidden from your inbox.
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" id="modalBlockUser" data-dismiss="modal" class="btn btn-danger">Block User</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </container>
             <div class="message-input">
                 <div class="wrap">
@@ -149,9 +216,9 @@
             </div>
         <% } else { %>
             <container id="contentContainer">
-                <div style="font-weight: 600; text-align: center;">
-                    <div>Welcome back! You have no new messages.</div>
-                    <div>Browse categories to chat and buy from sellers</div>
+                <div style="padding-top: 200px; font-weight: 600; text-align: center;">
+                    <div>Welcome back, <%=user.name %>!</div>
+                    <div><a href="/">Browse categories to chat and buy from sellers</a></div>
                 </div>
             </container>
         <% } %>
@@ -165,11 +232,41 @@
     var socket = io()
 
     var con_id = "<%=con_id %>"
+    var convuser_id = '<%= cu_id %>'
+    scrollToBottomOnLoad()
+
     socket.emit('subscribe', con_id);
 
     // When user clicks on menu button (Report/Block)
     $(document).on("click", '#menuButton', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
+    })
+
+    // When user blocks user
+    $(document).on("click", '#menuBlockUser', function() {
+        if (document.getElementById('menuBlockUser').innerHTML == "Block User") {
+            $('#exampleModal').modal('show');
+        } else {
+            document.getElementById("dropdownMenu").classList.toggle("show");
+            var socket = io()
+            socket.emit('block', {con_id, convuser_id})
+            document.getElementById("menuBlockUser").innerHTML = "Block User"
+        }
+    })
+
+    $(document).on("click", '#modalBlockUser', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+        var socket = io()
+        socket.emit('block', {con_id, convuser_id})
+        document.getElementById("menuBlockUser").innerHTML = "Unblock User"
+    })
+
+    // When user unblocks user
+    $(document).on("click", '#menuUnblockUser', function() {
+        document.getElementById("dropdownMenu").classList.toggle("show");
+        var socket = io()
+        socket.emit('block', {con_id, convuser_id})
+        document.getElementById("menuUnblockUser").innerHTML = "Block User"
     })
 
     // Allows enter key to send message
@@ -190,22 +287,21 @@
             window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
             
             socket.emit('subscribe', conversation_id);
-            
-            // refreshes div to load messages
-            // $("#contentContainer").load(location.href + " #contentMargin");
-            // console.log(location.href)
-            // scrollToBottomOnLoad();
 
             $.ajax({
                 type: 'GET',
                 url: location.href,
                 success: function() {
                     $("#contentContainer").load(location.href + " #contentMargin");
+                    setTimeout(function () {
+                        scrollToBottomOnLoad()
+                        }, 40);
                 },
                 error: function() {
                 }
         
             })
+            
         });
     });
 
@@ -246,8 +342,40 @@
             </li>`)
             scrollToBottom();
         }
-        
-        
+    }
+
+    socket.on('blockmessage', addBlockMessage)
+
+    function addBlockMessage(msg) {
+        var convuser_id = parseInt($('.contact.active').data('cuid'))
+        if (isNaN(convuser_id)) {
+            convuser_id = '<%= cu_id %>'
+        }
+        if (Number(msg.cu_id) == convuser_id) {
+        $("#inlineMessage").append(`
+            <li class="replies">
+                <div>
+                    <p style="color: red;"> You have been blocked, the message you sent might not be received by the user. </p>
+                </div>
+            </li>`)
+            scrollToBottom();
+        }
+    }
+
+    var temp;
+    // Detect typing
+    $("#message").keypress(function (e) {
+        if (e.which !== 13) {
+            clearTimeout(temp)
+            socket.emit("typing", {typing: true, con_id: con_id});
+            temp = setTimeout(function() {
+                socket.emit("typing", {typing: false, con_id: con_id})
+            }, 1500)
+        }
+    });
+
+    socket.on('isTyping'), function(data) {
+        console.log('hello')
     }
 
     function scrollToBottom() {
@@ -264,14 +392,44 @@
         if (clientHeight + scrollTop  + newMessageHeight + lastMessageHeight >= scrollHeight) {
             messages.scrollTop(scrollHeight);
         }
+    }
     
     function scrollToBottomOnLoad() {
-        // Selector
+        // Selectors
         var messages = $('#messages');
-        // TO BE DONE
+        var newMessage = messages.children().children('li:last-child')
+        // Heights
+        var clientHeight = messages.prop('clientHeight');
+        var scrollHeight = messages.prop('scrollHeight');
+        messages.scrollTop(clientHeight + scrollHeight);
     }
+    
+    var counterValue = parseInt($('.notification').html()); // Get the current bubble value
 
-}
+    <% if (user) { %>
+        socket.emit('myUser', '<%=user.user_id%>');
+    
+        socket.on('notification', function() {
+            if ((counterValue == '') || (counterValue < 1)) {
+            counterValue = 0;
+            }
+            increaseCounter()
+            console.log('Counter up')
+        })
+
+        function removeAnimation() {
+            setTimeout(function () {
+            $('.notification').removeClass('animating')
+            }, 500);
+        }
+
+        function increaseCounter() {
+            counterValue++; // increment
+            $('.notification').css("visibility", "visible");
+            $('.notification').html(counterValue).addClass('animating'); // animate it
+            removeAnimation(); // remove CSS animating class 
+        }
+    <% } %>
 </script>
 
 

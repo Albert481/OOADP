@@ -94,8 +94,17 @@ app.use(flash());
 // Application Routes
 app.use(function(req, res, next) {
     res.locals.user = req.user;
-    next();
-  });
+    res.locals.notificount = -1;
+    if (req.user != undefined) {
+        SeenMsg.count({ where: {'user_id': req.user.user_id, 'seen': 0} }).then((userseen) => {
+            res.locals.notificount = userseen;
+            next();
+        }) 
+    } else {
+        next();
+    }
+    
+   });
 
 // Index route
 app.get('/', index.show)
@@ -131,31 +140,31 @@ app.get('/categories', category.show)
 
 
 // Setup chat
-var io = require('socket.io')(httpServer);
+const io = require('socket.io')(httpServer, { wsEngine: 'ws' });
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
-
-var socket_clients = {}
+var ConvUsers = require('./server/models/ConvUser')
 
 io.on('connection', function(socket) {
-    // socket_clients[1] = socket.id;
     chatConnections++;
     console.log("Num of chat users connected: " + chatConnections);
-
-    // socket.on('username', function(data) {
-    //     socket_clients[data.user.user_id] = socket.id;
-    //     console.log(socket_clients, "JEFF")
-    // })
-    socket.on('myUser', function(userRoom) {
-        console.log('joining own room for notification:', userRoom);
-        socket.join(userRoom);
-        
-    });
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
         socket.join(room);
+    });
+
+    socket.on('block', function(blockdata) {
+        console.log('blocked user: ', blockdata);
+        ConvUsers.find({where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }}).then((ifBlocked) => {
+            if (ifBlocked.blocked == false) {
+                ConvUsers.update({blocked: true}, { where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }})
+            } else {
+                ConvUsers.update({blocked: false}, { where: { con_id: blockdata.con_id, cu_id: {[Op.ne] : blockdata.convuser_id} }})
+            }
+            
+        })
         
     });
 
@@ -164,14 +173,25 @@ io.on('connection', function(socket) {
         console.log("Num of chat users connected: " + chatConnections);
 
     });
+
+    socket.on('myUser', function(userRoom) {
+        console.log('joining own room for notification:', userRoom);
+        socket.join(userRoom);
+        
+    });
+
+    socket.on("typing", function(data) {  
+        socket.broadcast.to(data.con_id).emit("isTyping", {typing: data.typing});
+    });
 });
 
+//app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
 app.post("/detail/:id", detail.chat);
 app.get("/listing", listing.list);
 app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
-app.post("/listing/edit/:id", listing.update);
+app.post("/listing/edit/:id", upload.single('image'), listing.update);
 app.delete("/listing/:id", listing.delete);
 
 app.get("/manageoffers/", manageOffers.list);
@@ -201,18 +221,32 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         message: req.body.message,
         timestamp: formattedTime
     }
-    // Save into database
-    ChatMsg.create(chatData).then((newMessage) => {
-        if (!newMessage) {
-            res.sendStatus(500);
+
+    Sequelize.query('SELECT * FROM ConvUsers WHERE cu_id=' + req.params.cu_id, {model: ConvUsers, raw: true}).then((ifBlocked) => {
+        if (ifBlocked[0].blocked == false) {
+            // Save into database
+            ChatMsg.create(chatData).then((newMessage) => {
+                if (!newMessage) {
+                    res.sendStatus(500);
+                }
+                // io.emit('message', chatData)
+                io.in(req.params.con_id).emit('message', chatData);
+                res.sendStatus(200)
+            })
+
+            // Check any unseen message existing, if yes, dont update, dont send notification
+            Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw: true}).then((ifMsgSeen) => {
+                if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
+                    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
+                    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
+                        io.in(otherUser[0].user_id).emit('notification');
+                    })
+                }
+                
+            })
+        } else {
+            io.in(req.params.con_id).emit('blockmessage', chatData)
         }
-        // io.emit('message', chatData)
-        io.in(req.params.con_id).emit('message', chatData);
-        res.sendStatus(200)
-    })
-    SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
-    Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-        io.in(otherUser.user_id).emit('notification');
     })
 });
 

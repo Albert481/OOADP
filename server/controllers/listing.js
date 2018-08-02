@@ -8,7 +8,18 @@ var Users = require('../models/users');
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 var Images = require('../models/ListingModel');
 var sequelize = myDatabase.sequelize;
-//var upload = multer({ dest: '././public/images/listingimages' })
+// var multer = require('multer');
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null,'./public/images/listingimages/')
+//     },
+//     filename: (req,file,cb) => {
+//         cb(null, file.originalname)
+//     }
+// });
+// const upload = multer({storage: storage});
+
+//var upload = multer({ dest: './public/images/listingimages/' })
 
 //Add a new listing to database
 exports.insert = function (req, res){
@@ -53,7 +64,8 @@ exports.insert = function (req, res){
         description: req.body.description,
         price: req.body.price,
         status: req.body.status,
-        notifi_id: req.notifi_id,
+        category: req.body.category,
+        notifi_id: req.notifi_id
     }
     ListingModel.create(listingData).then((newRecord, created) => {
         if (!newRecord){
@@ -77,7 +89,7 @@ exports.insert = function (req, res){
 //list listing
 exports.list = function (req, res){
     ListingModel.findAll({
-        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
+        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
     }).then(function(listings) {
         Users.findAll({
             where : {
@@ -87,7 +99,7 @@ exports.list = function (req, res){
         res.render('listing', {
             title: "Listing",
             itemList: listings,
-            userSeller: usersInfo[0],
+            userSeller: usersInfo[0].name,
             notifi_id: -1,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });
@@ -98,27 +110,6 @@ exports.list = function (req, res){
     });
 });
 };
-//     sequelize.query('SELECT id, user_id, name, imagename, description, price, status FROM Listings', { model: ListingModel, raw: true
-//  //   ListingModel.findAll({//include: [{ all: true }]
-//     //    attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status']
-//         }).then(listings => {
-//             Users.findAll({
-//                 user_id: listings[0].user_id
-//             }).then(user_info => {
-//                 res.render('listing', {
-//                     title:"Listing",
-//                     itemList: listings,
-//                     userSeller: user_info,
-//                     urlPath: req.protocol + "://" + req.get("host") + req.url
-//                 });
-//             }).catch((err) => {
-//              return res.status(400).send({
-//                  message: err
-//         });
-//     });
-// });
-// };
-
 //Edit one listing
 exports.editListing = function(req,res){
     var listing_num = req.params.id;
@@ -145,7 +136,8 @@ exports.update = function (req, res) {
         imagename: req.body.originalname,
         description: req.body.description,
         price: req.body.price,
-        status: req.body.status
+        status: req.body.status,
+        category: req.body.category
     }
     ListingModel.update(updateListing, {where: {id: listing_num} }).then((updateRecord) => {
         if (!updateRecord || updateRecord == 0){
@@ -156,7 +148,6 @@ exports.update = function (req, res) {
         res.status(200).send({message: "Updated listing:" + listing_num});
     })
 }
-
 //Delete a listing record from database
 exports.delete = function (req, res){
     var listing_num = req.params.id;

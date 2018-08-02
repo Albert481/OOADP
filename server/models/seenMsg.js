@@ -25,7 +25,7 @@ const seenMsg = sequelize.define('seenMsg', {
     },
     seen: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: true
     }
 });
 

@@ -10,11 +10,17 @@
     <% include ../partials/header %>
   </header>
 <body>
+        <div class='col-md-9'>
+                <div class="sidebar-module-container">
+                        <div class="sidebar-filter">
+                   </div>
+                </div>
+            </div>
+ 
 <div class="body-content outer-top-xs">
     <div class='container'>
         <div class='row'>
-            <div class='col-md-9'>
-                <!-- ========================================== SECTION – HERO ========================================= -->
+           <!-- ========================================== SECTION – HERO ========================================= -->
                 <div id="category" class="category-carousel hidden-xs">
                     <div class="item">
                         <div class="image">
@@ -22,14 +28,15 @@
                         <div class="container-fluid">
                             <div class="caption vertical-top text-left">
                                 <div class="big-text"> Big Sale </div>
-                                <div class="excerpt hidden-sm hidden-md"> Save up to 49% off </div>
-                                <div class="excerpt-normal hidden-sm hidden-md"> Lorem ipsum dolor sit amet, consectetur adipiscing elit </div>
+                                <div class="excerpt hidden-sm hidden-md"> Save up to 49% off by offering your price! </div>
+                                <div class="excerpt-normal hidden-sm hidden-md"> Vans Old Skool </div>
                             </div>
                             <!-- /.caption -->
                         </div>
                         <!-- /.container-fluid -->
                     </div>
                 </div>
+                <% if (user) { %>
                     <div class="addlisting">
                     <button type="button" class="btn btn-primary icon" data-toggle="modal" id="add-listing" data-target="#createListing">
                       Add Listing
@@ -71,6 +78,16 @@
                                     <input type="radio" id="inputStatus" name="status" class="form-control" value="true">Yes
                                     <input type="radio" id="inputStatus" name="status" class="form-control" value="false" checked>No
                                 </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="inputCategory">Category</label>
+                                    <br>
+                                <select class="col-sm-12" name="category">
+                                        <option id="inputCategory" value="Clothing">Clothing</option>
+                                        <option id="inputCategory" value="Shoes">Shoes</option>
+                                        <option id="inputCategory" value="Watches">Watches</option>
+                                        <option id="inputCategory" value="Jewellery">Jewellery</option>
+                                </select>
+                                </fieldset>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -81,6 +98,7 @@
                         </div>
                       </div>
                     </div>
+                <% } %>
                 <div class="clearfix filters-container m-t-10">
                     <div class="row">
                         <div class="col col-sm-8 col-md-2">
@@ -97,116 +115,6 @@
                                 </ul>
                             </div>
                             <!-- /.filter-tabs -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col col-sm-12 col-md-6">
-                            <div class="col col-sm-3 col-md-6 no-padding">
-                                <div class="lbl-cnt">
-                                    <span class="lbl">Sort by</span>
-                                    <div class="fld inline">
-                                        <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
-                                            <button data-toggle="dropdown" type="button" class="btn dropdown-toggle"> Position
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul role="menu" class="dropdown-menu">
-                                                <li role="presentation">
-                                                    <a href="#">position</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a onclick="lowestPrice()">Price:Lowest first</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">Price:Highest first</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">Product Name:A to Z</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- /.fld -->
-                                </div>
-                                <!-- /.lbl-cnt -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col col-sm-3 col-md-6 no-padding">
-                                <div class="lbl-cnt">
-                                    <span class="lbl">Show</span>
-                                    <div class="fld inline">
-                                        <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
-                                            <button data-toggle="dropdown" type="button" class="btn dropdown-toggle"> 1
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul role="menu" class="dropdown-menu">
-                                                <li role="presentation">
-                                                    <a href="#">1</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">2</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">3</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">4</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">5</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">6</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">7</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">8</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">9</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#">10</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- /.fld -->
-                                </div>
-                                <!-- /.lbl-cnt -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col col-sm-6 col-md-4 text-right">
-                            <div class="pagination-container">
-                                <ul class="list-inline list-unstyled">
-                                    <li class="prev">
-                                        <a href="#">
-                                            <i class="fa fa-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li class="next">
-                                        <a href="#">
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!-- /.list-inline -->
-                            </div>
-                            <!-- /.pagination-container -->
                         </div>
                         <!-- /.col -->
                     </div>
@@ -245,6 +153,7 @@
                                                         <% }else { %>  <% } %>
                                                     </div>
                                                     <!-- /.product-image -->
+                            
                             <div class="product-info text-left">
                                 <h3 class="name">
                                     <a href="/detail/<%= showList.id %>"></a>
@@ -266,27 +175,6 @@
                                 <!-- /.product-price -->
                             </div>
                             <!-- /.product-info -->
-                            <div class="cart clearfix animate-effect">
-                                    <div class="action">
-                                        <ul class="list-unstyled">
-                                            <li class="add-cart-button btn-group">
-                                                <button class="btn btn-primary icon" data-toggle="dropdown" type="button">
-                                                    <i class="fa fa-shopping-cart"></i>
-                                                </button>
-                                            </li>
-                                            <li class="lnk wishlist">
-                                                <a class="add-to-cart" href="detail.html" title="Wishlist">
-                                                    <i class="icon fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li class="lnk">
-                                                <a class="add-to-cart" href="detail.html" title="Compare">
-                                                    <i class="fa fa-signal"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                            </div>
                                                 </div>
                                                 <!-- /.product -->
                                             </div>
@@ -374,43 +262,6 @@
                         <!-- /.tab-pane #list-container -->
                     </div>
                     <!-- /.tab-content -->
-            
-            <div class="clearfix filters-container">
-            <div class="text-right">
-            <div class="pagination-container">
-            <ul class="list-inline list-unstyled">
-            <li class="prev">
-                <a href="#">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-            </li>
-            <li>
-                <a href="#">1</a>
-            </li>
-            <li class="active">
-                <a href="#">2</a>
-            </li>
-            <li>
-                <a href="#">3</a>
-            </li>
-            <li>
-                <a href="#">4</a>
-            </li>
-            <li class="next">
-                <a href="#">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            </li>
-            </ul>
-            <!-- /.list-inline -->
-            </div>
-            <!-- /.pagination-container -->
-            </div>
-            <!-- /.text-right -->
-
-            </div>
-            <!-- /.filters-container -->
-
     </div>
     <!-- /.search-result-container -->
 
@@ -418,6 +269,16 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+        <div id="brands-carousel" class="logo-slider wow fadeInUp">
+            <div class="logo-slider-inner">  
+                    <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
+            </div>
+        <!-- /.owl-carousel #logo-slider -->  
+    </div>
+    <!-- /.logo-slider-inner -->
+
+    </div>
+    <!-- /.logo-slider -->        
             </div>
             <!-- /.container -->
 

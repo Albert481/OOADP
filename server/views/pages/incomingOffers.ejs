@@ -16,15 +16,14 @@
 
 <body>
   <table class="table">
-    <h2 align = "center">YOUR OFFERS</h2>
+        <h2 align = "center">INCOMING OFFERS</h2>
     <thread>
       <tr>
-          <th>Remove</th>
-          <th>Offer ID</th>
-          <th>Listing ID</th>
-          <th>Listing Name</th>
-          <th>Offer Price</th>
-          <th>Status</th>
+        <th>Offer ID</th>
+        <th>Listing Name</th>
+        <th>Buyer Name</th>
+        <th>Offer Price</th>
+        <th>Status</th>
       </tr>
     </thread>
       <!-- <%console.log(itemList)%> -->
@@ -32,15 +31,14 @@
         <tbody>
           <tr class="rowRecord" data-id="<%= itemList[i].id %>">
               <!-- <%console.log(itemList[i])%> -->
-            <td class="romove-item"><a href="" title="cancel" class="deleteBtn"><i class="fa fa-trash-o"></i></a></td>
             <td class="cart-product-name-info">
               <h4 class='cart-product-description'><%= itemList[i].id %></h4>
             </td>
             <td class="cart-product-name-info">
-              <h4 class='cart-product-description'><%= itemList[i].listing_id %></h4>
+              <h4 class='cart-product-description'><%= itemList[i].itemname %></h4>
             </td>
             <td class="cart-product-name-info">
-              <h4 class='cart-product-description'><%= itemList[i].name %></h4>
+              <h4 class='cart-product-description'><%= itemList[i].buyername %></h4>
             </td>
             <td class="cart-product-name-info">
               <h4 class='cart-product-description'><%= itemList[i].offerprice %></h4>
@@ -48,19 +46,16 @@
             <!-- <td class="cart-product-edit">
               <input type="button" class="editBtn" value="Edit">
             </td> -->
-            <% if (itemList[i].offerstatus == "Pending") { %>
-            <td class="cart-product-name-info">
-                <h4 style = color:#808080><%= itemList[i].offerstatus %></h4>
-            </td>
-            <td class="cart-product-edit"><a href="#" class="editBtn">Edit</a></td>
-            <% } else if (itemList[i].offerstatus == "Accepted") { %>
-            <td class="cart-product-name-info">
-                <h4 style = color:#32CD32><%= itemList[i].offerstatus %></h4>
-            </td>
+            <% if (itemList[i].offerstatus === "Accepted") { %>
+                <td class="cart-product-name-info">
+                        <h4 style = color:#32CD32><%= itemList[i].offerstatus %></h4>
+                </td>   
+            <% } else if (itemList[i].offerstatus == "Declined") { %>
+                <td class="cart-product-name-info">
+                        <h4 style = color:#DC143C><%= itemList[i].offerstatus %></h4>
+                </td>
             <% } else { %>
-            <td class="cart-product-name-info">
-              <h4 style = color:#DC143C><%= itemList[i].offerstatus %></h4>
-            </td>
+                <td class="romove-item"><a href="" title="Accept Offer" class="accept"><h4>Accept</h4></a><a href="" title="Decline Offer" class="decline"><h4>Decline</h4></a></td>
             <% } %>
           </tr>
       </tbody>
@@ -68,10 +63,40 @@
   </table>
 
   <script>
-    // Edit Function
-    $('.editBtn').click(function () {
+    // Accept Function
+    $('.accept').click(function () {
       var record_num = $(this).closest("tr").data('id');
-      location.href = "editoffers/"+record_num;
+      
+      $.ajax({
+        url: '<%-urlPath%>' + '/accept/' + record_num,
+        type: 'POST',
+        success: function (result) {
+          console.log(result.message);
+        },
+        error: function (result) {
+          alert("Unable to delete item from cart.");
+          console.log(result.message);
+        }
+      });
+
+    });
+
+    // Decline Function
+    $('.decline').click(function () {
+      var record_num = $(this).closest("tr").data('id');
+      
+      $.ajax({
+        url: '<%-urlPath%>' + '/decline/' + record_num,
+        type: 'POST',
+        success: function (result) {
+          console.log(result.message);
+        },
+        error: function (result) {
+          alert("Unable to delete item from cart.");
+          console.log(result.message);
+        }
+      });
+
     });
     
     // Delete function

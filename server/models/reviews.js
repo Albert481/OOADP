@@ -52,15 +52,15 @@ const Reviews = sequelize.define('Reviews', {
 Reviews.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("reviews table synced");
-    Reviews.upsert({
-        id: 1,
-        name: 'Albert',
-        satisfaction: 'Positive',
-        content: 'lol',
-        user_id: 1,
-        listing_id: 1,
-        purchase_id: 1
-    })
+    // Reviews.upsert({
+    //     id: 1,
+    //     name: 'Albert',
+    //     satisfaction: 'Positive',
+    //     content: 'lol',
+    //     user_id: 1,
+    //     listing_id: 1,
+    //     purchase_id: 1
+    // })
 });
 
 module.exports = sequelize.model('Reviews', Reviews);

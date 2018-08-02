@@ -238,7 +238,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
                 
             })
         } else {
-            console.log('User was blocked, hence message not saved')
+            io.in(req.params.con_id).emit('blockmessage', chatData)
         }
     })
 });

@@ -116,6 +116,18 @@
                                     <span class="contact-status online"></span>
                                     <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
                                     <div class="meta">
+                                        <% for (var k in conversations) { %>
+                                            <% if ((conversations[i].con_id == conversations[k].con_id) && (conversations[k].user_id != user.user_id)) { %>
+                                            <div style="height: 20px; display: flex;">
+                                                <div style="text-align: left; width: 75%"> 
+                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2; width: 50%"><%=conversations[k].name %> </p>
+                                                </div>
+                                                <div style="text-align: right;"> 
+                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2;">DATE </p>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                        <% } %>
                                         <p class="name"> <%= conversations[i].title %> </p>
                                         <% for (var j in msgseen) { %>
                                             <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
@@ -149,11 +161,10 @@
                         <span>
                             <div id="dropdownMenu">
                                 <ul>
-                                    <% console.log(isBlocked[0][0].blocked) %>
                                     <% if (isBlocked[0][0].blocked == false) { %>
-                                    <li type="button" id="blockUser1" style="opacity: 1" data-toggle="modal" data-target="#exampleModal">Block User</li>
+                                    <li type="button" id="menuBlockUser" style="opacity: 1">Block User</li>
                                     <% } else {%>
-                                    <li type="button" id="unblockUser" style="opacity: 1" data-toggle="modal">Unblock User</li>
+                                    <li type="button" id="menuUnblockUser" style="opacity: 1" data-toggle="modal">Unblock User</li>
                                     <% } %>
                                 </ul>
                             </div>
@@ -190,7 +201,7 @@
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" id="blockUser" data-dismiss="modal" class="btn btn-danger">Block User</button>
+                            <button type="button" id="modalBlockUser" data-dismiss="modal" class="btn btn-danger">Block User</button>
                             </div>
                         </div>
                     </div>
@@ -205,9 +216,9 @@
             </div>
         <% } else { %>
             <container id="contentContainer">
-                <div style="font-weight: 600; text-align: center;">
-                    <div>Welcome back! You have no new messages.</div>
-                    <div>Browse categories to chat and buy from sellers</div>
+                <div style="padding-top: 200px; font-weight: 600; text-align: center;">
+                    <div>Welcome back, <%=user.name %>!</div>
+                    <div><a href="/">Browse categories to chat and buy from sellers</a></div>
                 </div>
             </container>
         <% } %>
@@ -222,6 +233,7 @@
 
     var con_id = "<%=con_id %>"
     var convuser_id = '<%= cu_id %>'
+    scrollToBottomOnLoad()
 
     socket.emit('subscribe', con_id);
 
@@ -231,19 +243,30 @@
     })
 
     // When user blocks user
-    $(document).on("click", '#blockUser', function() {
+    $(document).on("click", '#menuBlockUser', function() {
+        if (document.getElementById('menuBlockUser').innerHTML == "Block User") {
+            $('#exampleModal').modal('show');
+        } else {
+            document.getElementById("dropdownMenu").classList.toggle("show");
+            var socket = io()
+            socket.emit('block', {con_id, convuser_id})
+            document.getElementById("menuBlockUser").innerHTML = "Block User"
+        }
+    })
+
+    $(document).on("click", '#modalBlockUser', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
         var socket = io()
         socket.emit('block', {con_id, convuser_id})
-        document.getElementById("blockUser1").innerHTML = "Unblock user"
+        document.getElementById("menuBlockUser").innerHTML = "Unblock User"
     })
 
     // When user unblocks user
-    $(document).on("click", '#unblockUser', function() {
+    $(document).on("click", '#menuUnblockUser', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
         var socket = io()
         socket.emit('block', {con_id, convuser_id})
-        document.getElementById("unblockUser").innerHTML = "Block user"
+        document.getElementById("menuBlockUser").innerHTML = "Block User"
     })
 
     // Allows enter key to send message
@@ -270,11 +293,15 @@
                 url: location.href,
                 success: function() {
                     $("#contentContainer").load(location.href + " #contentMargin");
+                    setTimeout(function () {
+                        scrollToBottomOnLoad()
+                        }, 40);
                 },
                 error: function() {
                 }
         
             })
+            
         });
     });
 
@@ -315,8 +342,24 @@
             </li>`)
             scrollToBottom();
         }
-        
-        
+    }
+
+    socket.on('blockmessage', addBlockMessage)
+
+    function addBlockMessage(msg) {
+        var convuser_id = parseInt($('.contact.active').data('cuid'))
+        if (isNaN(convuser_id)) {
+            convuser_id = '<%= cu_id %>'
+        }
+        if (Number(msg.cu_id) == convuser_id) {
+        $("#inlineMessage").append(`
+            <li class="replies">
+                <div>
+                    <p style="color: red;"> You have been blocked, the message you sent might not be received by the user. </p>
+                </div>
+            </li>`)
+            scrollToBottom();
+        }
     }
 
     function scrollToBottom() {
@@ -336,9 +379,13 @@
     }
     
     function scrollToBottomOnLoad() {
-        // Selector
+        // Selectors
         var messages = $('#messages');
-        // TO BE DONE
+        var newMessage = messages.children().children('li:last-child')
+        // Heights
+        var clientHeight = messages.prop('clientHeight');
+        var scrollHeight = messages.prop('scrollHeight');
+        messages.scrollTop(clientHeight + scrollHeight);
     }
 
     var socket = io('/noti');

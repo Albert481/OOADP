@@ -236,6 +236,7 @@
     scrollToBottomOnLoad()
 
     socket.emit('subscribe', con_id);
+    socket.emit('myCon', con_id);
 
     // When user clicks on menu button (Report/Block)
     $(document).on("click", '#menuButton', function() {
@@ -367,15 +368,28 @@
     $("#message").keypress(function (e) {
         if (e.which !== 13) {
             clearTimeout(temp)
-            socket.emit("typing", {typing: true, con_id: con_id});
+            socket.emit('typing', {typing: true, con_id: con_id, name: '<%=user.name %>' });
             temp = setTimeout(function() {
-                socket.emit("typing", {typing: false, con_id: con_id})
+                socket.emit('typing', {typing: false, con_id: con_id, name: '<%=user.name%>' })
             }, 1500)
         }
     });
 
-    socket.on('isTyping'), function(data) {
-        console.log('hello')
+    socket.on('istyping'), function(data) {
+        console.log(data)
+        if (data.typing) {
+            $("#inlineMessage").append(`
+            <li class="sent">
+                <div id='"+ data.name +"'>
+                    <p style="color: gray;"> is typing... </p>
+                </div>
+            </li>`)
+            scrollToBottom();
+        } else {
+            $("#"+data.name+"").remove();
+        }
+        
+        
     }
 
     function scrollToBottom() {

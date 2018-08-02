@@ -138,7 +138,7 @@ app.get('/categories', category.show)
 
 
 // Setup chat
-const io = require('socket.io')(httpServer, { wsEngine: 'ws' });
+const io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
@@ -146,7 +146,7 @@ var ConvUsers = require('./server/models/ConvUser')
 
 io.on('connection', function(socket) {
     chatConnections++;
-    console.log("Num of chat users connected: " + chatConnections);
+    console.log("Num of socket users connected: " + chatConnections);
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
@@ -168,18 +168,21 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         chatConnections--;
-        console.log("Num of chat users connected: " + chatConnections);
-
+        console.log("Num of socket users connected: " + chatConnections);
     });
 
     socket.on('myUser', function(userRoom) {
-        console.log('joining own room for notification:', userRoom);
-        socket.join(userRoom);
-        
+        console.log('joining own room for notification:', 'n' + userRoom);
+        socket.join('n' + userRoom);
     });
 
-    socket.on("typing", function(data) {  
-        socket.broadcast.to(data.con_id).emit("isTyping", {typing: data.typing});
+    socket.on('myCon', function(conRoom) {
+        console.log('joining own con for typing:', 't' + conRoom);
+        socket.join('t' + conRoom);
+    });
+
+    socket.on('typing', function(data) {
+        socket.broadcast.to('t' + data.con_id).emit('istyping', {typing: data.typing, name: data.name});
     });
 });
 
@@ -233,7 +236,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
                 if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
                     SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
                     Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-                        io.in(otherUser[0].user_id).emit('notification');
+                        io.in('n' + otherUser[0].user_id).emit('notification');
                     })
                 }
                 

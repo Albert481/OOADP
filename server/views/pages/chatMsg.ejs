@@ -375,21 +375,28 @@
         }
     });
 
-    socket.on('istyping'), function(data) {
-        console.log(data)
+    socket.on('istyping', addTyping)
+
+    function timeoutFunction() {  
+        typing = false;
+        socket.emit("typing", false);
+      }
+
+    function addTyping(data) {
         if (data.typing) {
-            $("#inlineMessage").append(`
-            <li class="sent">
-                <div id='"+ data.name +"'>
-                    <p style="color: gray;"> is typing... </p>
-                </div>
-            </li>`)
-            scrollToBottom();
+            if ($("#"+data.name+"").length == 0) {
+                $("#inlineMessage").append(`
+                <li id=` + data.name + ` class="sent">
+                    <div>
+                        <p style="color: gray;">` + data.name + ` is typing... </p>
+                    </div>
+                </li>`)
+                scrollToBottom();
+                timeout = setTimeout(timeoutFunction, 1500);
+            }
         } else {
             $("#"+data.name+"").remove();
         }
-        
-        
     }
 
     function scrollToBottom() {

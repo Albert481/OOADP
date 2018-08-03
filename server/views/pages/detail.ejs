@@ -196,111 +196,51 @@
 					<div class="row">
 						<div class="col-sm-3">
 							<ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
-								<li class="active"><a href="/reviews/<%= itemList.id%>">SEE REVIEW</a></li>
-								<li><a data-toggle="tab" href="#tags">TAGS</a></li>
+								<li class="active"><a href="#review">REVIEWS</a></li>
 							</ul><!-- /.nav-tabs #product-tabs -->
 						</div>
 						<div class="col-sm-9">
 
 							<div class="tab-content">
 								
-
-								<div id="review" class="tab-pane in active">
+								<div id="review" class="tab-pane in active"  style="overflow:scroll; height:400px;" >
 									<div class="product-tab">										
-										<div class="product-add-review">
+										<div class="product-info">
 											<h4 class="title">Write your own review</h4>
-											<div class="review-table">
-												<div class="table-responsive">
-													<table class="table">	
-														<thead>
-															<tr>
-																<th class="cell-label">&nbsp;</th>
-																<th>Negative</th>
-																<th>Neutral</th>
-																<th>Positive</th>
-															</tr>
-														</thead>	
-														<tbody>
-															<tr>
-																<td class="cell-label">Quality</td>
-																<td><input type="radio" name="quality" class="radio" value="1"></td>
-																<td><input type="radio" name="quality" class="radio" value="2"></td>
-																<td><input type="radio" name="quality" class="radio" value="3"></td>
-															</tr>
-															<tr>
-																<td class="cell-label">User Sastisfication</td>
-																<td><input type="radio" name="quality" class="radio" value="1"></td>
-																<td><input type="radio" name="quality" class="radio" value="2"></td>
-																<td><input type="radio" name="quality" class="radio" value="3"></td>
-															</tr>
-														</tbody>
-													</table><!-- /.table .table-bordered -->
-												</div><!-- /.table-responsive -->
-											</div><!-- /.review-table -->
-											
-											<div class="review-form">
-												<div class="form-container">
-													<form role="form" class="cnt-form">
-														
-														<div class="row">
-															<div class="col-sm-6">
-																<div class="form-group">
-																	<label for="exampleInputName">Your Name <span class="astk">*</span></label>
-																	<input type="text" class="form-control txt" id="exampleInputName" placeholder="">
-																</div><!-- /.form-group -->
-															</div>
-
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label for="exampleInputReview">Review <span class="astk">*</span></label>
-																	<textarea class="form-control txt txt-review" id="exampleInputReview" rows="4" placeholder=""></textarea>
-																</div><!-- /.form-group -->
-															</div>
-														</div><!-- /.row -->
-														
-														<div class="action text-right">
-															<button class="btn btn-primary btn-upper">SUBMIT REVIEW</button>
-														</div><!-- /.action -->
-
-													</form><!-- /.cnt-form -->
-												</div><!-- /.form-container -->
-											</div><!-- /.review-form -->
+											<% reviews.forEach(function(reviews){ %>
+												<% if (itemList.id == reviews.listing_id) { %>
+												<div class="list-group-item" data-id="<%= reviews.id%>">
+													<img src="<%= gravatar_r %>" alt="" style="float: left; margin-right: 10px">
+															<h4 class="list-group-item-heading">
+																By: <%= reviews.name %>
+																Email: <%= reviews.email %>
+															</h4>
+															<p class="list-group-item-text">
+																<%= reviews.content %>
+															</p>
+															<small class="text-muted">
+																satisfaction: <%= reviews.satisfaction %><br>
+															</small>
+															<br>
+															<br>
+													</div>
+												</div>
+												<% } %>
+												<% }); %>
 
 										</div><!-- /.product-add-review -->										
 										
 							        </div><!-- /.product-tab -->
 								</div><!-- /.tab-pane -->
 
-								<div id="tags" class="tab-pane">
-									<div class="product-tag">
-										
-										<h4 class="title">Product Tags</h4>
-										<form role="form" class="form-inline form-cnt">
-											<div class="form-container">
-									
-												<div class="form-group">
-													<label for="exampleInputTag">Add Your Tags: </label>
-													<input type="email" id="exampleInputTag" class="form-control txt">
-													
-
-												</div>
-
-												<button class="btn btn-upper btn-primary" type="submit">ADD TAGS</button>
-											</div><!-- /.form-container -->
-										</form><!-- /.form-cnt -->
-
-										<form role="form" class="form-inline form-cnt">
-											<div class="form-group">
-												<label>&nbsp;</label>
-												<span class="text col-md-offset-3">Use spaces to separate tags. Use single quotes (') for phrases.</span>
-											</div>
-										</form><!-- /.form-cnt -->
-
-									</div><!-- /.product-tab -->
-								</div><!-- /.tab-pane -->
+						
 							</div><!-- /.tab-content -->
 						</div><!-- /.col -->
 					</div><!-- /.row -->
+				</div><!-- /.product-tabs -->			
+			</div><!-- /.col -->
+			<div class="clearfix"></div>
+		</div><!-- /.row -->
 				</div><!-- /.product-tabs -->			
 			</div><!-- /.col -->
 			<div class="clearfix"></div>

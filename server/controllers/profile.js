@@ -26,7 +26,8 @@ exports.update = function (req, res) {
         name: req.body.name,
         email: req.body.email,
         bio: req.body.bio,
-        address: req.body.address
+        address: req.body.address,
+        password: req.body.password
     }
     user.update(updateData, { where: {user_id: record_num}}).then((updatedRecord)=>{
         if(!updatedRecord || updatedRecord == 0){
@@ -37,6 +38,19 @@ exports.update = function (req, res) {
         res.status(200).send({message: "Updated Profile " + record_num});
     })
 
+}
+
+exports.delete = function (req, res) {
+    var record_num = req.user.user_id;
+    console.log("deletting user " + record_num);
+    user.destroy({where: {id: record_num}}).then((deletedUser) =>{
+        if(!deletedUser){
+            return res.send(400,{
+                message: "error"
+            });
+        }
+        res.status(200).send({message: "Deleted user: " + record_num});
+    })
 }
 
 //edit profile authorization

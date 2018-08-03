@@ -11,7 +11,7 @@ exports.show = function (req, res){
         res.render('purchase', {
             title: 'Purchase History',
             purchase: purchase,
-            user: user,
+            //user: user,
             notifi_id: req.notifi_id,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         })

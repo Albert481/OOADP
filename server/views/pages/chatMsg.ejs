@@ -52,6 +52,14 @@
         border-radius: .4rem;
         padding: .2rem .4rem;
     }
+
+    #blinkingdot {
+        animation: blink 1.3s infinite;
+    }
+
+    @keyframes blink{
+        to{opacity: .0;}
+    }
     </style>
 </head>
 
@@ -210,7 +218,7 @@
             <div class="message-input">
                 <div class="wrap">
                 <input id="message" type="text" placeholder="Write your message..." name="inputMessage"/>
-                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <i id="uploadimage" class="fa fa-paperclip attachment" aria-hidden="true"></i>
                 <button id="send" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
@@ -287,6 +295,7 @@
             var convuser_id = $(this).data('cuid')
             window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
             
+            socket.emit('myCon', con_id);
             socket.emit('subscribe', conversation_id);
 
             $.ajax({
@@ -378,7 +387,6 @@
     socket.on('istyping', addTyping)
 
     function timeoutFunction() {  
-        typing = false;
         socket.emit("typing", false);
       }
 
@@ -388,7 +396,7 @@
                 $("#inlineMessage").append(`
                 <li id=` + data.name + ` class="sent">
                     <div>
-                        <p style="color: gray;">` + data.name + ` is typing... </p>
+                        <p style="color: gray;"><span id="blinkingdot">` + data.name + ` is typing ...<span> </p>
                     </div>
                 </li>`)
                 scrollToBottom();
@@ -398,6 +406,23 @@
             $("#"+data.name+"").remove();
         }
     }
+
+    $('#uploadimage').bind('change', function(e){
+        var data = e.originalEvent.target.files[0];
+        readThenSendFile(data);      
+    });
+
+    function readThenSendFile(data){
+        var reader = new FileReader();
+        reader.onload = function(evt){
+            var msg ={};
+            msg.username = username;
+            msg.file = evt.target.result;
+            msg.fileName = data.name;
+            socket.emit('base64 file', msg);
+        };
+        reader.readAsDataURL(data);
+}
 
     function scrollToBottom() {
         // Selectors

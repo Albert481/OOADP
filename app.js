@@ -222,13 +222,6 @@ app.delete("/incomingoffers/:id", incomingOffers.delete);
 app.post("/incomingoffers/accept/:id", incomingOffers.acceptoffer);
 app.post("/incomingoffers/decline/:id", incomingOffers.declineoffer);
 
-//purchase
-app.get("/purchase", purchase.show);
-app.get("/purchaseinfo/:id", purchase.list);
-
-//reviews
-app.get("/reviews/:id", reviews.show);
-app.post("/purchaseinfo/:id", reviews.create);
 
 app.get('/messages/', chat.hasAuthorization, chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.hasAuthorization, chat.chatreceive);
@@ -267,6 +260,15 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
         }
     })
 });
+
+//purchase
+//app.get("/purchase", purchase.show);
+app.get("/purchaseinfo/:id", purchase.list);
+
+//reviews
+app.get("/reviews/:id", reviews.show);
+app.post("/purchaseinfo/:id", reviews.create);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

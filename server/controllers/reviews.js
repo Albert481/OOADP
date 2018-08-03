@@ -32,6 +32,7 @@ exports.create = function (req, res) {
         user_id: req.user.user_id,
         listing_id: req.body.listing_id,
         name: req.body.name,
+        email: req.body.email,
         satisfaction: req.body.satisfaction,
         content: req.body.content,
     }

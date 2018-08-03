@@ -139,7 +139,6 @@
                                         <p class="name"> <%= conversations[i].title %> </p>
                                         <% for (var j in msgseen) { %>
                                             <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
-                                                <% console.log(conversations[i].con_id, msgseen[0][j].con_id) %>
                                                 <% if (msgseen[0][j].seen == false) { %>
                                                     <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"> <% } else { %> class="connoti" style="visibility: visible"> <% } %></div>
                                                 <% } %>
@@ -257,7 +256,6 @@
             $('#exampleModal').modal('show');
         } else {
             document.getElementById("dropdownMenu").classList.toggle("show");
-            var socket = io()
             socket.emit('block', {con_id, convuser_id})
             document.getElementById("menuBlockUser").innerHTML = "Block User"
         }
@@ -265,7 +263,6 @@
 
     $(document).on("click", '#modalBlockUser', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
-        var socket = io()
         socket.emit('block', {con_id, convuser_id})
         document.getElementById("menuBlockUser").innerHTML = "Unblock User"
     })
@@ -273,7 +270,6 @@
     // When user unblocks user
     $(document).on("click", '#menuUnblockUser', function() {
         document.getElementById("dropdownMenu").classList.toggle("show");
-        var socket = io()
         socket.emit('block', {con_id, convuser_id})
         document.getElementById("menuUnblockUser").innerHTML = "Block User"
     })
@@ -294,9 +290,6 @@
             var conversation_id = $(this).data('conid')
             var convuser_id = $(this).data('cuid')
             window.history.pushState('', '', '/messages/' + conversation_id + '/' + convuser_id);
-            
-            socket.emit('myCon', con_id);
-            socket.emit('subscribe', conversation_id);
 
             $.ajax({
                 type: 'GET',
@@ -305,7 +298,10 @@
                     $("#contentContainer").load(location.href + " #contentMargin");
                     setTimeout(function () {
                         scrollToBottomOnLoad()
-                        }, 40);
+                        socket.emit('myCon', conversation_id);
+                        socket.emit('subscribe', conversation_id);
+                    }, 40);
+                    
                 },
                 error: function() {
                 }
@@ -374,13 +370,15 @@
 
     var temp;
     // Detect typing
-    $("#message").keypress(function (e) {
+    $(document).on("keypress", "#message", function (e) {
         if (e.which !== 13) {
             clearTimeout(temp)
             socket.emit('typing', {typing: true, con_id: con_id, name: '<%=user.name %>' });
             temp = setTimeout(function() {
                 socket.emit('typing', {typing: false, con_id: con_id, name: '<%=user.name%>' })
             }, 1500)
+        } else {
+            socket.emit('typing', {typing: false, con_id: con_id, name: '<%=user.name%>' })
         }
     });
 

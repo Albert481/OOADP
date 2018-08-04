@@ -59,6 +59,11 @@
                                                             <a href="/detail/<%= showList.id %>"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a>
                                                             </div>
                                                         </div>
+                                                        <% if (showList.status == 1) { %>
+                                                            <div class="tag sale">
+                                                                <span>SOLD</span>
+                                                            </div>
+                                                        <% }else { %>  <% } %>
                                                            <!-- /.product-image -->
                                                            <div class="product-info text-left">
                                                              <h3 class="name"><a href="/detail/<%= showList.id %>"><%= showList.name %></a></h3>
@@ -68,6 +73,7 @@
                                                                 </span>
                                                             </div>
                                                             <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
+                                                            <input type="button" class="btn btn-primary icon editIBtn" onclick="location.href ='/image/<%= showList.id %>'" value="Edit Image">
                                                             <input type="button" class="btn btn-primary icon deleteBtn" data-id="<%= showList.id%>" value="Delete">
                                                            </div>
                                                          <!-- /.blog-post-info --> 

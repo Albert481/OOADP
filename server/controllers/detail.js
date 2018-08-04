@@ -29,7 +29,7 @@ exports.show = function (req, res){
             res.render('detail', {
                 title:"Detail",
                 itemList: listings[0],
-                user: user_info[0],
+                userinfo: user_info[0],
                 notifi_id: req.notifi_id,
                 suggestList: suggestList,
                 reviews: reviews,

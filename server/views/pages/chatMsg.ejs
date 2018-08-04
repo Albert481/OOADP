@@ -89,39 +89,37 @@
     <div class="top-bar animate-dropdown" style="top: 0; position: absolute; max-width: 1800px; min-width: 360px; width: 95%;">
     <div class="logo" style="float: left; padding-left: 5%;"> <a href="/"> <img src="/images/logo.png" alt="logo"> </a> </div>
         <div class="container" style="margin-right: 0%" id="containermain">
-            <div class="header-top-inner">
-                <div class="cnt-account">
-                    <ul class="list-unstyled">
-                        <% if (user) { %>
-                        <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
-                        <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-                        <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
-                        <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
-                        <% } else { %>
-                        <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
-                        <% } %>
-                    </ul>
-                </div>
+        <div class="header-top-inner">
+        <div class="cnt-account">
+          <ul class="list-unstyled">
             <% if (user) { %>
-          <!-- /.cnt-account -->
-          <div class="cnt-block">
-              <ul class="list-unstyled list-inline">
-                <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/purchase">Purchase history</a></li>
-                    <li><a href="/listing">Listing</a></li>
-                    <li><a href="/editprofile">Settings</a></li>
-                    <li><a href="/logout">Logout</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+            <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
+            <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+            <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
+            <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
+            <% } else { %>
+            <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
             <% } %>
-
-            <!-- /.cnt-cart -->
-            <div class="clearfix"></div>
-            </div>
+          </ul>
+        </div>
+        <% if (user) { %>
+        <!-- /.cnt-account -->
+        <div class="cnt-block">
+            <ul class="list-unstyled list-inline">
+              <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/">Listing</a></li>
+                  <li><a href="/editprofile">Settings</a></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <% } %>
+        <!-- /.cnt-cart -->
+        <div class="clearfix"></div>
+      </div>
             <!-- /.header-top-inner --> 
         </div>
         <!-- /.container --> 

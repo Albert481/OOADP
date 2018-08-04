@@ -72,7 +72,7 @@ exports.insert = function (req, res){
                 message: "error"
             });
         }
-        res.redirect('/listing');
+        res.redirect('/');
     })
 
     //remove from temp folder
@@ -81,7 +81,7 @@ exports.insert = function (req, res){
             return res.status(500).send('Error');
         }
         //Redirect to listing's page
-        res.redirect('/listing');
+        res.redirect('/');
     });
 });
 };
@@ -90,15 +90,9 @@ exports.list = function (req, res){
     ListingModel.findAll({
         attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
     }).then(function(listings) {
-        Users.findAll({
-            where : {
-                user_id : listings[0].user_id
-            }
-        }).then(function(usersInfo) {
         res.render('listing', {
             title: "Listing",
             itemList: listings,
-            userSeller: usersInfo[0].name,
             notifi_id: -1,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });
@@ -107,7 +101,6 @@ exports.list = function (req, res){
             message: err
         });
     });
-});
 };
 //Edit one listing
 exports.editListing = function(req,res){
@@ -132,7 +125,6 @@ exports.update = function (req, res) {
     var updateListing = {
         user_id: req.body.user_id,
         name: req.body.name,
-        imagename: req.body.originalname,
         description: req.body.description,
         price: req.body.price,
         status: req.body.status,
@@ -147,6 +139,7 @@ exports.update = function (req, res) {
         res.status(200).send({message: "Updated listing:" + listing_num});
     })
 }
+
 //Delete a listing record from database
 exports.delete = function (req, res){
     var listing_num = req.params.id;

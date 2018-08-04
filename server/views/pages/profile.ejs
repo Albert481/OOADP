@@ -39,7 +39,7 @@
                                      <div class="product">
                                        <div class="product-image">
                                         <div class="image">
-                                        <a href="/detail/<%= showList.id %>"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a>
+                                        <a href="/detail/<%= showList.id %>"><img src="/images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a>
                                         </div>
                                     </div>
                                        <!-- /.product-image -->
@@ -51,6 +51,7 @@
                                             </span>
                                         </div>
                                         <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
+                                        <input type="button" class="btn btn-primary icon editIBtn" onclick="location.href ='/image/<%= showList.id %>'" value="Edit Image">
                                         <input type="button" class="btn btn-primary icon deleteBtn" data-id="<%= showList.id%>" value="Delete">
                                        </div>
                                      <!-- /.blog-post-info --> 

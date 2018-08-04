@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+        <%= title %>
+    </title>
+    <% include ../partials/stylesheet %>
+</head>
+<header>
+    <% include ../partials/header %>
+  </header>
+<body>
+    <div class="image">
+        <img src="/images/listingimages/<%= item.imagename %>" alt="<%= item.imagename %>">
+    </div>
+    <form method="post" enctype="multipart/form-data">
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Image</h4>
+    </div>
+    <div class="modal-body">
+            <fieldset class="form-group">
+                <label for="inputImage">Image</label>
+                <input type="file" id="inputImage" name="image" class="form-control">
+                <span class="file-custom"></span>
+            </fieldset>
+          </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+    </div>
+</form>
+    <script>
+        function saveChanges() {
+            if ($('#inputImage').get(0).files.length === 0 ){
+                alert("Please insert an image");
+            }
+            else{
+            var url = "/image/<%=item.id%>";
+            var newValues = {
+            image: $('#inputImage')[0].files[0].name
+            }
+            alert("Image updated successfully");
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(newValues),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Image updated successfully");
+                    location.href = "/"
+                },
+                error: function(result){
+                    alert("Error updating image. Please try again" + JSON.stringify(result).keys());
+                    location.href = "/"
+//                    discardChanges();
+                }
+            })
+        }
+    }
+
+        function discardChanges() {
+            location.href = "/profile"
+        }
+    </script>
+</body>
+<footer>
+    <% include ../partials/footer %>
+    <% include ../partials/javascript %>
+  </footer>
+</html>

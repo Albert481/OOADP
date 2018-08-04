@@ -34,6 +34,8 @@ var profile = require('./server/controllers/profile');
 var reviews = require('./server/controllers/reviews');
 //import purchase controller
 var purchase = require('./server/controllers/purchase');
+//import edit Imgae controller
+var images = require('./server/controllers/editlistingimage');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -105,7 +107,7 @@ app.use(function(req, res, next) {
    });
 
 // Index route
-app.get('/', index.show)
+// app.get('/', index.show)
 app.get('/login', auth.login)
 
 app.post('/login', passport.authenticate('local-login', {
@@ -185,11 +187,13 @@ nsp.on('connection', function(socket) {
 //app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
 app.post("/detail/:id", detail.chat);
-app.get("/listing", listing.list);
+app.get("/", listing.list);
 app.get("/listing/edit/:id", listing.editListing);
 app.post("/listing/new", upload.single('image'), listing.insert);
-app.post("/listing/edit/:id", upload.single('image'), listing.update);
+app.post("/listing/edit/:id", listing.update);
 app.delete("/listing/:id", listing.delete);
+app.get("/image/:id", images.editImage);
+app.post("/image/:id", upload.single('image'), images.updateImage);
 
 app.get("/manageoffers/", manageOffers.list);
 app.get("/editoffers/:id", manageOffers.editOffer)

@@ -616,20 +616,23 @@ body {
     border-radius: 8px;
     max-width: 205px;
     line-height: 130%;
+    word-break: break-all;
   }
   #frame .content .messages ul li.sent .timestamp {
-    font-size: 11px;
+    font-size: 10px;
     position: absolute;
     left: 10px;
     text-transform: uppercase;
     color: #999;
+    bottom: 10px;
   }
   #frame .content .messages ul li.replies .timestamp {
-    font-size: 11px;
+    font-size: 10px;
     position: absolute;
     right: 10px;
     text-transform: uppercase;
     color: #999;
+    bottom: 10px;
   }
   @media screen and (min-width: 735px) {
     #frame .content .messages ul li p {

@@ -7,7 +7,8 @@ exports.insert = function (req, res) {
     var offerData = {
         user_id: req.user.user_id,
         listing_id: req.body.listing_id,
-        offerprice: req.body.offerprice
+        offerprice: req.body.offerprice,
+        offerstatus: req.body.offerstatus
     }
     offerPrice.create(offerData).then((newRecord, created) => {
         if (!newRecord) {
@@ -22,7 +23,7 @@ exports.insert = function (req, res) {
 // List all the offer records in database
 exports.list = function (req, res) {
     var user_id = req.user.user_id;
-    sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id WHERE o.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
+    sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice, offerstatus FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id WHERE o.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
         
         res.render('manageOffers', {
             title: "My Cart",

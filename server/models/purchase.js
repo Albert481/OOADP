@@ -47,7 +47,7 @@ Purchases.sync({ force: false, logging: console.log}).then(() => {
     Purchases.upsert({
         id: 1,
         offer_id: 1,
-        user_id: 3,
+        user_id: 1,
         listing_id: 2
     }),
     Purchases.upsert({

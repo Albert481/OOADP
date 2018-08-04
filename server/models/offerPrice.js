@@ -26,6 +26,11 @@ const offerPrice = sequelize.define('offerPrice', {
     offerprice: {
         type: Sequelize.FLOAT,
         allowNull: false
+    },
+    offerstatus: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'Pending'
     }
 });
 

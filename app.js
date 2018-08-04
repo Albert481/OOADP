@@ -6,6 +6,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var moment = require('moment');
+var nodemailer = require('nodemailer');
+
 //import multer
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
@@ -20,6 +22,8 @@ var detail = require('./server/controllers/detail')
 var listing = require('./server/controllers/listing');
 // Manage Offers
 var manageOffers = require("./server/controllers/manageOffers")
+// Incoming Offers
+var incomingOffers = require("./server/controllers/incomingOffers")
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -140,7 +144,7 @@ app.get('/categories', category.show)
 
 
 // Setup chat
-var io = require('socket.io')(httpServer);
+const io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var SeenMsg = require('./server/models/seenMsg');
@@ -148,7 +152,7 @@ var ConvUsers = require('./server/models/ConvUser')
 
 io.on('connection', function(socket) {
     chatConnections++;
-    console.log("Num of chat users connected: " + chatConnections);
+    console.log("Num of socket users connected: " + chatConnections);
 
     socket.on('subscribe', function(room) {
         console.log('joining con_id:', room);
@@ -168,21 +172,40 @@ io.on('connection', function(socket) {
         
     });
 
+    socket.on('base64 file', function (msg) {
+        console.log('received base64 file from' + msg.username);
+        socket.username = msg.username;
+        // socket.broadcast.emit('base64 image', //exclude sender
+        io.sockets.emit('base64 file',  //include sender
+    
+            {
+              username: socket.username,
+              file: msg.file,
+              fileName: msg.fileName
+            }
+    
+        );
+    });
+
     socket.on('disconnect', function() {
         chatConnections--;
-        console.log("Num of chat users connected: " + chatConnections);
+        console.log("Num of socket users connected: " + chatConnections);
+    });
 
+    socket.on('myUser', function(userRoom) {
+        console.log('joining own room for notification:', 'n' + userRoom);
+        socket.join('n' + userRoom);
+    });
+
+    socket.on('myCon', function(conRoom) {
+        console.log('joining own con for typing:', 't' + conRoom);
+        socket.join('t' + conRoom);
+    });
+
+    socket.on('typing', function(data) {
+        socket.broadcast.to('t' + data.con_id).emit('istyping', {typing: data.typing, name: data.name});
     });
 });
-
-var nsp = io.of('/noti');
-nsp.on('connection', function(socket) {
-    socket.on('myUser', function(userRoom) {
-        console.log('joining own room for notification:', userRoom);
-        socket.join(userRoom);
-        
-    });
-})
 
 //app.use("/detail", detail.show);
 app.get("/detail/:id", detail.show);
@@ -200,14 +223,11 @@ app.get("/editoffers/:id", manageOffers.editOffer)
 app.post("/manageoffers/new", manageOffers.insert)
 app.post("/editoffers/:id", manageOffers.update);
 app.delete("/manageoffers/:id", manageOffers.delete);
+app.get("/incomingoffers/", incomingOffers.list);
+app.delete("/incomingoffers/:id", incomingOffers.delete);
+app.post("/incomingoffers/accept/:id", incomingOffers.acceptoffer);
+app.post("/incomingoffers/decline/:id", incomingOffers.declineoffer);
 
-//purchase
-app.get("/purchase", purchase.show);
-app.get("/purchaseinfo/:id", purchase.list);
-
-//reviews
-app.get("/reviews/:id", reviews.show);
-app.post("/purchaseinfo/:id", reviews.create);
 
 app.get('/messages/', chat.hasAuthorization, chat.receive);
 app.get('/messages/:con_id/:cu_id', chat.hasAuthorization, chat.chatreceive);
@@ -236,16 +256,25 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
                 if ((ifMsgSeen[0].seen == true) || ifMsgSeen[0].seen == undefined) {
                     SeenMsg.update({seen: false}, { where: { con_id: req.params.con_id, user_id: {[Op.ne] : req.user.user_id} }})
                     Sequelize.query('SELECT * FROM SeenMsgs WHERE con_id=' + req.params.con_id + ' AND user_id<>' + req.user.user_id, {model: SeenMsg, raw:true}).then((otherUser) => {
-                        nsp.in(otherUser[0].user_id).emit('notification');
+                        io.in('n' + otherUser[0].user_id).emit('notification');
                     })
                 }
                 
             })
         } else {
-            console.log('User was blocked, hence message not saved')
+            io.in(req.params.con_id).emit('blockmessage', chatData)
         }
     })
 });
+
+//purchase
+//app.get("/purchase", purchase.show);
+app.get("/purchaseinfo/:id", purchase.list);
+
+//reviews
+app.get("/reviews/:id", reviews.show);
+app.post("/purchaseinfo/:id", reviews.create);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

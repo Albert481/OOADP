@@ -16,14 +16,14 @@
 
 <body>
   <table class="table">
+    <h2 align = "center">MY OFFERS</h2>
     <thread>
       <tr>
-        <th>Remove</th>
-        <th>Offer ID</th>
-        <th>Listing ID</th>
-        <th>Listing Name</th>
-        <th>Offer Price</th>
-        <th>Edit</th>
+          <th>Offer ID</th>
+          <th>Listing ID</th>
+          <th>Listing Name</th>
+          <th>Offer Price</th>
+          <th>Status</th>
       </tr>
     </thread>
       <!-- <%console.log(itemList)%> -->
@@ -31,7 +31,6 @@
         <tbody>
           <tr class="rowRecord" data-id="<%= itemList[i].id %>">
               <!-- <%console.log(itemList[i])%> -->
-            <td class="romove-item"><a href="" title="cancel" class="deleteBtn"><i class="fa fa-trash-o"></i></a></td>
             <td class="cart-product-name-info">
               <h4 class='cart-product-description'><%= itemList[i].id %></h4>
             </td>
@@ -47,7 +46,22 @@
             <!-- <td class="cart-product-edit">
               <input type="button" class="editBtn" value="Edit">
             </td> -->
+            <% if (itemList[i].offerstatus == "Pending") { %>
+            <td class="cart-product-name-info">
+                <h4 style = color:#808080><%= itemList[i].offerstatus %></h4>
+            </td>
             <td class="cart-product-edit"><a href="#" class="editBtn">Edit</a></td>
+            <% } else if (itemList[i].offerstatus == "Accepted") { %>
+            <td class="cart-product-name-info">
+                <h4 style = color:#32CD32><%= itemList[i].offerstatus %></h4>
+            </td>
+            <td class=""><a href="/checkout" class="">Checkout</a></td>
+            <% } else { %>
+            <td class="cart-product-name-info">
+              <h4 style = color:#DC143C><%= itemList[i].offerstatus %></h4>
+            </td>
+            <td class="romove-item"><a href="" title="cancel" class="deleteBtn"><i class="fa fa-trash-o"></i></a></td>
+            <% } %>
           </tr>
       </tbody>
         <% } %>
@@ -70,6 +84,7 @@
           console.log(result.message);
           var itemToRemove = '.rowRecord[data-id=' + record_num + ']';
           $(itemToRemove).remove();
+          alert("Offer Deleted.")
         },
         error: function (result) {
           alert("Unable to delete item from cart.");

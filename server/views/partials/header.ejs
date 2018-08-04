@@ -6,7 +6,7 @@
   .notification {
     position: absolute;
     bottom: 8px;
-    right: 247px;
+    right: 294px;
     background: #d2232a;
     width: 15px;
     height: 15px;
@@ -47,8 +47,8 @@
               <% if (user) { %>
               <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
               <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-              <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
-              <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
+              <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
+              <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
               <% } else { %>
               <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
               <% } %>
@@ -61,7 +61,6 @@
                 <li class="dropdown dropdown-small"> <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><span class="value">My Account </span><b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="/profile">Profile</a></li>
-                    <li><a href="/purchase">Purchase history</a></li>
                     <li><a href="/listing">Listing</a></li>
                     <li><a href="/editprofile">Settings</a></li>
                     <li><a href="/logout">Logout</a></li>
@@ -170,7 +169,7 @@
   </header>
 
   <script>
-    var socket = io('/noti');
+    var socket = io();
     
     var counterValue = parseInt($('.notification').html()); // Get the current bubble value
 

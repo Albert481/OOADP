@@ -43,14 +43,13 @@
       }
 
     .connoti {
-        min-width: 2rem;
-        font-size: 1rem;
-        text-align: center;
-        color: #fff;
-        background-color: #33a0e8;
+        width: 10px;
+        height: 10px;
+        background-color: #d2232a;
         margin-left: .4rem;
-        border-radius: .4rem;
+        border-radius: 100%;
         padding: .2rem .4rem;
+        float: right;
     }
 
     .blinkingdot span{
@@ -89,20 +88,20 @@
 <body>
     <div class="top-bar animate-dropdown" style="top: 0; position: absolute; max-width: 1800px; min-width: 360px; width: 95%;">
     <div class="logo" style="float: left; padding-left: 5%;"> <a href="/"> <img src="/images/logo.png" alt="logo"> </a> </div>
-        <div class="container" style="margin-right: 0%">
+        <div class="container" style="margin-right: 0%" id="containermain">
             <div class="header-top-inner">
-            <div class="cnt-account">
-                <ul class="list-unstyled">
-                    <% if (user) { %>
-                    <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
-                    <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-                    <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
-                    <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
-                    <% } else { %>
-                    <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
-                    <% } %>
-                </ul>
-            </div>
+                <div class="cnt-account">
+                    <ul class="list-unstyled">
+                        <% if (user) { %>
+                        <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
+                        <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                        <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
+                        <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
+                        <% } else { %>
+                        <li><a href="/login"><i class="icon fa fa-lock"></i>Login</a></li>
+                        <% } %>
+                    </ul>
+                </div>
             <% if (user) { %>
           <!-- /.cnt-account -->
           <div class="cnt-block">
@@ -149,6 +148,13 @@
                                     <span class="contact-status online"></span>
                                     <img src="/images/listingimages/<%= conversations[i].imagename %>" alt="<%= conversations[i].imagename %>">
                                     <div class="meta">
+                                        <% for (var j in msgseen) { %>
+                                            <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
+                                                <% if (msgseen[0][j].seen == false) { %>
+                                                    <div <% if (notificount < 1) { %> id="connoticheck" class="connoti" style="visibility: hidden"> <% } else { %> id="connoticheck" class="connoti" style="visibility: visible"> <% } %></div>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
                                         <% for (var k in conversations) { %>
                                             <% if ((conversations[i].con_id == conversations[k].con_id) && (conversations[k].user_id != user.user_id)) { %>
                                             <div style="height: 20px; display: flex;">
@@ -162,13 +168,6 @@
                                             <% } %>
                                         <% } %>
                                         <p class="name"> <%= conversations[i].title %> </p>
-                                        <% for (var j in msgseen) { %>
-                                            <% if ((conversations[i].user_id == msgseen[0][j].user_id) && (conversations[i].con_id == msgseen[0][j].con_id)) { %>
-                                                <% if (msgseen[0][j].seen == false) { %>
-                                                    <div <% if (notificount < 1) { %> class="connoti" style="visibility: hidden"> <% } else { %> class="connoti" style="visibility: visible"> <% } %></div>
-                                                <% } %>
-                                            <% } %>
-                                        <% } %>
                                     </div>
                                 </div>
                             </li>
@@ -321,6 +320,12 @@
                 url: location.href,
                 success: function() {
                     $("#contentContainer").load(location.href + " #contentMargin");
+                    $("#containermain").load(location.href + " .header-top-inner");
+                    if($("#connoticheck").hasClass('connoti')){
+                        decreaseCounter();
+                        $("#connoticheck").css('visibility', 'hidden');
+                    }
+                    
                     setTimeout(function () {
                         scrollToBottomOnLoad()
                         socket.emit('myCon', conversation_id);
@@ -483,7 +488,13 @@
             counterValue = 0;
             }
             increaseCounter()
-            console.log('Counter up')
+            if($("#connoticheck").hasClass('connoti')){
+                        
+            } else {
+                $("#connoticheck").addClass('connoti');
+                $("#connoticheck").css('visibility', 'visible');
+            }
+
         })
 
         function removeAnimation() {
@@ -497,6 +508,12 @@
             $('.notification').css("visibility", "visible");
             $('.notification').html(counterValue).addClass('animating'); // animate it
             removeAnimation(); // remove CSS animating class 
+        }
+
+        function decreaseCounter() { 
+            counterValue--; // decrement
+            $('.notification').html(counterValue).addClass('animating'); // animate it
+            removeAnimation(); // remove CSS animating class
         }
     <% } %>
 </script>

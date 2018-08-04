@@ -43,7 +43,7 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
-        res.redirect('/purchase');
+        res.redirect('/profile');
     })
 };
 

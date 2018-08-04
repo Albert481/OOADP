@@ -275,6 +275,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
 //purchase
 //app.get("/purchase", purchase.show);
 app.get("/purchaseinfo/:id", purchase.list);
+app.post("/manageoffers/bought", purchase.insert);
 
 //reviews
 app.get("/reviews/:id", reviews.show);

@@ -40,6 +40,22 @@ exports.list = function (req, res) {
     });
 };
 
+//insert
+exports.insert = function (req, res){
+    var purchaseData = {
+        user_id: req. user.user_id,
+        listing_id: req.body.listing_id,
+        offer_id: req.body.offer_id
+    }
+    Purchases.create(purchaseData).then((newRecord, created) => {
+        if (!newRecord) {
+            return res.send(400, {
+                message: "error"
+            });
+        }
+        res.redirect('/manageoffers');
+    })
+};
 
 exports.hasAuthorization = function (req, res, next) {
     if (req.isAuthenticated())

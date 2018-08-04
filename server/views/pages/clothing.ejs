@@ -5,6 +5,14 @@
         <%= title %>
     </title>
     <% include ../partials/stylesheet %>
+    <style>
+            #listingName {
+            width:200px;
+            overflow:hidden;
+            height:50px;
+            line-height:50px;
+        }
+    </style>
 </head>
 <header>
     <% include ../partials/header %>
@@ -160,10 +168,10 @@
                                     <a href="/detail/<%= showList.id %>"></a>
                                 </h3>             
                                 <div class="listingTitle">
-                                    <a href="/detail/<%= showList.id %>" style="color: #000000">
-                                        <span class="listingTitle"><h3><%= showList.name %></h3></span>
-                                    </a>
-                                    </div>
+                                        <a href="/detail/<%= showList.id %>" style="color: #000000">
+                                            <span class="listingTitle"><h3 id="listingName"><%= showList.name %></h3></span>
+                                        </a>
+                                </div>
                                 <div class="rating rateit-small"></div>
                                         <div class="product-price">
                                             <span class="price"><p>$<%= showList.price %></p> </span>

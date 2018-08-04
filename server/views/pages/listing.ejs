@@ -5,6 +5,14 @@
         <%= title %>
     </title>
     <% include ../partials/stylesheet %>
+    <style>
+            #listingName {
+            width:200px;
+            overflow:hidden;
+            height:50px;
+            line-height:50px;
+        }
+    </style>
 </head>
 <header>
     <% include ../partials/header %>
@@ -160,7 +168,7 @@
                                 </h3>             
                                 <div class="listingTitle">
                                     <a href="/detail/<%= showList.id %>" style="color: #000000">
-                                        <span class="listingTitle"><h3><%= showList.name %></h3></span>
+                                        <span class="listingTitle"><h3 id="listingName"><%= showList.name %></h3></span>
                                     </a>
                                     </div>
                                 <div class="rating rateit-small"></div>
@@ -256,10 +264,9 @@
 
             </div>
             <!-- /.body-content -->
-</body>
+        </body>
 <footer>
     <% include ../partials/footer %>
     <% include ../partials/javascript %>
   </footer>
-
 </html>

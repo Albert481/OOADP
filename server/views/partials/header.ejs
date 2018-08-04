@@ -30,6 +30,10 @@
       transform: scale(1.7);
     }
   }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
 </style>
 
 <script src="/javascripts/socket.io.js"></script>
@@ -95,7 +99,7 @@
                         <ul class="categories-filter animate-dropdown">
                             <li class="dropdown">
                               <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" href="/">Categories<b class="caret"></b></a>
-                              <ul class="dropdown-menu">
+                              <ul class="dropdown-menu" role="menu">
                                 <li><a href="/clothing">Clothing</a></li>
                                 <li><a href="/shoes">Shoes</a></li>
                                 <li><a href="/watches">Watches</a></li>

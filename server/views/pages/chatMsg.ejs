@@ -190,7 +190,7 @@
                             <i class="icon fa fa-ellipsis-v" id="menuButton" expanded="false" style="text-align: center; width: 32px; height: 32px; cursor: pointer; margin: auto;"></i>
                         </div>
                         <span>
-                            <div id="dropdownMenu">
+                            <div id="dropdownMenu" class="hide">
                                 <ul>
                                     <% if (isBlocked[0][0].blocked == false) { %>
                                     <li type="button" id="menuBlockUser" style="opacity: 1">Block User</li>
@@ -218,7 +218,7 @@
                     </ul>
                 </div>
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="blockModal" tabindex="-1" role="dialog" aria-labelledby="blockModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -277,16 +277,15 @@
     // When user blocks user
     $(document).on("click", '#menuBlockUser', function() {
         if (document.getElementById('menuBlockUser').innerHTML == "Block User") {
-            $('#exampleModal').modal('show');
+            $('#blockModal').modal('show');
         } else {
-            document.getElementById("dropdownMenu").classList.toggle("show");
             socket.emit('block', {con_id, convuser_id})
             document.getElementById("menuBlockUser").innerHTML = "Block User"
         }
+        document.getElementById("dropdownMenu").classList.toggle("show");
     })
 
     $(document).on("click", '#modalBlockUser', function() {
-        document.getElementById("dropdownMenu").classList.toggle("show");
         socket.emit('block', {con_id, convuser_id})
         document.getElementById("menuBlockUser").innerHTML = "Unblock User"
     })

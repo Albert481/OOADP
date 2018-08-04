@@ -25,7 +25,7 @@ exports.show = function (req, res){
             ListingModel.findAll({
                 attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
             }).then(function(suggestList) {
-                sequelize.query('select r.id, r.name, r.user_id, r.email, r.listing_id, r.satisfaction, r.content, l.id from Reviews r join Listings l on r.listing_id = l.id', {model: Reviews}).then((reviews) => {
+                sequelize.query('select r.id, r.name, r.user_id, r.listing_id, r.satisfaction, r.content, l.id from Reviews r join Listings l on r.listing_id = l.id', {model: Reviews}).then((reviews) => {
             res.render('detail', {
                 title:"Detail",
                 itemList: listings[0],
@@ -34,7 +34,7 @@ exports.show = function (req, res){
                 suggestList: suggestList,
                 reviews: reviews,
                 gravatar: gravatar.url(user_info[0].email,  {s: '100', r: 'x', d: 'retro'}, true),
-                gravatar_r: gravatar.url(reviews.email, { s: '80', r: 'x', d: 'retro'}, true)
+               // gravatar_r: gravatar.url(reviews.email, { s: '80', r: 'x', d: 'retro'}, true)
             })
             })
         })

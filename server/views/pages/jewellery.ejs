@@ -125,7 +125,8 @@
                     <div class="tab-pane active" id="grid-container">
                         <div class="category-product">
                             <div class="row">
-                                    <% itemList.forEach (function(showList) { %>  
+                                    <% itemList.forEach (function(showList) { %>
+                                    <% if (showList.category == "Jewellery") { %>  
                                     <div class="col-sm-10 col-md-4 wow fadeInUp">
                                         <div class="productlist">
                                             <div class="products">
@@ -177,6 +178,7 @@
                                         </div>
                                     </div>
                                     <!-- /.item -->
+                                    <% } %>
                                     <% }); %>
                                 </div>
                                 <!-- /.row -->
@@ -187,6 +189,7 @@
                         <div class="tab-pane fade" id="list-container">
                             <div class="category-product">
                                         <% itemList.forEach (function(showList) { %>
+                                        <% if (showList.category == "Jewellery") { %> 
                                     <div class="category-product-inner wow fadeInUp">
                                         <div class="products">
                                             <div class="product-list product">
@@ -227,6 +230,7 @@
                                         <!-- /.product -->
                                     </div>
                                     <!-- /.product inner --> 
+                                    <% } %>
                                     <% }); %>                     
                             </div>
                                 <!-- /.category-product -->

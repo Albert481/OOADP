@@ -103,6 +103,70 @@ exports.list = function (req, res){
         });
     });
 };
+exports.clothing = function (req, res){
+    ListingModel.findAll({
+        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
+    }).then(function(listings) {
+        res.render('clothing', {
+            title: "Clothing",
+            itemList: listings,
+            notifi_id: -1,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+exports.watches = function (req, res){
+    ListingModel.findAll({
+        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
+    }).then(function(listings) {
+        res.render('watches', {
+            title: "Watches",
+            itemList: listings,
+            notifi_id: -1,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+exports.shoes = function (req, res){
+    ListingModel.findAll({
+        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
+    }).then(function(listings) {
+        res.render('shoes', {
+            title: "Shoes",
+            itemList: listings,
+            notifi_id: -1,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+exports.jewellery = function (req, res){
+    ListingModel.findAll({
+        attributes: ['id', 'user_id', 'name', 'imagename', 'description', 'price', 'status', 'category']
+    }).then(function(listings) {
+        res.render('jewellery', {
+            title: "Jewellery",
+            itemList: listings,
+            notifi_id: -1,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
 //Edit one listing
 exports.editListing = function(req,res){
     var listing_num = req.params.id;

@@ -217,6 +217,11 @@ app.post("/listing/edit/:id", listing.update);
 app.delete("/listing/:id", listing.delete);
 app.get("/image/:id", images.editImage);
 app.post("/image/:id", upload.single('image'), images.updateImage);
+app.get("/clothing", listing.clothing);
+app.get("/watches", listing.watches);
+app.get("/shoes", listing.shoes);
+app.get("/jewellery", listing.jewellery);
+
 
 app.get("/manageoffers/", manageOffers.list);
 app.get("/editoffers/:id", manageOffers.editOffer)

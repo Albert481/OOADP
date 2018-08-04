@@ -53,12 +53,35 @@
         padding: .2rem .4rem;
     }
 
-    #blinkingdot {
-        animation: blink 1.3s infinite;
+    .blinkingdot span{
+        display: inline-block;
+        background-color: #B6B5BA;
+        width: 5px;
+        height: 5px;
+        border-radius: 100%;
+        margin-right: 5px;
+        animation: bob 1.3s infinite;
+    }
+    .blinkingdot span:nth-child(1) {
+        animation-delay: -1s;
+    }
+    .blinkingdot span:nth-child(2) {
+        animation-delay: -0.85s;
+    }
+    .blinkingdot span:nth-child(3) {
+        animation-delay: -0.7s;
+        margin-right: 0;
     }
 
-    @keyframes blink{
-        to{opacity: .0;}
+    @keyframes bob {
+        10% {
+            transform: translateY(-10px);
+            background-color: #9E9DA2;
+        }
+        50% {
+            transform: translateY(0);
+            background-color: #B6B5BA;
+        }
     }
     </style>
 </head>
@@ -133,7 +156,7 @@
                                                     <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2; width: 50%"><%=conversations[k].name %> </p>
                                                 </div>
                                                 <div style="text-align: right;"> 
-                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2;">DATE </p>
+                                                    <p style="font-size: 1.2rem; height: 1.5rem; line-height: 1.2;"> </p>
                                                 </div>
                                             </div>
                                             <% } %>
@@ -395,8 +418,8 @@
             if ($("#"+data.name+"").length == 0) {
                 $("#inlineMessage").append(`
                 <li id=` + data.name + ` class="sent">
-                    <div>
-                        <p style="color: gray;"><span id="blinkingdot">` + data.name + ` is typing ...<span> </p>
+                    <div class="blinkingdot">
+                        <p style="color: gray;">` + data.name + ` is typing <span></span><span></span><span></span> </p>
                     </div>
                 </li>`)
                 scrollToBottom();

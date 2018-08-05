@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var moment = require('moment');
 var nodemailer = require('nodemailer');
 
+const stripe = require('stripe')('sk_test_eNcHw6TZDMbPOcBD3D9lwdSx');
+
 //import multer
 var multer = require('multer');
 var upload = multer({ dest: './public/uploads/', limits: {fileSize: 1500000, files: 1} });
@@ -280,6 +282,21 @@ app.post("/manageoffers/bought", purchase.insert);
 //reviews
 app.get("/reviews/:id", reviews.show);
 app.post("/purchaseinfo/:id", reviews.create);
+
+// Checkout
+app.post('/checkout', (req, res) => {
+    console.log(req.body.amount)
+    stripe.customers.create({
+        email: req.body.token.stripeEmail,
+        source: req.body.token.id
+    }).then(customer => stripe.charges.create({
+        amount: req.body.amount,
+        currency: "sgd",
+        description: "myShoppe Purchase",
+        customer: customer.id
+    })).then(charge => console.log('Payment success'));
+    
+})
 
 
 // catch 404 and forward to error handler

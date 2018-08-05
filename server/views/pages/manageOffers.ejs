@@ -9,77 +9,105 @@
 </head>
 
 <script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+<script src="https://checkout.stripe.com/checkout.js"></script>
 
 <header>
   <% include ../partials/header %>
 </header>
 
 <body>
-  <div class="container">
-    <table class="table table-hover table-bordered table-striped">
-      <h2 align = "center">MY OFFERS</h2>
-      <thread>
-        <tr>
-            <th class="info">Offer ID</th>
-            <th class="info">Listing ID</th>
-            <th class="info">Listing Name</th>
-            <th class="info">Offer Price</th>
-            <th class="info">Status</th>
-            <th class="info"></th>
-        </tr>
-      </thread>
-        <!-- <%console.log(itemList)%> -->
-        <% for(var i in itemList){ %>
-          <tbody>
-            <tr class="rowRecord" data-id="<%= itemList[i].id %>">
-                <!-- <%console.log(itemList[i])%> -->
-              <td class="cart-product-name-info">
-                <h4 class='cart-product-description'><%= itemList[i].id %></h4>
-              </td>
-              <td class="cart-product-name-info">
-                <h4 class='cart-product-description'><%= itemList[i].listing_id %></h4>
-              </td>
-              <td class="cart-product-name-info">
-                <h4 class='cart-product-description'><%= itemList[i].name %></h4>
-              </td>
-              <td class="cart-product-name-info">
-                <h4 class='cart-product-description'><%= itemList[i].offerprice %></h4>
-              </td>
-              <!-- <td class="cart-product-edit">
-                <input type="button" class="editBtn" value="Edit">
-              </td> -->
-              <% if (itemList[i].offerstatus == "Pending") { %>
-              <td class="cart-product-name-info">
-                  <h4 style = color:#808080><%= itemList[i].offerstatus %></h4>
-              </td>
-              <td class="cart-product-edit"><a href="#" class="editBtn">Edit</a></td>
-              <% } else if (itemList[i].offerstatus == "Accepted") { %>
-              <td class="cart-product-name-info">
-                  <h4 style = color:#32CD32><%= itemList[i].offerstatus %></h4>
-              </td>
-              <form action="/manageoffers/bought" method="post">
-                <fieldset class="form-group">
-                  <!--<label for="inputname">Name</label> -->
-                  <input type="hidden" id="inputlisting" name="listing_id" class="form-control" value="<%= itemList[i].listing_id %>" required="" readonly>
-              </fieldset>
-              <fieldset class="form-group">
-                <!--<label for="inputname">Name</label> -->
-                <input type="hidden" id="inputoffer" name="offer_id" class="form-control" value="<%= itemList[i].id %>" required="" readonly>
-            </fieldset>
-              <td class=""><button type="" class="btn btn-primary">Checkout</button></td>
+  <table class="table">
+    <h2 align = "center">MY OFFERS</h2>
+    <thread>
+      <tr>
+          <th>Offer ID</th>
+          <th>Listing ID</th>
+          <th>Listing Name</th>
+          <th>Offer Price</th>
+          <th>Status</th>
+      </tr>
+    </thread>
+      <!-- <%console.log(itemList)%> -->
+      <% for(var i in itemList){ %>
+        <tbody>
+          <tr class="rowRecord" data-id="<%= itemList[i].id %>">
+              <!-- <%console.log(itemList[i])%> -->
+            <td class="cart-product-name-info">
+              <h4 class='cart-product-description'><%= itemList[i].id %></h4>
+            </td>
+            <td class="cart-product-name-info">
+              <h4 class='cart-product-description'><%= itemList[i].listing_id %></h4>
+            </td>
+            <td class="cart-product-name-info">
+              <h4 class='cart-product-description'><%= itemList[i].name %></h4>
+            </td>
+            <td class="cart-product-name-info">
+              <h4 class='cart-product-description'><%= itemList[i].offerprice %></h4>
+            </td>
+            <!-- <td class="cart-product-edit">
+              <input type="button" class="editBtn" value="Edit">
+            </td> -->
+            <% if (itemList[i].offerstatus == "Pending") { %>
+            <td class="cart-product-name-info">
+                <h4 style = color:#808080><%= itemList[i].offerstatus %></h4>
+            </td>
+            <td class="cart-product-edit"><a href="#" class="editBtn">Edit</a></td>
+            <% } else if (itemList[i].offerstatus == "Accepted") { %>
+            <td class="cart-product-name-info">
+                <h4 style = color:#32CD32><%= itemList[i].offerstatus %></h4>
+            </td>
+            <td id="shop">
+              <script>
+                var checkoutHandler = StripeCheckout.configure({
+                  key: "pk_test_GgdRbci9EeoFHswyOmO6v0gB",
+                  locale: "auto",
+                  name: "<%= itemList[i].name %>",
+                  amount: "<%= (itemList[i].offerprice * 100).toFixed(8) %>",
+                  description: "<%= itemList[i].name %>"
+                });
+              </script>
+              <input type="hidden" name="chargeAmount" value="<%= (itemList[i].offerprice * 100).toFixed(0) %>">
+              <button id="buttonCheckout" class="btn btn-outline-dark text-white btn-lg"> Checkout with Stripe</button>
+            </td>
             </form>
-              <% } else { %>
-              <td class="cart-product-name-info">
-                <h4 style = color:#DC143C><%= itemList[i].offerstatus %></h4>
-              </td>
-              <td class="romove-item"><a href="" title="cancel" class="deleteBtn"><i class="fa fa-trash-o"></i></a></td>
-              <% } %>
-            </tr>
-        </tbody>
-          <% } %>
-    </table>
-  </div>
+            <% } else { %>
+            <td class="cart-product-name-info">
+              <h4 style = color:#DC143C><%= itemList[i].offerstatus %></h4>
+            </td>
+            <td class="romove-item"><a href="" title="cancel" class="deleteBtn"><i class="fa fa-trash-o"></i></a></td>
+            <% } %>
+          </tr>
+      </tbody>
+        <% } %>
+  </table>
+
   <script>
+    var button = document.getElementById("buttonCheckout");
+    button.addEventListener("click", function(ev) {
+      checkoutHandler.open({
+        token: handleToken
+      });
+    });
+
+    function handleToken(token) {
+      var obj = {}
+      obj.token = token;
+      obj.amount = $("input[name=chargeAmount]").val();
+      fetch("/checkout", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(obj)
+      })
+      .then(response => {
+        if (!response.ok)
+          throw response;
+        return response.json();
+      })
+      .then(output => {
+        console.log("Purchase succeeded:", output);
+      })
+    }
+
     // Edit Function
     $('.editBtn').click(function () {
       var record_num = $(this).closest("tr").data('id');

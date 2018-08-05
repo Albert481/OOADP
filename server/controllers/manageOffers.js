@@ -24,7 +24,6 @@ exports.insert = function (req, res) {
 exports.list = function (req, res) {
     var user_id = req.user.user_id;
     sequelize.query('SELECT o.id, listing_id, l.name AS name, offerprice, offerstatus FROM OfferPrices o INNER JOIN Listings l ON o.listing_id = l.id WHERE o.user_id =' + user_id, { model: offerPrice, raw: true}).then((offer) => {
-        
         res.render('manageOffers', {
             title: "My Cart",
             itemList: offer,

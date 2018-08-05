@@ -17,7 +17,7 @@
       .notification {
         position: absolute;
         bottom: 8px;
-        right: 294px;
+        right: 208px;
         background: #d2232a;
         width: 15px;
         height: 15px;
@@ -94,7 +94,6 @@
           <ul class="list-unstyled">
             <% if (user) { %>
             <li><a href="/messages/"><i class="icon fa fa-inbox"></i>Messages <% if (notificount < 1) { %> <span class="notification" style="visibility: hidden"><%=notificount%> <% } else { %><span class="notification" style="visibility: visible"><%=notificount%><% } %></span></a></li>
-            <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
             <li><a href="/manageoffers"><i class="icon fa fa-shopping-cart"></i>My Offers</a></li>
             <li><a href="/incomingoffers"><i class="icon fa fa-shopping-cart"></i>Offers Received</a></li>
             <% } else { %>

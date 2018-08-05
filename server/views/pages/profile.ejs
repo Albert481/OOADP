@@ -93,20 +93,22 @@
                             
                         </div><!-- /.product-tab -->
                     </div><!-- /.tab-pane -->
-
+                    <h4 class="title">Puchase History</h4>
                     <div id="purchases" class="tab-pane">
                         <div class="product-tag">
-                            <h4 class="title">Puchase History</h4>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Purchase No.</th>
+                                        <th>Listing ID</th>
+                                        <th>Offer ID</th>
+                                        <th> </th>
+                                    </tr>
+                                    </thead>
                             <% purchase.forEach (function(purchase) { %>
                                 <% if (purchase.user_id == user.user_id) { %>
                               <!--SHOW PURCHASES-->
-                                <table class="table">
-                                  <thread>
-                                    <tr>
-                                      <th>Purchase No.</th>
-                                      <th>Listing ID</th>
-                                      <th>Offer ID</th>
-                                    </tr>
+                              <table class="table">
                                       <tr>
                                         <td>
                                           <%= purchase.id %>
@@ -121,7 +123,6 @@
                                           <a class="btn btn-secondary" href="/purchaseinfo/<%= purchase.id %>" class="btn btn-secondary pull-right">More Details</a>
                                         </td>
                                       </tr>
-                                  </thread>
                                 </table>
                                 <% } %>
                             <% }); %>

@@ -1,34 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
     <% include ../partials/stylesheet %>
 </head>
+
+<header>
+	<% include ../partials/header %>
+</header>
+
 <body>
-    <% include ../partials/header %>
         <!--FORM TO UPDATE USER DETAIL-->
-        <fieldset class="form-group">
-            <label for="inputName">Name</label>
-            <input type="text" id="inputName" name="Name" class="form-control" placeholder="Name" required="true" value="<%=user.name%>">
-        </fieldset>
-        <fieldset class="form-group">
-            <label for="inputName">Email</label>
-            <input type="text" id="inputEmail" name="Email" class="form-control" placeholder="Email" required="true" value="<%=user.email%>">
-        </fieldset>
-        <fieldset class="form-group">
-            <label for="inputBio">Bio</label>
-            <input type="text" id="inputBio" name="bio" class="form-control" placeholder="Bio" required="true" value="<%=user.bio%>">
-        </fieldset>
-        <fieldset class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" id="inputAddress" name="Address" class="form-control" placeholder="Address" required="true" value="<%=user.address%>">
-        </fieldset>
-        <fieldset class="form-group">
-            <label for="inputPassword">Change Password</label>
-            <input type="password" id="inputPassword" name="password" class="form-control" required="true" value="<%=user.password%>">
-        </fieldset>
-        <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
-        <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+
+        <!--css changes-->
+            <div class="sign-in-page">
+        <div class="body-content">
+                <div class="container">
+        <div class="col-md-12 col-sm-12">
+                <h4 class="checkout-subtitle">Update Account</h4>
+                <p class="text title-tag-line">Change account details</p>
+                <form class="register-form outer-top-xs" role="form">
+                    <div class="form-group">
+                        <label class="info-title" for="inputName">Name</label>
+                        <input type="text" class="form-control unicase-form-control text-input" id="inputName" name="Name" required="true" value="<%=user.name%>">
+                      </div>
+                    <div class="form-group">
+                        <label class="info-title" for="inputEmail">Email Address</label>
+                        <input type="text" class="form-control unicase-form-control text-input" id="inputEmail" name="Email"  required="true" value="<%=user.email%>">
+                    </div>
+                    <div class="form-group">
+                        <label class="info-title" for="inputBio">Bio</label>
+                        <input type="text" class="form-control unicase-form-control text-input" id="inputBio" name="bio" required="true" value="<%=user.bio%>">
+                    </div>
+                    <div class="form-group">
+                        <label class="info-title" for="inputAddress">Address</label>
+                        <input type="text" id="inputAddress" name="Address" class="form-control unicase-form-control text-input" required="true" value="<%=user.address%>">
+                    </div>
+                     <div class="form-group">
+                        <label class="info-title" for="inputPassword">Change Password</label>
+                        <input type="password" id="inputPassword" name="password" class="form-control unicase-form-control text-input" required="true" value="<%=user.password%>">
+                    </div>
+                      <button type="submit" class="btn-upper btn btn-primary checkout-page-button" onclick=saveChanges()>Save Changes</button>
+                      <button type="button" class="btn-upper btn btn-secondary checkout-page-button"  onclick=discardChanges()>Cancel</button>
+                </form>
+                <br>
+            </div>
+            </div>	
+</div>
+</div>
     <script>
         function saveChanges() {
             var url = "editprofile";
@@ -57,11 +79,13 @@
             })
         }
         function discardChanges() {
-            location.href = "editprofile"
+            location.href = "profile"
         }
     </script>
-    <% include ../partials/footer %>
-    <% include ../partials/javascript %>
+<footer>
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+</footer>
 </body>
 
 </html>

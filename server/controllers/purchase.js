@@ -53,7 +53,7 @@ exports.insert = function (req, res){
                 message: "error"
             });
         }
-        res.redirect('/manageoffers');
+        res.redirect('/profile');
     })
 };
 

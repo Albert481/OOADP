@@ -74,7 +74,7 @@
                                     <div class="item">
                                         <h3 class="section-title">Purchase info</h3>
                                         <div class="clients_author">Purchase No: <%= purchase.id%></div><!-- /.container-fluid -->
-                                        <div class="testimonials"><em>Listing ID: <%= purchase.listing_id%></em></div>
+                                        <div class="testimonials"><em>Listing ID: <%= purchase.listing_id%></em><a class="btn btn-secondary" href="/detail/<%= purchase.listing_id%>">View Listing</a></div>
                                         <p class="testimonials">Offer ID: <%= purchase.offer_id %></p>
                                         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#createPost">Leave Feedback</button>
                                      </div><!-- /.item -->

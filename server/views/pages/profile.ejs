@@ -8,136 +8,149 @@
     <% include ../partials/header %>
 
     <div class="container">
-        <h1><%= title %></h1>
-        <div class="datails">
-
-            <div class="card text-xs-center">
-                <br>
-                <img class="card-img-top" src="<%= avatar %>" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title"><%= user.name %></h4>
-                    <p class="card-text">
-                        <strong>Email</strong>: <%= user.email %> <br>
-                        <strong>bio</strong>: <%= user.bio %> <br>
-                        <strong>mailing address</strong>: <%= user.address %><br>
+    <div class="sidebar-widget wow fadeInUp outer-top-vs col-md-12">
+            <div id="advertisement" class="advertisement">
+                <div class="item">
+                    <h3 class="section-title">Profile</h3>
+                    <div class="avatar"><img class="card-img-top" src="<%= avatar %>" alt="Card image cap"></div>
+                    <div class="clients_author"><%= user.name%></div><!-- /.container-fluid -->
+                    <div class="testimonials"><em>"</em> <%= user.bio %><em>"</em></div>
+                    <p class="testimonials">
+                        <b>Email Address: </b> <%= user.email %><br>
+                        <b>Mailing Address: </b> <%= user.address %>
                     </p>
-                    <a href="/logout" class="btn btn-default">Logout</a>
-                </div>
-            </div>
+                 </div><!-- /.item -->
+            </div><!-- /.owl-carousel -->
         </div>
-    </div>
-    <br/>
 
-    <div class="product-tabs inner-bottom-xs  wow fadeInUp">
-        <div class="row">
-            <div class="col-sm-9">
-                <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
-                    <li class="active"><a data-toggle="tab" href="#listing">LISTINGS</a></li>
-                    <li><a data-toggle="tab" href="#purchases">PURCHASE HISTORY  </a></li>
-                </ul><!-- /.nav-tabs #product-tabs -->
-            </div>
-            <br>
-            <div class="col-sm-9">
-
-                <div class="tab-content">
+        <div class="col-md-12">
+                <br>
+                <br>
+                <div class="detail-block">
+                    <div class="row wow fadeInUp">
+                        <div class="product-tabs inner-bottom-xs  wow fadeInUp col-md-12">
+                               <div class="col-md-12">
+                                     <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                                        <li class="active"><a data-toggle="tab" href="#listing">LISTINGS</a></li>
+                                        <li><a data-toggle="tab" href="#purchases">PURCHASE HISTORY  </a></li>
+                                     </ul><!-- /.nav-tabs #product-tabs -->
+                                </div>
+                                <br>
+                                <div class="col-md-12">
+                        
+                                    <div class="tab-content">
+                                            <div class="tab-content">
                     
 
-                    <div id="listing" class="tab-pane in active">
-                        <div class="product-tab">										
-                            <div class="product-add-review">
-                                <h3>Listings from <%=user.name %></h3>
-                                <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
-                                    <% itemList.forEach (function(showList) { %>
-                                    <div class="item item-carousel deletelist" data-id="<%= showList.id%>">
-                                            <% if (showList.user_id == user.user_id) { %> 
-                                                <form action="/profile" method="delete">
-                                                    <div class="owl-carousel blog-slider custom-carousel">       
-                                                       <div class="item">
-                                                         <div class="product">
-                                                           <div class="product-image">
-                                                            <div class="image">
-                                                            <a href="/detail/<%= showList.id %>"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a>
+                                                    <div id="listing" class="tab-pane in active">
+                                                        <div class="product-tab">										
+                                                            <div class="product-add-review">    
+                                                                <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+                                                                    <% itemList.forEach (function(showList) { %>
+                                                                    <div class="item item-carousel deletelist" data-id="<%= showList.id%>">
+                                                                            <% if (showList.user_id == user.user_id) { %> 
+                                                                                <form action="/profile" method="delete">
+                                                                                    <div class="owl-carousel blog-slider custom-carousel">       
+                                                                                       <div class="item">
+                                                                                         <div class="product">
+                                                                                           <div class="product-image">
+                                                                                            <div class="image">
+                                                                                            <a href="/detail/<%= showList.id %>"><img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>" ></a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <% if (showList.status == 1) { %>
+                                                                                            <div class="tag sale">
+                                                                                                <span>SOLD</span>
+                                                                                            </div>
+                                                                                        <% }else { %>  <% } %>
+                                                                                           <!-- /.product-image -->
+                                                                                           <div class="product-info text-left">
+                                                                                             <h3 class="name"><a href="/detail/<%= showList.id %>"><%= showList.name %></a></h3>
+                                                                                             <div class="product-price">
+                                                                                                <span class="price">
+                                                                                                $<%= showList.price %>
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
+                                                                                            <input type="button" class="btn btn-primary icon editIBtn" onclick="location.href ='/image/<%= showList.id %>'" value="Edit Image">
+                                                                                            <input type="button" class="btn btn-primary icon deleteBtn" data-id="<%= showList.id%>" value="Delete">
+                                                                                           </div>
+                                                                                         <!-- /.blog-post-info --> 
+                                                                                         </div>
+                                                                                         <!-- /.blog-post --> 
+                                                                                       </div>
+                                                                                       <!-- /.item --> 
+                                                                                   </div>
+                                                                                   <!-- /.owl-carousel -->
+                                                                                   </form>
+                                                                                   <% } %>
+                                                                                </div>
+                                                                                <!-- item -->
+                                                                                <% }); %>
+                                                                                </div>
+                                                            </div><!-- /.product-add-review -->										
+                                                            
+                                                        </div><!-- /.product-tab -->
+                                                    </div><!-- /.tab-pane -->
+                                                    <div id="purchases" class="tab-pane">
+                                                        <div class="product-tag">
+                                                                <% purchase.forEach (function(purchase) { %>
+                                                                    <% if (purchase.user_id == user.user_id) { %>
+                                                                        <div class="list-group-item" data-id="<%= purchase.id%>">
+                                                                <table class="table">
+                                                                    <tr>
+                                                                        <th>Purchase No.</th>
+                                                                        <th>Listing ID</th>
+                                                                        <th>Offer ID</th>
+                                                                        <th> </th>
+                                                                    </tr>
+                                                                      <tr>
+                                                                        <td>
+                                                                          <%= purchase.id %>
+                                                                        </td>
+                                                                        <td>
+                                                                          <%= purchase.listing_id %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= purchase.offer_id %>
+                                                                        </td>
+                                                                        <td>
+                                                                          <a class="btn btn-secondary" href="/purchaseinfo/<%= purchase.id %>" class="btn btn-secondary pull-right">More Details</a>
+                                                                        </td>
+                                                                      </tr>
+                                                                </table>
                                                             </div>
-                                                        </div>
-                                                        <% if (showList.status == 1) { %>
-                                                            <div class="tag sale">
-                                                                <span>SOLD</span>
-                                                            </div>
-                                                        <% }else { %>  <% } %>
-                                                           <!-- /.product-image -->
-                                                           <div class="product-info text-left">
-                                                             <h3 class="name"><a href="/detail/<%= showList.id %>"><%= showList.name %></a></h3>
-                                                             <div class="product-price">
-                                                                <span class="price">
-                                                                $<%= showList.price %>
-                                                                </span>
-                                                            </div>
-                                                            <input type="button" class="btn btn-primary icon editBtn" onclick="location.href ='/listing/edit/<%= showList.id %>'" value="Edit">
-                                                            <input type="button" class="btn btn-primary icon editIBtn" onclick="location.href ='/image/<%= showList.id %>'" value="Edit Image">
-                                                            <input type="button" class="btn btn-primary icon deleteBtn" data-id="<%= showList.id%>" value="Delete">
-                                                           </div>
-                                                         <!-- /.blog-post-info --> 
-                                                         </div>
-                                                         <!-- /.blog-post --> 
-                                                       </div>
-                                                       <!-- /.item --> 
-                                                   </div>
-                                                   <!-- /.owl-carousel -->
-                                                   </form>
-                                                   <% } %>
-                                                </div>
-                                                <!-- item -->
-                                                <% }); %>
-                                                </div>
-                            </div><!-- /.product-add-review -->										
-                            
-                        </div><!-- /.product-tab -->
-                    </div><!-- /.tab-pane -->
-                    <h4 class="title">Puchase History</h4>
-                    <div id="purchases" class="tab-pane">
-                        <div class="product-tag">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>Purchase No.</th>
-                                        <th>Listing ID</th>
-                                        <th>Offer ID</th>
-                                        <th> </th>
-                                    </tr>
-                                    </thead>
-                            <% purchase.forEach (function(purchase) { %>
-                                <% if (purchase.user_id == user.user_id) { %>
-                              <!--SHOW PURCHASES-->
-                              <table class="table">
-                                      <tr>
-                                        <td>
-                                          <%= purchase.id %>
-                                        </td>
-                                        <td>
-                                          <%= purchase.listing_id %>
-                                        </td>
-                                        <td>
-                                            <%= purchase.offer_id %>
-                                        </td>
-                                        <td>
-                                          <a class="btn btn-secondary" href="/purchaseinfo/<%= purchase.id %>" class="btn btn-secondary pull-right">More Details</a>
-                                        </td>
-                                      </tr>
-                                </table>
-                                <% } %>
-                            <% }); %>
+                                                                <% } %>
+                                                            <% }); %>
+                                
+                                                            
+                                
+                                                        </div><!-- /.product-tab -->
+                                                    </div><!-- /.tab-pane -->
+                                                </div><!-- /.tab-content -->
+                                            </div><!-- /.col -->
+                                        </div><!-- /.row -->
+                                    </div><!-- /.product-tabs -->			
+                                </div><!-- /.col -->
+                                <div class="clearfix"></div>
+                                </div>
+                                    </div>
+                                </div>
+                        </div>
+                     </div>
 
-                            
 
-                        </div><!-- /.product-tab -->
-                    </div><!-- /.tab-pane -->
-                </div><!-- /.tab-content -->
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.product-tabs -->			
-</div><!-- /.col -->
-<div class="clearfix"></div>
+                </div>
+    </div>
 </div>
+
+<br>
+<br>
+<br>
+
+
+
+
       <script>
             $('.deleteBtn').click(function() {
                 var listing_id = $(this).data('id');      

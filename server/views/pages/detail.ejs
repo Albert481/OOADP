@@ -217,7 +217,6 @@
 								<div id="review" class="tab-pane in active"  style="overflow:scroll; height:400px;" >
 									<div class="product-tab">										
 										<div class="product-info">
-											<h4 class="title">Write your own review</h4>
 											<% reviews.forEach(function(reviews){ %>
 												<% if (itemList.id == reviews.listing_id) { %>
 												<div class="list-group-item" data-id="<%= reviews.id%>">
@@ -232,8 +231,6 @@
 															<small class="text-muted">
 																satisfaction: <%= reviews.satisfaction %><br>
 															</small>
-															<br>
-															<br>
 													</div>
 												</div>
 												<% } %>

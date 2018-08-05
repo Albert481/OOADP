@@ -277,7 +277,7 @@ app.post('/messages/:con_id/:cu_id', function (req, res) {
 //purchase
 //app.get("/purchase", purchase.show);
 app.get("/purchaseinfo/:id", purchase.list);
-app.post("/manageoffers/bought", purchase.insert);
+app.post("/manageoffers", purchase.insert);
 
 //reviews
 app.get("/reviews/:id", reviews.show);
@@ -296,7 +296,7 @@ app.post('/checkout', (req, res) => {
         customer: customer.id
     })).then(charge => console.log('Payment success'));
     
-})
+});
 
 
 // catch 404 and forward to error handler

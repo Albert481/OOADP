@@ -43,7 +43,7 @@ exports.list = function (req, res) {
 //insert
 exports.insert = function (req, res){
     var purchaseData = {
-        user_id: req. user.user_id,
+        user_id: req.user.user_id,
         listing_id: req.body.listing_id,
         offer_id: req.body.offer_id
     }
@@ -53,7 +53,6 @@ exports.insert = function (req, res){
                 message: "error"
             });
         }
-        res.redirect('/profile');
     })
 };
 

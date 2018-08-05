@@ -40,6 +40,7 @@
               <th class="info"><h4>Listing Name</h4></th>
               <th class="info"><h4>Listed By</h4></th>
               <th class="info"><h4>Offer Price</h4></th>
+
               <th class="info"><h4>Status</h4></th>
               <th class="info"></th>
           </tr>
@@ -64,6 +65,7 @@
                 <td class="cart-product-name-info">
                   <h4 class='cart-product-description'>$<%= itemList[i].offerprice %></h4>
                 </td>
+
                 <!-- <td class="cart-product-edit">
                   <input type="button" class="editBtn" value="Edit">
                 </td> -->
@@ -85,9 +87,14 @@
                       amount: "<%= (itemList[i].offerprice * 100).toFixed(8) %>",
                       description: "<%= itemList[i].name %>"
                     });
-                  </script>
+                  </script> 
+                  <form action="/manageoffers" method="post">
+                  <input type="hidden" id="inputlisting" name="listing_id" class="form-control" value="<%= itemList[i].listing_id %>" required="" readonly>
+                  <!--<label for="inputname">Name</label> -->
+                  <input type="hidden" id="inputoffer" name="offer_id" class="form-control" value="<%= itemList[i].id %>" required="" readonly>
                   <input type="hidden" name="chargeAmount" value="<%= (itemList[i].offerprice * 100).toFixed(0) %>">
                   <button id="buttonCheckout" class="btn text-white btn-primary">Checkout with Stripe</button>
+                  </form>
                 </td>
                 </form>
                 <% } else { %>

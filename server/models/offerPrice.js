@@ -47,7 +47,7 @@ offerPrice.sync({ force: false, logging: console.log}).then(() => {
     offerPrice.upsert({
         id: 2,
         user_id: 1,
-        listing_id: 1,
+        listing_id: 3,
         offerprice: 60.00
     })
 });

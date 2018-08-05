@@ -18,13 +18,16 @@ const ListingModel = sequelize.define('Listings', {
     },
     name: {
         type: Sequelize.STRING,
+        allowNull: false,
         trim: true
     },
     imagename:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     price: {
         type: Sequelize.FLOAT,
@@ -33,7 +36,7 @@ const ListingModel = sequelize.define('Listings', {
     },
     status:{
         type: Sequelize.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
         defaultValue: 0
     },
     category:{

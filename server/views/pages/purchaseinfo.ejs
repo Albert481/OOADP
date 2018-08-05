@@ -8,7 +8,6 @@
     <% include ../partials/header %>
 
     <div class="container">
-        <h1><%= title %></h1>
         <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -41,7 +40,7 @@
                                     </thead>	
                                     <tbody>
                                       <tr>
-                                        <td class="cell-label">User Sastisfication</td>
+                                        <td class="cell-label">Rate your Experience</td>
                                         <td><input type="radio" name="satisfaction" class="radio" value="Negative"></td>
                                         <td><input type="radio" name="satisfaction" class="radio" value="Neutral"></td>
                                         <td><input type="radio" name="satisfaction" class="radio" value="Positive"></td>
@@ -50,7 +49,7 @@
                                   </table>
                                 <fieldset class="form-group">
                                     <label for="inputContent">Content</label>
-                                    <textarea id="inputContent" name="content" rows="8" cols="40" class="form-control" placeholder="Comment Description" required=""></textarea>
+                                    <textarea id="inputContent" name="content" rows="8" cols="40" class="form-control" required=""></textarea>
                                 </fieldset>
                                 <!--hidden-->
                                 <input type="hidden" id="inputuserid" name="user_id"  value="<%= user.user_id %>" required="true" readonly>
@@ -69,19 +68,23 @@
             <!--Purchase info-->
         <div class="datails">
 
-            <div class="card text-xs-center">
-                <br>
-                <div class="card-block">
-                    <h4 class="card-title">Purchase ID: <%= purchase.id %></h4>
-                    <p class="card-text">
-                        <strong>Listing ID</strong>: <%= purchase.listing_id %> <br>
-                        <strong>Offer ID</strong>: <%=purchase.offer_id %> <br>
-                    </p>
-                    <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createPost">Leave Feedback</button>
+                <div class="container">
+                        <div class="sidebar-widget wow fadeInUp outer-top-vs col-md-12">
+                                <div id="advertisement" class="advertisement">
+                                    <div class="item">
+                                        <h3 class="section-title">Purchase info</h3>
+                                        <div class="clients_author">Purchase No: <%= purchase.id%></div><!-- /.container-fluid -->
+                                        <div class="testimonials"><em>Listing ID: <%= purchase.listing_id%></em></div>
+                                        <p class="testimonials">Offer ID: <%= purchase.offer_id %></p>
+                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#createPost">Leave Feedback</button>
+                                     </div><!-- /.item -->
+                                </div><!-- /.owl-carousel -->
+                            </div>
                 </div>
-            </div>
         </div>
     </div>
+    <br>
+    <br>
     
         <% include ../partials/footer %>
         <% include ../partials/javascript %>

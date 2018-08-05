@@ -48,11 +48,11 @@
                 contentType: "application/json",
                 success: function(result){
                     alert("Image updated successfully");
-                    location.href = "/"
+                    location.href = "/profile"
                 },
                 error: function(result){
                     alert("Error updating image. Please try again" + JSON.stringify(result).keys());
-                    location.href = "/"
+                    location.href = "/profile"
 //                    discardChanges();
                 }
             })

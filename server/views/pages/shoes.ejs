@@ -29,21 +29,22 @@
     <div class='container'>
         <div class='row'>
            <!-- ========================================== SECTION – HERO ========================================= -->
-                <div id="category" class="category-carousel hidden-xs">
-                    <div class="item">
-                        <div class="image">
-                            <img src="images/banners/cat-banner-1.jpg" alt="" class="img-responsive"> </div>
-                        <div class="container-fluid">
-                            <div class="caption vertical-top text-left">
-                                <div class="big-text"> Big Sale </div>
-                                <div class="excerpt hidden-sm hidden-md"> Save up to 49% off by offering your price! </div>
-                                <div class="excerpt-normal hidden-sm hidden-md"> Vans Old Skool </div>
-                            </div>
-                            <!-- /.caption -->
+           <div id="category" class="category-carousel hidden-xs">
+                <div class="item">
+                    <div class="image">
+                        <!-- source: https://shankaripriyapurushothaman.files.wordpress.com/2017/10/formal-shoes-banner-1.jpg -->
+                        <img src="/images/banners/formal-shoes-banner-1.jpg" alt="" class="img-responsive"> </div>
+                    <div class="container-fluid">
+                        <div class="caption vertical-top text-left">
+                            <div class="big-text" style="color:mediumslateblue;"> Big Sale </div>
+                            <div class="excerpt hidden-sm hidden-md"> Save up to 49% off by offering your price! </div>
+                            <div class="excerpt-normal hidden-sm hidden-md"> Formal Shoes </div>
                         </div>
-                        <!-- /.container-fluid -->
+                        <!-- /.caption -->
                     </div>
+                    <!-- /.container-fluid -->
                 </div>
+            </div>
                 <% if (user) { %>
                     <div class="addlisting">
                     <button type="button" class="btn btn-primary icon" data-toggle="modal" id="add-listing" data-target="#createListing">
@@ -145,7 +146,7 @@
                                                                 <tr>
                                                                     <td style="width:250px; height:250px; background-color:white;text-align:center; vertical-align:middle">
                                                                         <a href="/detail/<%= showList.id %>">
-                                                                            <img src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
+                                                                            <img height="250" src="images/listingimages/<%= showList.imagename %>" alt="<%= showList.imagename %>">
                                                                         </a>
                                                                     </td>   
                                                                 </tr>

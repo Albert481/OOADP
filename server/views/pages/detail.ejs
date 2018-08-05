@@ -136,15 +136,14 @@
 								</div><!-- /.row -->
 							</div><!-- /.price-container -->
 
-							<% if (user) { %>
 							<div class="quantity-container info-container">
 									<div class="row">
 										<% if (itemList.status == 0) { %>
-										<div class="col-sm-3">
+										<div class="col-sm-2">
 											<span class="label">Offer Price:</span>
 										</div>
 										<form action="/manageoffers/new" method="post">
-											<div class="col-sm-2">
+											<div class="col-sm-3">
 												<div class="cart-quantity">
 													<div class="quant-input">
 														<label for="inputOffer">Male</label>
@@ -154,27 +153,55 @@
 												</div>
 											</div>
 											<input type="hidden" id="inputListing" name="listing_id"  value="<%= itemList.id %>" required="true">
-											<div class="col-sm-7">
+											<div class="col-sm-3">
+												<% if (user) { %>
 													<button type="" class="btn btn-primary">MAKE OFFER</button>
+												<% } else { %>
+													<button type="" class="btn btn-primary" data-toggle="modal" data-target="#authModal" >MAKE OFFER</button>
+												<% } %>
 											</div>
 										</form>
 										<% } else { %>
 										<h2 style="color:#DC143C">SOLD</h2>
 										<% } %>
-										<div class="col-sm-10">
+										<div class="col-sm-3">
 												<form method="post">
-													<button type="submit" class="btn btn-primary pull-left"><i class=""></i> VIEW CHAT</a>
+													<% if (user) { %>
+														<button type="submit" class="btn btn-primary pull-left"> CHAT
+													<% } else { %>
+														<button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#authModal"> CHAT
+													<% } %>
 												</form>
 										</div>
 	
 										
 									</div><!-- /.row -->
 								</div><!-- /.quantity-container -->
-							<% } %>
 						</div><!-- /.product-info -->
 					</div><!-- /.col-sm-7 -->
 				</div><!-- /.row -->
-                </div>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="authModal" tabindex="-1" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content" role="document">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title">Sign Up or Log In</h4>
+							</div>
+							<div class="modal-body" style="text-align: center; padding-top: 36px;">
+							<span style="text-align: center; font-size: 18px;">To continue, please log in or create an account on myShoppe</span><br><br>
+							<button type="button" onclick="location.href='/login'" data-dismiss="modal" class="btn btn-success" style="width: 100%; height: 48px; text-align: center; font-size: 18px;">Sign up</button>
+							</div>
+							<div class="modal-footer" style="text-align: center;">
+								<span style="text-align: center; font-size: 18px;">Already have an account?</span>
+							<a href="/login" style="text-align: center; font-size: 18px;">Log in</a>
+							</div>
+						</div>
+					</div>
+				</div>
 				
 				<div class="product-tabs inner-bottom-xs  wow fadeInUp">
 					<div class="row">
@@ -299,7 +326,7 @@
 <script>
 	$(document).on("click" , '#viewchat' ,function () {
 		$.post(location.href);
-    })
+	})
 </script>
 
 </html>

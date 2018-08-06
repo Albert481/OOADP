@@ -103,7 +103,7 @@ ListingModel.upsert({
 ListingModel.upsert({
     id:6,
     user_id: 4,
-    name: "FILA Men's and Women's Disruptor 2",
+    name: "FILA Mens and Womens Disruptor 2",
     imagename: "FS1HTA1071X_WWT_grande.jpg",
     description: "You’ll definitely be disrupting the usual parade of sneakers on the streets with this chunky ’90s model out of the archives.",
     price: 320.00,

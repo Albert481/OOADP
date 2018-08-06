@@ -177,16 +177,16 @@
 												<% if (itemList.id == reviews.listing_id) { %>
 												<div class="list-group-item" data-id="<%= reviews.id%>">
 													<img src="" alt="" style="float: left; margin-right: 10px">
-															<h4 class="list-group-item-heading">
+															<h4 class="clients_author">
 																By: <%= reviews.name %>
 														<!--		Email: <%= reviews.email %> -->
 															</h4>
-															<p class="list-group-item-text">
+															<p class="testimonials">
 																<%= reviews.content %>
 															</p>
-															<small class="text-muted">
-																satisfaction: <%= reviews.satisfaction %><br>
-															</small>
+															<p class="testimonials">
+															<em>satisfaction: <%= reviews.satisfaction %> </em><br>
+															</p>
 													</div>
 												</div>
 												<% } %>
